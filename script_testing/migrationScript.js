@@ -23,7 +23,7 @@ const now = Date.now()
 // import migration actions from Redux Store
 const migrationActions = [{
   action: 'addColumn',
-  name: 'Gender',
+  name: 'Weight',
   type: 'STRING',
 }]
 
