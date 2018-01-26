@@ -13,5 +13,4 @@ async function getDatabases() {
   return databases
 }
 
-getDatabases();
-
+export default getDatabases;

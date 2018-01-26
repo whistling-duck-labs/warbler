@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,37 +70,35 @@
 module.exports = require("electron");
 
 /***/ }),
-/* 1 */
+/* 1 */,
+/* 2 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs-jetpack");
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-module.exports = {"name":"development","description":"Add here any environment specific stuff you like."}
-
-/***/ }),
-/* 3 */
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _path = _interopRequireDefault(__webpack_require__(4));
+var _path = _interopRequireDefault(__webpack_require__(7));
 
-var _url = _interopRequireDefault(__webpack_require__(5));
+var _url = _interopRequireDefault(__webpack_require__(8));
 
 var _electron = __webpack_require__(0);
 
-var _dev_menu_template = __webpack_require__(6);
+var _dev_menu_template = __webpack_require__(9);
 
-var _edit_menu_template = __webpack_require__(7);
+var _edit_menu_template = __webpack_require__(10);
 
-var _window = _interopRequireDefault(__webpack_require__(8));
+var _window = _interopRequireDefault(__webpack_require__(11));
 
-var _env = _interopRequireDefault(__webpack_require__(2));
+var _env = _interopRequireDefault(__webpack_require__(12));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -151,19 +149,19 @@ _electron.app.on("window-all-closed", () => {
 });
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports) {
 
 module.exports = require("path");
 
 /***/ }),
-/* 5 */
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = require("url");
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -201,7 +199,7 @@ const devMenuTemplate = {
 exports.devMenuTemplate = devMenuTemplate;
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -244,7 +242,7 @@ const editMenuTemplate = {
 exports.editMenuTemplate = editMenuTemplate;
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -257,7 +255,7 @@ exports.default = void 0;
 
 var _electron = __webpack_require__(0);
 
-var _fsJetpack = _interopRequireDefault(__webpack_require__(1));
+var _fsJetpack = _interopRequireDefault(__webpack_require__(2));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -343,6 +341,12 @@ var _default = (name, options) => {
 };
 
 exports.default = _default;
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports) {
+
+module.exports = {"name":"development","description":"Add here any environment specific stuff you like."}
 
 /***/ })
 /******/ ]);

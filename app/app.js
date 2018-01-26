@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,44 +73,63 @@ module.exports = require("electron");
 /* 1 */
 /***/ (function(module, exports) {
 
-module.exports = require("fs-jetpack");
+module.exports = require("react");
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
-module.exports = {"name":"development","description":"Add here any environment specific stuff you like."}
+module.exports = require("fs-jetpack");
 
 /***/ }),
-/* 3 */,
-/* 4 */,
-/* 5 */,
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-redux");
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+module.exports = require("material-ui/styles/MuiThemeProvider");
+
+/***/ }),
 /* 6 */,
 /* 7 */,
 /* 8 */,
-/* 9 */
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(10);
+__webpack_require__(14);
 
-__webpack_require__(15);
+__webpack_require__(19);
 
-__webpack_require__(16);
+__webpack_require__(20);
 
 var _electron = __webpack_require__(0);
 
-var _fsJetpack = _interopRequireDefault(__webpack_require__(1));
+var _fsJetpack = _interopRequireDefault(__webpack_require__(2));
 
-var _hello_world = __webpack_require__(17);
+var _react = _interopRequireDefault(__webpack_require__(1));
 
-var _env = _interopRequireDefault(__webpack_require__(2));
+var _reactDom = _interopRequireDefault(__webpack_require__(21));
 
-var _react = _interopRequireDefault(__webpack_require__(18));
+var _routes = _interopRequireDefault(__webpack_require__(22));
 
-var _reactDom = _interopRequireDefault(__webpack_require__(19));
+var _reactRedux = __webpack_require__(3);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -131,23 +150,18 @@ const osMap = {
   linux: "Linux"
 };
 
-_reactDom.default.render(_react.default.createElement("div", null, "MIGRATORY BIRDS"), document.getElementById('app'));
+_reactDom.default.render(_react.default.createElement(_routes.default, null), document.getElementById('app'));
 
 document.querySelector("#app").style.display = "block";
-document.querySelector("#greet").innerHTML = (0, _hello_world.greet)();
-document.querySelector("#os").innerHTML = osMap[process.platform];
-document.querySelector("#author").innerHTML = manifest.author;
-document.querySelector("#env").innerHTML = _env.default.name;
-document.querySelector("#electron-version").innerHTML = process.versions.electron;
 
 /***/ }),
-/* 10 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(11);
+var content = __webpack_require__(15);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -155,7 +169,7 @@ var transform;
 var options = {"hmr":true}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(13)(content, options);
+var update = __webpack_require__(17)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -172,10 +186,10 @@ if(false) {
 }
 
 /***/ }),
-/* 11 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(12)(false);
+exports = module.exports = __webpack_require__(16)(false);
 // imports
 
 
@@ -186,7 +200,7 @@ exports.push([module.i, "html,\nbody {\n  width: 100%;\n  height: 100%;\n  margi
 
 
 /***/ }),
-/* 12 */
+/* 16 */
 /***/ (function(module, exports) {
 
 /*
@@ -268,7 +282,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 13 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -324,7 +338,7 @@ var singleton = null;
 var	singletonCounter = 0;
 var	stylesInsertedAtTop = [];
 
-var	fixUrls = __webpack_require__(14);
+var	fixUrls = __webpack_require__(18);
 
 module.exports = function(list, options) {
 	if (typeof DEBUG !== "undefined" && DEBUG) {
@@ -640,7 +654,7 @@ function updateLink (link, options, obj) {
 
 
 /***/ }),
-/* 14 */
+/* 18 */
 /***/ (function(module, exports) {
 
 
@@ -735,7 +749,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 15 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -794,7 +808,7 @@ document.addEventListener("contextmenu", event => {
 }, false);
 
 /***/ }),
-/* 16 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -844,7 +858,13 @@ const supportExternalLinks = event => {
 document.addEventListener("click", supportExternalLinks, false);
 
 /***/ }),
-/* 17 */
+/* 21 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-dom");
+
+/***/ }),
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -853,31 +873,159 @@ document.addEventListener("click", supportExternalLinks, false);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.bye = exports.greet = void 0;
+exports.default = void 0;
 
-const greet = () => {
-  return "Let's Migrate!";
-};
+var _react = _interopRequireWildcard(__webpack_require__(1));
 
-exports.greet = greet;
+var _reactRedux = __webpack_require__(3);
 
-const bye = () => {
-  return "See ya!";
-};
+var _reactRouterDom = __webpack_require__(4);
 
-exports.bye = bye;
+var _MuiThemeProvider = _interopRequireDefault(__webpack_require__(5));
+
+var _components = __webpack_require__(23);
+
+var _createHashHistory = _interopRequireDefault(__webpack_require__(27));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+const newHistory = (0, _createHashHistory.default)();
+console.log(newHistory);
+
+class Routes extends _react.Component {
+  componentDidMount() {}
+
+  render() {
+    return _react.default.createElement(_MuiThemeProvider.default, null, _react.default.createElement(_reactRouterDom.Router, {
+      history: newHistory
+    }, _react.default.createElement(_components.Main, null, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
+      path: "/",
+      component: _components.DatabaseSelect
+    })))));
+  }
+
+}
+
+exports.default = Routes;
 
 /***/ }),
-/* 18 */
-/***/ (function(module, exports) {
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("react");
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "DatabaseSelect", {
+  enumerable: true,
+  get: function () {
+    return _databaseSelect.default;
+  }
+});
+Object.defineProperty(exports, "Main", {
+  enumerable: true,
+  get: function () {
+    return _main.default;
+  }
+});
+
+var _databaseSelect = _interopRequireDefault(__webpack_require__(24));
+
+var _main = _interopRequireDefault(__webpack_require__(26));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 19 */
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(1));
+
+var _reactRouterDom = __webpack_require__(4);
+
+var _Card = __webpack_require__(25);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+class DatabaseSelect extends _react.Component {
+  render() {
+    let databaseNames = ['users', 'bananas', 'girlfriends', 'boyfriends']; //TODO: hook this up to the store to grab database names
+
+    console.log('rendering this');
+    return _react.default.createElement("div", {
+      className: "databaseCards"
+    }, databaseNames.map((name, idx) => {
+      return _react.default.createElement(_Card.Card, {
+        key: idx
+      }, _react.default.createElement(_Card.CardText, null, name));
+    }));
+  }
+
+}
+
+exports.default = DatabaseSelect;
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports) {
 
-module.exports = require("react-dom");
+module.exports = require("material-ui/Card");
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(1));
+
+var _reactRedux = __webpack_require__(3);
+
+var _reactRouterDom = __webpack_require__(4);
+
+var _MuiThemeProvider = _interopRequireDefault(__webpack_require__(5));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * COMPONENT
+ *  The Main component is our 'picture frame' - it displays the navbar and anything
+ *  else common to our entire app. The 'picture' inside the frame is the space
+ *  rendered out by the component's `children`.
+ */
+const Main = props => {
+  const {
+    children
+  } = props;
+  return _react.default.createElement(_MuiThemeProvider.default, null, _react.default.createElement("div", null, children));
+};
+
+var _default = Main;
+exports.default = _default;
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
+
+module.exports = require("history/createHashHistory");
 
 /***/ })
 /******/ ]);
