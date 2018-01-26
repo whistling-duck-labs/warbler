@@ -10,7 +10,7 @@ async function getDatabases() {
     return anon.datname
   })
 
-  console.log(databases)
+  return databases
 }
 
 getDatabases();
