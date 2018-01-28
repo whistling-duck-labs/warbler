@@ -1,16 +1,18 @@
-import {createStore, applyMiddleware} from 'redux'
+import {createStore, applyMiddleware, compose} from 'redux'
 import {combineReducers} from 'redux-immutable'
-import createLogger from 'redux-logger'
+import {createLogger} from 'redux-logger'
 import thunkMiddleware from 'redux-thunk'
-import { composeWithDevTools } from 'redux-devtools-extension'
 import db from './db'
+import dbList from './dbList'
+import targetDb from './targetDb'
 
-const reducer = combineReducers({db})
-const middleware = composeWithDevTools(applyMiddleware(
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const reducer = combineReducers({db, dbList, targetDb})
+const middleware = applyMiddleware(
   thunkMiddleware,
   createLogger({collapsed: true})
-))
-const store = createStore(reducer, middleware)
+)
+const store = createStore(reducer, composeEnhancers(middleware))
 
 export default store
-export * from './user'

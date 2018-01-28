@@ -1,10 +1,37 @@
-import {List} from 'immutable'
-import diff from 'immutablediff'
+import {fromJS, List} from 'immutable'
 
 // actions
-export const INIT_DB = 'INIT_DB'
+const INIT_DB = 'INIT_DB'
 
-export const initDB = (db) => ({type: INIT_DB, db: db})
+const initDB = (db) => ({type: INIT_DB, db: db})
+
+// thunk
+
+export const fetchDb = dbName => dispatch => {
+  // fetch all db info
+  const db = fromJS(
+    [ // list of
+      { //model objects
+        key: 1,
+        name: 'users',
+        attributes: [ // list of
+          { // attribute objects
+            key: 1,
+            name: 'name',
+            type: 'string',
+            allowNull: false
+          },
+          {
+            key: 2,
+            name: 'email',
+            type: 'string',
+            allowNull: false
+          }
+        ]
+      }
+    ])
+  dispatch(initDB(db))
+}
 
 // initial state
 

@@ -1,17 +1,33 @@
 import React, { Component } from 'react'
 import { NavLink } from 'react-router-dom'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import {connect} from 'react-redux'
+import {fetchDbNames} from '../store/dbList'
+import {fetchDb} from '../store/db'
 
-export default class DatabaseSelect extends Component {
+class DatabaseSelect extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      isLoading: true,
+      dbList: this.props.dbList
+    }
+  }
+  componentDidMount () {
+    this.props.fetchDbNames()
+  }
+
+  onSelect (dbname) {
+    fetchDb(dbname)
+    this.props.history.push('/control')
+  }
 
   render () {
-    let databaseNames = ['users', 'bananas', 'girlfriends', 'boyfriends'] //TODO: hook this up to the store to grab database names
-    console.log('rendering this')
     return (
       <div className="databaseCards">
-        {databaseNames.map((name, idx) => {
+        {this.props.dbList && this.props.dbList.map((name, idx) => {
           return (
-            <Card key={idx}>
+            <Card key={idx} onClick={() => this.onSelect(name)}>
               <CardText>
                 {name}
               </CardText>
@@ -22,3 +38,11 @@ export default class DatabaseSelect extends Component {
     )
   }
 }
+
+const mapState = state => ({
+  dbList: state.get('dbList')
+})
+
+const mapDispatch = {fetchDbNames}
+
+export default connect(mapState, mapDispatch)(DatabaseSelect)

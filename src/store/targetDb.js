@@ -1,5 +1,4 @@
 import {List} from 'immutable'
-import diff from 'immutablediff'
 import {INIT_DB} from './db'
 
 export const UPDATE_DB = 'UPDATE_DB'
