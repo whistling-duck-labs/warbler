@@ -10,11 +10,11 @@ import "./helpers/external_links.js";
 
 import { remote } from "electron";
 import jetpack from "fs-jetpack";
-import { greet } from "./hello_world/hello_world";
-import env from "env";
 
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Routes from './routes'
+import { Provider } from 'react-redux'
 
 const app = remote.app;
 const appDir = jetpack.cwd(app.getAppPath());
@@ -30,14 +30,8 @@ const osMap = {
 };
 
 ReactDOM.render(
-  <div>MIGRATORY BIRDS</div>,
+  <Routes />,
   document.getElementById('app')
 )
 
 document.querySelector("#app").style.display = "block";
-document.querySelector("#greet").innerHTML = greet();
-document.querySelector("#os").innerHTML = osMap[process.platform];
-document.querySelector("#author").innerHTML = manifest.author;
-document.querySelector("#env").innerHTML = env.name;
-document.querySelector("#electron-version").innerHTML =
-  process.versions.electron;

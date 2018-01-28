@@ -40,6 +40,7 @@
     "fs-jetpack": "^1.0.0",
     "immutable": "^3.8.2",
     "immutablediff": "^0.4.4",
+    "material-ui": "^0.20.0",
     "pg": "^7.4.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -48,6 +49,7 @@
     "redux-immutable": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
+    "react-router-dom": "^4.2.2",
     "sequelize": "^4.32.1",
     "shelljs": "^0.8.1"
   },
