@@ -22,3 +22,15 @@ a {
 .container {
   text-align: center;
 }
+
+.databaseCards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dbCard {
+  width: 170px;
+  margin: 5px;
+}
+

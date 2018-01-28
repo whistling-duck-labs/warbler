@@ -1,4 +1,5 @@
 import {List} from 'immutable'
+import getDatabases from '../../scripts/getDatabases'
 
 const initialDbList = List(['bananas'])
 
@@ -11,10 +12,12 @@ const populateDbList = (dbList) => ({type: POPULATE_DB_LIST, dbList})
 // thunk
 
 export const fetchDbNames = () => dispatch => {
-  // TODO: fetch list of db names and replace hard coding
-  const dbNames = ['users', 'bananas', 'girlfriends', 'boyfriends']
-  const dbList = List(dbNames)
-  return dispatch(populateDbList(dbList))
+  getDatabases()
+    .then(dbs => {
+      const dbList = List(dbs)
+      return dispatch(populateDbList(dbList))
+    })
+    .catch(err => console.error(err))
 }
 
 // reducer
