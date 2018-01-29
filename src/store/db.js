@@ -1,7 +1,7 @@
 import {fromJS, List} from 'immutable'
 import getModelInfo from '../../script_testing/getModelInfo'
 // actions
-const INIT_DB = 'INIT_DB'
+export const INIT_DB = 'INIT_DB'
 
 const initDB = (db) => ({type: INIT_DB, db: db})
 
