@@ -18,7 +18,7 @@ class DatabaseSelect extends Component {
   }
 
   onSelect (dbname) {
-    fetchDb(dbname)
+    this.props.fetchDb(dbname)
     this.props.history.push('/control')
   }
 
@@ -43,6 +43,6 @@ const mapState = state => ({
   dbList: state.get('dbList')
 })
 
-const mapDispatch = {fetchDbNames}
+const mapDispatch = {fetchDbNames, fetchDb}
 
 export default connect(mapState, mapDispatch)(DatabaseSelect)

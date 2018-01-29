@@ -14,6 +14,7 @@ const initialState = List([])
 export default function (state = initialState, action) {
   switch (action.type) {
     case INIT_DB:
+      console.log('hiya ', action.db)
       return action.db
     case UPDATE_DB:
       return action.targetDb
