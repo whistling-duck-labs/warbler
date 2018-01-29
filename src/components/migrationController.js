@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
+import {updateDB} from '../store/targetDb'
+
 import ModelTable from './modelTable'
 import RaisedButton from 'material-ui/RaisedButton';
+import AddColumnForm from './addColumnForm'
 
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
+import {fromJS, Map} from 'immutable'
 
 class MigrationController extends Component {
 
@@ -22,7 +22,22 @@ class MigrationController extends Component {
     this.setState({renderTable: true, selectedModel: modelIdx})
   }
 
-  componentDidMount () {
+  onAddColSubmit (evt, value) {
+    evt.preventDefault();
+    let name = value.name
+    let type = value.type
+    let colObj = fromJS({name, type})
+    let newCol = Map(colObj)
+    let newDb = this.props.db.update(0, model => {
+      return (
+        model.update('attributes', attr => {
+          return (
+            attr.push(newCol)
+          )
+        })
+      )
+    })
+    this.props.updateDB(newDb)
   }
 
   render() {
@@ -35,22 +50,16 @@ class MigrationController extends Component {
            <ModelTable model={this.props.db.get(this.state.selectedModel)} /> :
            null
         }
-        <div className="addColumnContainer">
-          <form>
-            <FloatingActionButton>
-              <ContentAdd />
-            </FloatingActionButton>
-            <TextField name="propName"/>
-            <SelectField name="type"/>
-          </form>
-        </div>
+        <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} />
       </div>
     )
   }
 }
 
 const mapState = state => ({
-  db: state.get('db')
+  db: state.get('targetDb')
 })
 
-export default connect(mapState)(MigrationController)
+const mapDispatch = {updateDB}
+
+export default connect(mapState, mapDispatch)(MigrationController)

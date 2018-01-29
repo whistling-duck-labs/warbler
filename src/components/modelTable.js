@@ -21,7 +21,6 @@ const ModelTable = (props) => {
         </TableHeader>
         <TableBody>
           {properties.map((colMap, idx) => {
-            console.log('doing mapping')
             return (
               <TableRow key={idx}>
                 <TableRowColumn>{colMap.get('name')}</TableRowColumn>
