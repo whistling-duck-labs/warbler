@@ -13,9 +13,9 @@ async function getModelinfo(dbName) {
   const res = await client.query("SELECT * FROM pg_catalog.pg_tables WHERE schemaname = 'public'")
 
 
-  const tablenames = res.rows.map(row => row.tablename)
+  const tableNames = res.rows.map(row => row.tablename)
 
-  const promisedDB = tablenames.map(async (table, idx) => {
+  const promisedDB = tableNames.map(async (table, idx) => {
     const tableObject = {
       key: idx,
       name: table,
