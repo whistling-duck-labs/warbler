@@ -59,4 +59,4 @@ function buildModelAttributeList(attributes) {
   })
 }
 
-export default getModelinfo
+export default getModelInfo
