@@ -42,15 +42,13 @@ class MigrationController extends Component {
   }
 
   render() {
-    let db = this.props.db || null
-    console.log(db)
     return (
       <div>
         <h1>I'm running (test)</h1>
         <ModelSelector
         models={this.props.db}
         update={(idx) => this.updateSelectedModel(idx)} />
-        {db ? <ModelTable model={this.props.db.get(this.state.selectedModel)} /> : null}
+        {this.props.db.get('size') && <ModelTable model={this.props.db.get(this.state.selectedModel)} /> }
         <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} />
         <ControlPanel />
       </div>
