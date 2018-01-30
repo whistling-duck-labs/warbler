@@ -5,13 +5,10 @@ const {fromJS} = require('immutable')
 const store = require('../src/store')
 const directoryPath = '/Users/Jon/Documents/fullstack/boilermaker'
 
+// Regexp to get model key inside runmigrations .map
+const modelKeyRegex = /\/(\d+)\//
+
 shell.config.execPath = shell.which('node')
-
-// const installSequelizeCli = () => {
-//   shell.exec(`npm install --prefix --save ${directoryPath} sequelize-cli`)
-// }
-
-// installSequelizeCli()
 
 const createConfigFiles = (modelsPath, configPath, dbUrl) => {
   //import config data. We don't need username and password as long as password is null
@@ -52,24 +49,35 @@ const runMigration = async () => {
 
   // ******* Find differences to migrate ***********//
 
-  //TESTING ONLY - SHOULD IMPORT FROM STORE
-  const attributes = db.getIn(['2', 'attributes'])
-  const targetDb = db.setIn(['2', 'attributes'], attributes.push({
-    key: 21,
-    name: 'oregano',
-    type: 'INTEGER'
-  }))
-  //***************
+  // //TESTING ONLY - SHOULD IMPORT FROM STORE
+  // const attributes = db.getIn(['2', 'attributes'])
+  // const targetDb = db.setIn(['2', 'attributes'], attributes.push({
+  //   key: 21,
+  //   name: 'oregano',
+  //   type: 'INTEGER'
+  // }))
+  // //***************
 
   // get the diff between the two objects and
   // add model name and action to diff
   const listOfChanges = diff(db, targetDb).map(model => {
     let migrationAction
+    let value
     // add more logic here for different migrations
-    if (model.get('op') === 'add') {
-      migrationAction = 'addColumn'
+    // create table
+    // drop table
+    // rename table
+    // rename column
+    // change column
+
+    const op = model.get('op')
+    const attributeMigrationActionMap = {
+      add: 'addColumn',
+      remove: 'removeColumn',
+      replace: 'changeColumn'
     }
-    const modelKey = model.get('path').match(/\/(\d+)\//)[1]
+
+    const modelKey = model.get('path').match(modelKeyRegex)[1]
     const modelName = targetDb.get(modelKey).get('name')
     return model
       .set('model', modelName)
