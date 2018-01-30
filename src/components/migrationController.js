@@ -47,7 +47,8 @@ class MigrationController extends Component {
         <ModelSelector
         models={this.props.db}
         update={(idx) => this.updateSelectedModel(idx)}
-        className="modelSelector" />
+        className="modelSelector"
+        dbName ={this.props.dbName} />
         {this.props.db.size && <ModelTable model={this.props.db.get(this.state.selectedModel)} /> }
         <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} className="addColumnForm"/>
         <ControlPanel />
@@ -58,7 +59,7 @@ class MigrationController extends Component {
 
 const mapState = state => ({
   db: state.get('targetDb'),
-  dbName: state.get('dbUrl')
+  dbName: state.get('dbUrl').replace('postgres://localhost:5432/', '')
 })
 
 const mapDispatch = {updateDB}

@@ -4,6 +4,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import {connect} from 'react-redux'
 import {fetchDbNames} from '../store/dbList'
 import {fetchDb} from '../store/db'
+import {setDbUrl} from '../store/dbUrl'
 
 class DatabaseSelect extends Component {
   constructor (props) {
@@ -19,6 +20,7 @@ class DatabaseSelect extends Component {
 
   onSelect (dbname) {
     this.props.fetchDb(dbname)
+    this.props.setDbUrl('postgres://localhost:5432/' + dbname)
     this.props.history.push('/control')
   }
 
@@ -43,6 +45,6 @@ const mapState = state => ({
   dbList: state.get('dbList')
 })
 
-const mapDispatch = {fetchDbNames, fetchDb}
+const mapDispatch = {fetchDbNames, fetchDb, setDbUrl}
 
 export default connect(mapState, mapDispatch)(DatabaseSelect)

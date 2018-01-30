@@ -70,3 +70,7 @@ Thumbs.db
 /app/background.js
 /app/**/*.map
 
+# migration script files
+.sequelizerc
+migrations
+config/config.json
