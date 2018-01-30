@@ -1,4 +1,4 @@
-const {fromJS} = require('immutable')
+import {fromJS} from 'immutable'
 
 async function getModelInfo(selectedDbName) {
   const { Client } = require('pg')
@@ -51,7 +51,6 @@ function buildModelAttributeList(attributes) {
                           }
 
   return attributes.rows.map(attribute => {
-
     return {
       key: attribute.ordinal_position,
       name: attribute.column_name,
@@ -60,7 +59,4 @@ function buildModelAttributeList(attributes) {
   })
 }
 
-const dbName = 'warbler_testing'
-getModelInfo(dbName).then(res => console.log(res))
-
-//export default getModelinfo
+export default getModelinfo
