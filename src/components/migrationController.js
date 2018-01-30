@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-import ControlPanel from './controlPanel'
 import {connect} from 'react-redux'
 import {updateDB} from '../store/targetDb'
 
-import ModelTable from './modelTable'
 import RaisedButton from 'material-ui/RaisedButton';
-import AddColumnForm from './addColumnForm'
+
+import { ModelTable, AddColumnForm, ControlPanel } from './'
 
 import {fromJS, Map} from 'immutable'
 
