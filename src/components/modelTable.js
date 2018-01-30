@@ -13,7 +13,7 @@ const ModelTable = (props) => {
   return (
     <div className="tableContainer">
       <Table className="modelTable">
-        <TableHeader>
+        <TableHeader displaySelectAll={false}>
           <TableRow>
             <TableHeaderColumn>Property</TableHeaderColumn>
             <TableHeaderColumn>Type</TableHeaderColumn>

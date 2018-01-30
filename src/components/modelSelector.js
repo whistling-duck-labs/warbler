@@ -9,6 +9,7 @@ const ModelSelector = (props) => {
   let models = props.models
   return (
     <List>
+      <div>{models.name}</div>
       {
         models.map((model, idx) => {
           return (

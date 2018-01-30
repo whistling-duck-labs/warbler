@@ -43,13 +43,13 @@ class MigrationController extends Component {
 
   render() {
     return (
-      <div>
-        <h1>I'm running (test)</h1>
+      <div className="migrationController">
         <ModelSelector
         models={this.props.db}
-        update={(idx) => this.updateSelectedModel(idx)} />
-        {this.props.db.get('size') && <ModelTable model={this.props.db.get(this.state.selectedModel)} /> }
-        <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} />
+        update={(idx) => this.updateSelectedModel(idx)}
+        className="modelSelector" />
+        {this.props.db.size && <ModelTable model={this.props.db.get(this.state.selectedModel)} /> }
+        <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} className="addColumnForm"/>
         <ControlPanel />
       </div>
     )
@@ -57,7 +57,8 @@ class MigrationController extends Component {
 }
 
 const mapState = state => ({
-  db: state.get('targetDb')
+  db: state.get('targetDb'),
+  dbName: state.get('dbUrl')
 })
 
 const mapDispatch = {updateDB}
