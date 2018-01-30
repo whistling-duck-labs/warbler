@@ -3,17 +3,14 @@ import {fromJS} from 'immutable'
 async function getModelinfo(dbName) {
   const { Client } = require('pg')
 
-  const client = new Client({
-    user: 'Jon',
-    host: '127.0.0.1',
-    database: dbName,
-    password: 'null',
-    port: 5432,
-  })
+  // We don't need username and password as long as password is null
+  const portSetting = 'postgres://localhost:5432/'
+  const postgresUrl = portSetting + dbName
+  const client = new Client(postgresUrl)
 
   await client.connect()
 
-  const res = await client.query("SELECT * FROM pg_catalog.pg_tables WHERE schemaname = 'public'");
+  const res = await client.query("SELECT * FROM pg_catalog.pg_tables WHERE schemaname = 'public'")
 
 
   const tablenames = res.rows.map(row => row.tablename)
@@ -57,4 +54,4 @@ async function getModelinfo(dbName) {
   return Promise.all(promisedDB).then(db => fromJS(db))
 }
 
-export default getModelinfo;
+export default getModelinfo

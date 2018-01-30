@@ -6,20 +6,27 @@ import {fetchDb} from '../store/db'
 
 const ControlPanel = (props) => (
   <div>
-    <RaisedButton primary label='Migrate' onClick={props.runMigration} />
+    <RaisedButton primary label='Migrate' onClick={() => props.runMigration(props.dbName)} />
   </div>
 )
 
+const mapState = state => ({
+  dbName: state.get('dbUrl').replace('postgres://localhost:5432/', '')
+})
+
 const mapDispatch = dispatch => {
   return {
-    runMigration () {
-      // TODO: change alerts - get db to fetch from the dbUrl on the store
+    runMigration (dbName) {
+      // TODO: change alerts
       alert('Migrating!')
       runMigration()
-      alert('Finished Migrating')
-      fetchDb('migrate')
+        .then(res => {
+          alert('Finished Migrating')
+          fetchDb(dbName)
+        })
+        .catch(console.error)
     }
   }
 }
 
-export default connect(null, mapDispatch)(ControlPanel)
+export default connect(mapState, mapDispatch)(ControlPanel)
