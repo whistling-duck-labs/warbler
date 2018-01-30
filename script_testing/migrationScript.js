@@ -13,19 +13,18 @@ shell.config.execPath = shell.which('node')
 
 // installSequelizeCli()
 
-const createConfigFiles = (modelsPath, configPath) => {
-  //import config data
+const createConfigFiles = (modelsPath, configPath, dbUrl) => {
+  //import config data. We don't need username and password as long as password is null
+  const dbName = dbUrl.replace('postgres://localhost:5432/', '')
   const config = `{
     "development": {
-      "username": "Jon",
-      "password": null,
-      "database": "migrate",
+      "database": "${dbName}",
       "host": "127.0.0.1",
       "dialect": "postgres"
     }
   }`
   // setup sequelizerc file
-  shell.touch(`${directoryPath}/.sequelizerc`)
+  shell.touch(`.sequelizerc`)
   shell.echo(`const path = require('path')\nmodule.exports = {'config': '${configPath}',\n  'models-path': '${modelsPath}'\n}`).to(`.sequelizerc`)
   // setup config file with db credentials
   shell.echo(config).to(`config/config.json`)
@@ -33,12 +32,12 @@ const createConfigFiles = (modelsPath, configPath) => {
   shell.mkdir(`migrations`)
 }
 
-const runMigration = () => {
+const runMigration = async () => {
 
   // get db from store
   const state = store.default.getState()
-  console.log(state)
   const db = state.get('db')
+  const dbUrl = state.get('dbUrl')
   shell.echo('starting migration')
 
   //********** setup *********//
@@ -48,21 +47,20 @@ const runMigration = () => {
   const now = Date.now()
 
   // create config files and migration folders if they don't exist
-  createConfigFiles(modelsPath, configPath)
+  createConfigFiles(modelsPath, configPath, dbUrl)
 
 
   // ******* Find differences to migrate ***********//
 
   //TESTING ONLY - SHOULD IMPORT FROM STORE
-  console.log(db)
   const attributes = db.getIn(['2', 'attributes'])
   const targetDb = db.setIn(['2', 'attributes'], attributes.push({
-    key: 20,
-    name: 'pepper',
-    type: 'STRING'
+    key: 21,
+    name: 'oregano',
+    type: 'INTEGER'
   }))
   //***************
-console.log('diff ', diff(db, targetDb))
+
   // get the diff between the two objects and
   // add model name and action to diff
   const listOfChanges = diff(db, targetDb).map(model => {
@@ -71,12 +69,12 @@ console.log('diff ', diff(db, targetDb))
     if (model.get('op') === 'add') {
       migrationAction = 'addColumn'
     }
+    const modelKey = model.get('path').match(/\/(\d+)\//)[1]
+    const modelName = targetDb.get(modelKey).get('name')
     return model
-    // only works for 1 model name right now
-      .set('model', targetDb.get('2').get('name'))
+      .set('model', modelName)
       .set('action', migrationAction)
   })
-  console.log(listOfChanges)
   // --> List of changes now has objects that have model, action, and value
 
 
@@ -104,12 +102,11 @@ console.log('diff ', diff(db, targetDb))
   shell.echo(`"use strict" \nmodule.exports = ${migration}`).to(`migrations/${now}-${model}.js`)
 
   // Run migration
-  if (shell.exec(`node_modules/.bin/sequelize db:migrate`).code !== 0) {
-    shell.echo('Error: Migration failed')
-    shell.exit(1)
-    return 1
-  }
-  return 0
+  //if (shell.exec(`node_modules/.bin/sequelize db:migrate`).code !== 0)
+  const migrationProcess = await shell.exec(`node_modules/.bin/sequelize db:migrate`, {async: true})
+  migrationProcess.stdout.on('data', function(data) {
+    console.log('success', data)
+  })
 }
 
 export default runMigration
