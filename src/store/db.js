@@ -1,5 +1,5 @@
 import {fromJS, List} from 'immutable'
-import getModelInfo from '../../script_testing/getModelInfo'
+import getModelInfo from '../../scripts/getModelInfo'
 // actions
 export const INIT_DB = 'INIT_DB'
 
