@@ -4,7 +4,7 @@ async function getModelinfo(dbName) {
   const { Client } = require('pg')
 
   const client = new Client({
-    user: 'Jon',
+    user: 'robin',
     host: '127.0.0.1',
     database: dbName,
     password: 'null',
