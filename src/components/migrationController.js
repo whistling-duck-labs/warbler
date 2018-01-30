@@ -6,6 +6,7 @@ import {updateDB} from '../store/targetDb'
 import ModelTable from './modelTable'
 import RaisedButton from 'material-ui/RaisedButton';
 import AddColumnForm from './addColumnForm'
+import ModelSelector from './modelSelector'
 
 import {fromJS, Map} from 'immutable'
 
@@ -14,13 +15,8 @@ class MigrationController extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      renderTable: false,
       selectedModel: 0
     }
-  }
-
-  onModelSelect (modelIdx) {
-    this.setState({renderTable: true, selectedModel: modelIdx})
   }
 
   onAddColSubmit (evt, value) {
@@ -41,16 +37,20 @@ class MigrationController extends Component {
     this.props.updateDB(newDb)
   }
 
-  render() {
+  updateSelectedModel (idx) {
+    this.setState({selectedModel: idx})
+  }
 
+  render() {
+    let db = this.props.db || null
+    console.log(db)
     return (
       <div>
         <h1>I'm running (test)</h1>
-        <RaisedButton label="users" onClick={() => this.onModelSelect(0)} />
-        {this.state.renderTable ?
-           <ModelTable model={this.props.db.get(this.state.selectedModel)} /> :
-           null
-          }
+        <ModelSelector
+        models={this.props.db}
+        update={(idx) => this.updateSelectedModel(idx)} />
+        {db ? <ModelTable model={this.props.db.get(this.state.selectedModel)} /> : null}
         <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} />
         <ControlPanel />
       </div>
