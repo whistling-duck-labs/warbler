@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
+import ControlPanel from './controlPanel'
 import {connect} from 'react-redux'
 import {updateDB} from '../store/targetDb'
 
-import { ModelTable, AddColumnForm, ControlPanel, ModelSelector} from './'
+import ModelTable from './modelTable'
+import RaisedButton from 'material-ui/RaisedButton';
+import AddColumnForm from './addColumnForm'
 
 import {fromJS, Map} from 'immutable'
 
@@ -11,8 +14,13 @@ class MigrationController extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      renderTable: false,
       selectedModel: 0
     }
+  }
+
+  onModelSelect (modelIdx) {
+    this.setState({renderTable: true, selectedModel: modelIdx})
   }
 
   onAddColSubmit (evt, value) {
@@ -21,7 +29,7 @@ class MigrationController extends Component {
     let type = value.type
     let colObj = fromJS({name, type})
     let newCol = Map(colObj)
-    let newDb = this.props.targetDb.update(this.state.selectedModel, model => {
+    let newDb = this.props.db.update(0, model => {
       return (
         model.update('attributes', attr => {
           return (
@@ -33,20 +41,17 @@ class MigrationController extends Component {
     this.props.updateDB(newDb)
   }
 
-  updateSelectedModel (idx) {
-    this.setState({selectedModel: idx})
-  }
-
   render() {
+
     return (
-      <div className="migrationController">
-        <ModelSelector
-        models={this.props.targetDb}
-        update={(idx) => this.updateSelectedModel(idx)}
-        className="modelSelector"
-        dbName ={this.props.dbName} />
-        {this.props.targetDb.size && <ModelTable model={this.props.targetDb.get(this.state.selectedModel)} /> }
-        <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} className="addColumnForm"/>
+      <div>
+        <h1>I'm running (test)</h1>
+        <RaisedButton label="users" onClick={() => this.onModelSelect(0)} />
+        {this.state.renderTable ?
+           <ModelTable model={this.props.db.get(this.state.selectedModel)} /> :
+           null
+          }
+        <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} />
         <ControlPanel />
       </div>
     )
@@ -54,8 +59,7 @@ class MigrationController extends Component {
 }
 
 const mapState = state => ({
-  targetDb: state.get('targetDb'),
-  dbName: state.get('dbUrl').replace('postgres://localhost:5432/', '')
+  db: state.get('targetDb')
 })
 
 const mapDispatch = {updateDB}
