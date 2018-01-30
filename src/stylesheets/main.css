@@ -9,6 +9,7 @@ body {
 body {
   display: flex;
   justify-content: center;
+  align-items: center;
   font-family: sans-serif;
   color: #525252;
 }
@@ -25,7 +26,6 @@ a {
 .databaseCards {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 20%;
   justify-content: center;
 }
 
@@ -34,12 +34,3 @@ a {
   margin: 5px;
 }
 
-.migrationController {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.tableContainer {
-  width: 50%;
-  flex: 0 1 auto;
-}
