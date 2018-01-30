@@ -1,0 +1,4 @@
+const path = require('path')
+module.exports = {'config': '/Users/Jon/Documents/fullstack/warbler/config/config.json',
+  'models-path': '/Users/Jon/Documents/fullstack/warbler/server/db/models'
+}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ControlPanel from './controlPanel'
 import {connect} from 'react-redux'
 import {updateDB} from '../store/targetDb'
 
@@ -49,8 +50,9 @@ class MigrationController extends Component {
         {this.state.renderTable ?
            <ModelTable model={this.props.db.get(this.state.selectedModel)} /> :
            null
-        }
+          }
         <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} />
+        <ControlPanel />
       </div>
     )
   }
