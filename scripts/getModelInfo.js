@@ -44,16 +44,18 @@ function buildModelObjects(modelNames, client) {
 function buildModelAttributeList(attributes) {
   const dataTypeMapping = { 'character varying': 'STRING',
                             'integer': 'INTEGER',
-                            'timestamp with time zone': 'DATE'
+                            'timestamp with time zone': 'DATE',
+                            'boolean': 'BOOLEAN',
+                            'text': 'TEXT',
+                            'double precision': 'FLOAT'
                           }
 
   return attributes.rows.map(attribute => {
-    //attribute.datatype = dataTypeMapping[attribute.datatype] || attribute.datatype
 
     return {
       key: attribute.ordinal_position,
       name: attribute.column_name,
-      type: dataTypeMapping[attribute.dataType] || attribute.datatype
+      type: dataTypeMapping[attribute.data_type] || attribute.data_type
     }
   })
 }
