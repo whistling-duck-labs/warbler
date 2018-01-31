@@ -86,6 +86,27 @@ export const getListOfChanges = (db, targetDb) => {
   })
 }
 
+const getDownAction = (upAction) => {
+  switch (upAction) {
+    case 'addColumn':
+      return 'removeColumn'
+    case 'removeColumn':
+      return 'addColumn'
+    case 'renameColumn':
+      return 'renameColumn'
+    case 'changeColumn':
+      return 'changeColumn'
+    case 'createTable':
+      return 'dropTable'
+    case 'dropTable':
+      return 'createTable'
+    case 'renameTable':
+      return 'renameTable'
+    default:
+      throw new Error('Could not generate down Action: Up action was not recognized: ' + upAction)
+  }
+}
+
 const generateMigrationContent = listOfChanges => {
   let upMigration = `{
   up: (queryInterface, Sequelize) => {
@@ -99,9 +120,7 @@ const generateMigrationContent = listOfChanges => {
   listOfChanges.forEach((change, idx) => {
     const model = change.get('model')
     const action = change.get('action')
-    let downAction
-    // add more logic here for opposite (down) actions
-
+    const downAction = getDownAction(action)
     const type = change.get('value').get('type').toUpperCase()
     const name = change.get('value').get('name')
     const upQuery = `queryInterface["${action}"]("${model}", "${name}", Sequelize.${type})`
@@ -110,10 +129,7 @@ const generateMigrationContent = listOfChanges => {
     // This adds a query to the up migration chain
     upMigration += upQueryWrapper
 
-    // This generates the down action query and adds to the down migration chain
-    if (action === 'addColumn') {
-      downAction = 'removeColumn'
-    }
+
     const downQuery = `queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})`
     const downQueryWrapper = idx === 0 ? `${downQuery}` : `\n      .then(() => ${downQuery})`
     // Add down migration query to the down migration chain
