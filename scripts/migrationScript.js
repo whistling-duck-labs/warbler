@@ -88,13 +88,13 @@ export const getListOfChanges = (db, targetDb) => {
 
 const generateMigrationContent = listOfChanges => {
   let upMigration = `{
-    up: (queryInterface, Sequelize) => {
-      return `
-  let downMigration = `\n},
+  up: (queryInterface, Sequelize) => {
+    return `
+  let downMigration = `\n  },
   down: (queryInterface, Sequelize) => {
     return `
-  let migrationEnding = `}
-    }`
+  let migrationEnding = `\n  }
+}`
 
   listOfChanges.forEach((change, idx) => {
     const model = change.get('model')
@@ -106,7 +106,7 @@ const generateMigrationContent = listOfChanges => {
     const name = change.get('value').get('name')
     const upQuery = `queryInterface["${action}"]("${model}", "${name}", Sequelize.${type})`
 
-    const upQueryWrapper = idx === 0 ? `${upQuery}` : `\n  .then(() => ${upQuery})`
+    const upQueryWrapper = idx === 0 ? `${upQuery}` : `\n      .then(() => ${upQuery})`
     // This adds a query to the up migration chain
     upMigration += upQueryWrapper
 
@@ -115,7 +115,7 @@ const generateMigrationContent = listOfChanges => {
       downAction = 'removeColumn'
     }
     const downQuery = `queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})`
-    const downQueryWrapper = idx === 0 ? `${downQuery}` : `\n  .then(() => ${downQuery})`
+    const downQueryWrapper = idx === 0 ? `${downQuery}` : `\n      .then(() => ${downQuery})`
     // Add down migration query to the down migration chain
     downMigration += downQueryWrapper
  })
