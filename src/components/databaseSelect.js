@@ -15,15 +15,15 @@ class DatabaseSelect extends Component {
       dbList: this.props.dbList,
       foo: 10
     }
-    this.condiRender = this.condiRender.bind(this)
+    this.splashControl = this.splashControl.bind(this)
   }
 
   componentDidMount () {
     this.props.fetchDbNames()
-    setTimeout(this.condiRender, 4000);
+    setTimeout(this.splashControl, 4000);
   }
 
-  condiRender() {
+  splashControl() {
     this.setState({isLoading: false})
   }
 
@@ -35,9 +35,9 @@ class DatabaseSelect extends Component {
 
   render () {
     return (
-      this.state.isLoading || !this.props.dbList ? <SplashScreen /> :
+      this.state.isLoading || !this.props.dbList.size ? <SplashScreen /> :
       <div className="databaseCards">
-        {this.props.dbList && this.props.dbList.map((name, idx) => {
+        {this.props.dbList.map((name, idx) => {
           return (
             <Card key={idx} onClick={() => this.onSelect(name)} className="dbCard">
               <CardText className="dbCardText" style={{fontSize: 11}}>
@@ -52,7 +52,6 @@ class DatabaseSelect extends Component {
 }
 
 const mapState = state => ({
-  console.log('here', state.get('dbList'))
   dbList: state.get('dbList')
 })
 
