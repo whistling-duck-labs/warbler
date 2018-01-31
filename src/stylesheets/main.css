@@ -36,10 +36,51 @@ a {
 
 .migrationController {
   display: flex;
+  margin: 10px;
   flex-wrap: wrap;
 }
 
-.tableContainer {
-  width: 50%;
+.modelSelector {
+  width: 20%;
+  max-width: 500px;
+  margin: 0px 20px 20px 20px;
+  min-height: 50%;
+  padding-right: 20px;
+  border-right: thin solid grey ;
+}
+
+.tableFormContainer {
+  width: 70%;
   flex: 0 1 auto;
+}
+
+.dbTitle {
+  font-size: 2em;
+  margin-bottom: 15px;
+}
+
+.addColumnForm {
+  display: flex
+}
+
+.addColumnButton {
+  height: 56px;
+  max-width: 56px;
+  align-self: flex-start;
+}
+
+.addColTextField {
+  align-self: flex-end;
+  flex-grow: 1;
+  max-width: 300px;
+  margin-right: 50px;
+}
+
+.addColType {
+  flex-grow: 1;
+  margin-left: 100px;
+}
+
+.migratePanel {
+  align-self: flex-end;
 }
