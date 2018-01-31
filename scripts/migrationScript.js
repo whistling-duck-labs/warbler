@@ -159,7 +159,7 @@ const runMigration = async () => {
   const migration = generateMigrationContent(listOfChanges)
 
   // write migration file
-  shell.echo(`"use strict" \nmodule.exports = ${migration}`).to(`migrations/${now}.js`)
+  shell.echo(`"use strict"\nmodule.exports = ${migration}`).to(`migrations/${now}.js`)
 
   // Run migration
   //if (shell.exec(`node_modules/.bin/sequelize db:migrate`).code !== 0)
