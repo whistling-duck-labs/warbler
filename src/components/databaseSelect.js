@@ -4,17 +4,23 @@ import {connect} from 'react-redux'
 import {fetchDbNames} from '../store/dbList'
 import {fetchDb} from '../store/db'
 import {setDbUrl} from '../store/dbUrl'
+import { SplashScreen } from './'
+import { setTimeout } from 'timers';
 
 class DatabaseSelect extends Component {
   constructor (props) {
     super(props)
     this.state = {
       isLoading: true,
-      dbList: this.props.dbList
+      dbList: this.props.dbList,
+      foo: 10
     }
+    this.splashControl = this.splashControl.bind(this)
   }
+
   componentDidMount () {
     this.props.fetchDbNames()
+    setTimeout(this.splashControl, 4000);
   }
 
   onSelect (dbname) {
@@ -23,10 +29,15 @@ class DatabaseSelect extends Component {
     this.props.history.push('/control')
   }
 
+  splashControl() {
+    this.setState({isLoading: false})
+  }
+
   render () {
     return (
+      this.state.isLoading || !this.props.dbList.size ? <SplashScreen /> :
       <div className="databaseCards">
-        {this.props.dbList && this.props.dbList.map((name, idx) => {
+        {this.props.dbList.map((name, idx) => {
           return (
             <Card key={idx} onClick={() => this.onSelect(name)} className="dbCard">
               <CardText className="dbCardText" style={{fontSize: 11}}>
