@@ -23,14 +23,14 @@ class DatabaseSelect extends Component {
     setTimeout(this.splashControl, 4000);
   }
 
-  splashControl() {
-    this.setState({isLoading: false})
-  }
-
   onSelect (dbname) {
     this.props.fetchDb(dbname)
     this.props.setDbUrl('postgres://localhost:5432/' + dbname)
     this.props.history.push('/control')
+  }
+
+  splashControl() {
+    this.setState({isLoading: false})
   }
 
   render () {
