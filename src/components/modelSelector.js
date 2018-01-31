@@ -8,7 +8,7 @@ class ModelSelector extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedModel: 0,
+      selectedModel: 0
     }
   }
 
