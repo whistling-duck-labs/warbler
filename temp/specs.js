@@ -336,10 +336,21 @@ var _migrationScript = __webpack_require__(11);
 var _chai = __webpack_require__(1);
 
 describe('The migration script', () => {
-  it('has a getMigrationAction function that returns expected migration action', () => {
-    let op = 'add',
-        changePath = '/3/attributes/3';
-    (0, _chai.expect)((0, _migrationScript.getMigrationAction)(op, changePath)).to.equal('addColumn');
+  describe('has a getMigrationAction function', () => {
+    it('returns add migration action', () => {
+      let op = 'add',
+          changePath = '/3/attributes/3';
+      (0, _chai.expect)((0, _migrationScript.getMigrationAction)(op, changePath)).to.equal('addColumn');
+    }), it('returns removeColumn migration action', () => {
+      let op = 'remove',
+          changePath = '/3/attributes/3';
+      (0, _chai.expect)((0, _migrationScript.getMigrationAction)(op, changePath)).to.equal('removeColumn');
+    }), it('throws a new error', () => {
+      let op = 'puppyBowl',
+          changePath = '/3/attributes/3',
+          error = `migration type error, with operation ${op} and path ${changePath}`;
+      (0, _chai.expect)((0, _migrationScript.getMigrationAction)(op, changePath)).to.be.an.instanceOf(Error);
+    });
   });
 });
 
@@ -422,7 +433,7 @@ const getMigrationAction = (op, changePath) => {
         return 'renameTable';
 
       default:
-        return new Error(`migration type error, with operation ${op} and path ${changePath}`);
+        throw new Error(`migration type error, with operation ${op} and path ${changePath}`);
     }
   }
 };

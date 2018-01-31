@@ -54,7 +54,7 @@ export const getMigrationAction = (op, changePath) => {
       case 'replace':
         return 'renameTable'
       default:
-        return new Error(`migration type error, with operation ${op} and path ${changePath}`)
+        throw new Error(`migration type error, with operation ${op} and path ${changePath}`)
     }
   }
 }
