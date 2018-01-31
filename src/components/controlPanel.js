@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import RaisedButton from 'material-ui/RaisedButton'
-import runMigration from '../../script_testing/migrationScript'
+import runMigration from '../../scripts/migrationScript'
 import {fetchDb} from '../store/db'
 
 const ControlPanel = (props) => (
