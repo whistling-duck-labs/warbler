@@ -9,3 +9,5 @@ function SplashScreen(props) {
     </div>
   )
 }
+
+export default SplashScreen

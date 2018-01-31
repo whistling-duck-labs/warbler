@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import {updateDB} from '../store/targetDb'
 
-import { ModelTable, AddColumnForm, ControlPanel, ModelSelector} from './'
+import { ModelTable, AddColumnForm, ControlPanel, ModelSelector, SplashScreen } from './'
 
 import {fromJS, Map} from 'immutable'
 

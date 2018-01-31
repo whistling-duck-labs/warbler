@@ -1,20 +1,31 @@
 import React, { Component } from 'react'
+import ReactDOM from 'react-dom'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {connect} from 'react-redux'
 import {fetchDbNames} from '../store/dbList'
 import {fetchDb} from '../store/db'
 import {setDbUrl} from '../store/dbUrl'
+import { SplashScreen } from './'
+import { setTimeout } from 'timers';
 
 class DatabaseSelect extends Component {
   constructor (props) {
     super(props)
     this.state = {
       isLoading: true,
-      dbList: this.props.dbList
+      dbList: this.props.dbList,
+      foo: 10
     }
+    this.condiRender = this.condiRender.bind(this)
   }
+
   componentDidMount () {
     this.props.fetchDbNames()
+    setTimeout(this.condiRender, 4000);
+  }
+
+  condiRender() {
+    this.setState({isLoading: false})
   }
 
   onSelect (dbname) {
@@ -25,6 +36,7 @@ class DatabaseSelect extends Component {
 
   render () {
     return (
+      this.state.isLoading || !this.props.dbList ? <SplashScreen /> :
       <div className="databaseCards">
         {this.props.dbList && this.props.dbList.map((name, idx) => {
           return (
