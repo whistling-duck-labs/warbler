@@ -60,14 +60,17 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("immutable");
+"use strict";
+
+
+__webpack_require__(1);
 
 /***/ }),
 /* 1 */
@@ -76,22 +79,9 @@ module.exports = require("immutable");
 "use strict";
 
 
-__webpack_require__(2);
+var _chai = __webpack_require__(2);
 
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _chai = __webpack_require__(3);
-
-var _utils = _interopRequireDefault(__webpack_require__(4));
-
-var _db = __webpack_require__(7);
-
-var _immutable = __webpack_require__(0);
+var _utils = _interopRequireDefault(__webpack_require__(3));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -104,33 +94,15 @@ describe("application launch", () => {
     });
   });
 });
-describe('actions', () => {
-  it('should create an action to add a db', () => {
-    const db = (0, _immutable.fromJS)({
-      users: {
-        name: {
-          type: 'string',
-          allowNull: false
-        }
-      }
-    });
-    const expectedAction = (0, _immutable.Map)({
-      type: _db.INIT_DB,
-      db
-    });
-    console.log((0, _db.initDB)(db));
-    (0, _chai.expect)(expectedAction.equals((0, _db.initDB)(db))).to.equal(true);
-  });
-});
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, exports) {
 
 module.exports = require("chai");
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -141,9 +113,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _electron = _interopRequireDefault(__webpack_require__(5));
+var _electron = _interopRequireDefault(__webpack_require__(4));
 
-var _spectron = __webpack_require__(6);
+var _spectron = __webpack_require__(5);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -175,64 +147,16 @@ var _default = {
 exports.default = _default;
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = require("electron");
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = require("spectron");
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = _default;
-exports.initDB = exports.INIT_DB = void 0;
-
-const {
-  Map
-} = __webpack_require__(0);
-
-const diff = __webpack_require__(8); // actions
-
-
-const INIT_DB = 'INIT_DB';
-exports.INIT_DB = INIT_DB;
-
-const initDB = db => ({
-  type: INIT_DB,
-  db
-}); // initial state
-
-
-exports.initDB = initDB;
-const initialDB = Map({}); // reducer
-
-function _default(state = initialDB, action) {
-  switch (action.type) {
-    case INIT_DB:
-      return action.db;
-
-    default:
-      return state;
-  }
-}
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-module.exports = require("immutablediff");
 
 /***/ })
 /******/ ]);
