@@ -6,7 +6,7 @@ export default class TypeSelect extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      value: "string"
+      value: "STRING"
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -24,8 +24,8 @@ export default class TypeSelect extends Component {
         onChange={this.handleChange}
         value={this.state.value}
         >
-          <MenuItem value="string" primaryText="String" />
-          <MenuItem value="integer" primaryText="Integer" />
+          <MenuItem value="STRING" primaryText="STRING" />
+          <MenuItem value="INTEGER" primaryText="INTEGER" />
       </SelectField>
     )
   }

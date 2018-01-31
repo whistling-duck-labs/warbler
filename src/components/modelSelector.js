@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {List, ListItem} from 'material-ui/List';
+import AddModelForm from './addModelForm'
 
 let listItemStyle = {backgroundColor: "grey"}
 
@@ -7,7 +8,7 @@ class ModelSelector extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedModel: 0
+      selectedModel: 0,
     }
   }
 
@@ -23,7 +24,7 @@ class ModelSelector extends Component {
         <List>
           <div className="dbTitle">{this.props.dbName}</div>
           {
-            models.map((model, idx) => {
+            models && models.map((model, idx) => {
               let selectedStyle = null;
               if (idx === this.state.selectedModel) selectedStyle = listItemStyle
               return (
@@ -36,6 +37,10 @@ class ModelSelector extends Component {
             })
           }
         </List>
+        <AddModelForm
+        handleChange={(event) => this.props.handleModelChange(event)}
+        handleAdd={(event) => this.props.handleModelAdd(event, this.state.modelToAdd)}
+        modelValue={this.props.modelValue} />
       </div>
     )
   }
