@@ -9,7 +9,7 @@ export default class AddColumnForm extends Component {
     super(props)
     this.state = {
       name: "",
-      type: "string"
+      type: "STRING"
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleTypeChange = this.handleTypeChange.bind(this)

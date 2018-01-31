@@ -11,18 +11,18 @@ const ControlPanel = (props) => (
 )
 
 const mapState = state => ({
-  dbName: state.get('dbUrl').replace('postgres://localhost:5432/', '')
+  dbName: state.get('dbUrl').replace('postgres://localhost:5432/', ''),
+  targetDb: state.get('targetDb')
 })
 
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch, ownProps) => {
   return {
     runMigration (dbName) {
       // TODO: change alerts
       alert('Migrating!')
-      runMigration()
+      runMigration(ownProps.targetDb)
         .then(res => {
           alert('Finished Migrating')
-          dispatch(fetchDb(dbName))
         })
         .catch(console.error)
     }

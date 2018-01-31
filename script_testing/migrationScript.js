@@ -38,6 +38,7 @@ const runMigration = async () => {
   const state = store.default.getState()
   const db = state.get('db')
   const dbUrl = state.get('dbUrl')
+  const targetDb = state.get('targetDb')
   shell.echo('starting migration')
 
   //********** setup *********//
@@ -53,12 +54,12 @@ const runMigration = async () => {
   // ******* Find differences to migrate ***********//
 
   //TESTING ONLY - SHOULD IMPORT FROM STORE
-  const attributes = db.getIn(['2', 'attributes'])
-  const targetDb = db.setIn(['2', 'attributes'], attributes.push({
-    key: 21,
-    name: 'oregano',
-    type: 'INTEGER'
-  }))
+  // const attributes = db.getIn(['2', 'attributes'])
+  // const targetDb = db.setIn(['2', 'attributes'], attributes.push({
+  //   key: 21,
+  //   name: 'oregano',
+  //   type: 'INTEGER'
+  // }))
   //***************
 
   // get the diff between the two objects and
