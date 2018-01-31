@@ -6,7 +6,10 @@ const store = require('../src/store')
 const directoryPath = '/Users/Jon/Documents/fullstack/boilermaker'
 
 // Regexp to get model key inside runmigrations .map
-const modelKeyRegex = /\/(\d+)\//
+export const regex = {
+                modelKey: /\/(\d+)/,
+                attributeKey: /attributes\/(\d+)/
+              }
 // Required because of bug with electron and shelljs
 shell.config.execPath = shell.which('node')
 
@@ -59,8 +62,69 @@ export const getMigrationAction = (op, changePath) => {
   }
 }
 
-/******************************************/
+export const getListOfChanges = (db, targetDb) => {
+  return diff(db, targetDb).map(changeMap => {
 
+    // add more logic here for different migrations
+    // create table
+    // drop table
+    // rename table
+    // rename column
+    // change column
+
+    let value //figure out logic for adding value for removeAction
+    const op = changeMap.get('op')
+    const changePath = changeMap.get('path')
+    const modelKey = changeMap.get('path').match(regex.modelKey)[1]
+    const modelName = db.get(modelKey).get('name')
+    const attributeKey = changeMap.get('path').match(regex.attributeKey)[1]
+    const attributeName = db.getIn([modelKey, 'attributes', attributeKey, 'name'])
+    return changeMap
+      .set('model', modelName)
+      .set('action', getMigrationAction(op, changePath))
+      .set('value', changeMap.get('value') || fromJS({ name: attributeName }))
+  })
+}
+
+const generateMigrationContent = listOfChanges => {
+  let upMigration = `{
+    up: (queryInterface, Sequelize) => {
+      return `
+  let downMigration = `\n},
+  down: (queryInterface, Sequelize) => {
+    return `
+  let migrationEnding = `}
+    }`
+
+  listOfChanges.forEach((change, idx) => {
+    const model = change.get('model')
+    const action = change.get('action')
+    let downAction
+    // add more logic here for opposite (down) actions
+
+    const type = change.get('value').get('type').toUpperCase()
+    const name = change.get('value').get('name')
+    const upQuery = `queryInterface["${action}"]("${model}", "${name}", Sequelize.${type})`
+
+    const upQueryWrapper = idx === 0 ? `${upQuery}` : `\n  .then(() => ${upQuery})`
+    // This adds a query to the up migration chain
+    upMigration += upQueryWrapper
+
+    // This generates the down action query and adds to the down migration chain
+    if (action === 'addColumn') {
+      downAction = 'removeColumn'
+    }
+    const downQuery = `queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})`
+    const downQueryWrapper = idx === 0 ? `${downQuery}` : `\n  .then(() => ${downQuery})`
+    // Add down migration query to the down migration chain
+    downMigration += downQueryWrapper
+ })
+
+  return upMigration + downMigration + migrationEnding
+}
+
+
+/******************************************/
 
 /****************MAIN FUNCTION *************/
 const runMigration = async () => {
@@ -68,6 +132,7 @@ const runMigration = async () => {
   // get db from store
   const state = store.default.getState()
   const db = state.get('db')
+  const targetDb = state.get('targetDb')
   const dbUrl = state.get('dbUrl')
   shell.echo('starting migration')
 
@@ -83,61 +148,18 @@ const runMigration = async () => {
 
   // ******* Find differences to migrate ***********//
 
-  // //TESTING ONLY - SHOULD IMPORT FROM STORE
-  // const attributes = db.getIn(['2', 'attributes'])
-  // const targetDb = db.setIn(['2', 'attributes'], attributes.push({
-  //   key: 21,
-  //   name: 'oregano',
-  //   type: 'INTEGER'
-  // }))
-  // //***************
 
   // get the diff between the two objects and
   // add model name and action to diff
-  const listOfChanges = diff(db, targetDb).map(changeMap => {
-
-    // add more logic here for different migrations
-    // create table
-    // drop table
-    // rename table
-    // rename column
-    // change column
-
-    let value //figure out logic for adding value for removeAction
-    const op = changeMap.get('op')
-    const changePath = changeMap.get('path')
-    const modelKey = changeMap.get('path').match(modelKeyRegex)[1]
-    const modelName = targetDb.get(modelKey).get('name')
-    return changeMap
-      .set('model', modelName)
-      .set('action', getMigrationAction(op, changePath))
-      .set('value', value || changeMap.value)
-  })
-  // --> List of changes now has maps (objects) that have model, action, and value
+  const listOfChanges = getListOfChanges(db, targetDb)
+    // --> List of changes now has maps (objects) that have model, action, and value
 
 
-  // create migrations file by looping through List of changes and creating functions for each. This just gets the first one.
-  const model = listOfChanges.get('0').get('model')
-  const action = listOfChanges.get('0').get('action')
-  let downAction
-  // add more logic here for opposite (down) actions
-  if (action === 'addColumn') {
-    downAction = 'removeColumn'
-  }
-  const type = listOfChanges.get('0').get('value').get('type')
-  const name = listOfChanges.get('0').get('value').get('name')
-
-  const migration = `{
-    up: (queryInterface, Sequelize) => {
-      return queryInterface["${action}"]("${model}", "${name}", Sequelize.${type})
-    },
-    down: (queryInterface, Sequelize) => {
-      return queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})
-    }
-  }`
+  // create migrations file content by looping through List of changes and creating functions for each. This just gets the first one.
+  const migration = generateMigrationContent(listOfChanges)
 
   // write migration file
-  shell.echo(`"use strict" \nmodule.exports = ${migration}`).to(`migrations/${now}-${model}.js`)
+  shell.echo(`"use strict" \nmodule.exports = ${migration}`).to(`migrations/${now}.js`)
 
   // Run migration
   //if (shell.exec(`node_modules/.bin/sequelize db:migrate`).code !== 0)

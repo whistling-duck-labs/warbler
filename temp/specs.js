@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -90,7 +90,7 @@ exports.fetchDb = exports.INIT_DB = void 0;
 
 var _immutable = __webpack_require__(0);
 
-var _getModelInfo = _interopRequireDefault(__webpack_require__(9));
+var _getModelInfo = _interopRequireDefault(__webpack_require__(10));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -131,16 +131,9 @@ module.exports = require("pg");
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-__webpack_require__(5);
-
-__webpack_require__(8);
-
-__webpack_require__(10);
+module.exports = require("immutablediff");
 
 /***/ }),
 /* 5 */
@@ -149,11 +142,24 @@ __webpack_require__(10);
 "use strict";
 
 
+__webpack_require__(6);
+
+__webpack_require__(9);
+
+__webpack_require__(11);
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _chai = __webpack_require__(1);
 
-var _hello_world = __webpack_require__(6);
+var _hello_world = __webpack_require__(7);
 
-var _env = _interopRequireDefault(__webpack_require__(7));
+var _env = _interopRequireDefault(__webpack_require__(8));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -183,7 +189,7 @@ describe("hello world", () => {
 });
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -207,13 +213,13 @@ const bye = () => {
 exports.bye = bye;
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = {"name":"test","description":"Add here any environment specific stuff you like."}
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -254,7 +260,7 @@ describe('actions', () => {
 });
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -325,16 +331,47 @@ var _default = getModelInfo;
 exports.default = _default;
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _migrationScript = __webpack_require__(11);
+var _immutable = __webpack_require__(0);
+
+var _immutablediff = _interopRequireDefault(__webpack_require__(4));
+
+var _migrationScript = __webpack_require__(12);
 
 var _chai = __webpack_require__(1);
 
+var _utils = __webpack_require__(24);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*const db = fromJS(
+      [
+        { //model object
+          key: 1,
+          name: 'users',
+          attributes: [
+            { // attribute objects
+              key: 1,
+              name: 'name',
+              type: 'string',
+              allowNull: false
+            },
+            {
+              key: 2,
+              name: 'email',
+              type: 'string',
+              allowNull: false
+            }
+          ]
+        }
+      ]),
+      targetDb = db.setIn(['0', 'attributes', '2'], fromJS({name: 'isAdmin', type: 'boolean'})),
+      puppyBowl = 'puppies'*/
 describe('The migration script', () => {
   describe('has a getMigrationAction function', () => {
     it('returns add migration action', () => {
@@ -351,11 +388,17 @@ describe('The migration script', () => {
           error = `migration type error, with operation ${op} and path ${changePath}`;
       (0, _chai.expect)((0, _migrationScript.getMigrationAction)(op, changePath)).to.be.an.instanceOf(Error);
     });
+  }), describe('has a getListOfChanges function', () => {
+    it('returns the list of changes', () => {
+      const changes = (0, _immutablediff.default)(_utils.db, _utils.targetDb);
+      console.log(_immutable.fromJS);
+      console.log('puppyBowl');
+    });
   });
 });
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -364,13 +407,13 @@ describe('The migration script', () => {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = exports.getMigrationAction = void 0;
+exports.default = exports.getListOfChanges = exports.getMigrationAction = exports.regex = void 0;
 
-const shell = __webpack_require__(12);
+const shell = __webpack_require__(13);
 
-const path = __webpack_require__(13);
+const path = __webpack_require__(14);
 
-const diff = __webpack_require__(14);
+const diff = __webpack_require__(4);
 
 const {
   fromJS
@@ -380,8 +423,12 @@ const store = __webpack_require__(15);
 
 const directoryPath = '/Users/Jon/Documents/fullstack/boilermaker'; // Regexp to get model key inside runmigrations .map
 
-const modelKeyRegex = /\/(\d+)\//; // Required because of bug with electron and shelljs
+const regex = {
+  modelKey: /\/(\d+)/,
+  attributeKey: /attributes\/(\d+)/ // Required because of bug with electron and shelljs
 
+};
+exports.regex = regex;
 shell.config.execPath = shell.which('node');
 /******************HELPER FUNCTIONS *******************/
 
@@ -437,12 +484,36 @@ const getMigrationAction = (op, changePath) => {
     }
   }
 };
+
+exports.getMigrationAction = getMigrationAction;
+
+const getListOfChanges = (db, targetDb) => {
+  return diff(db, targetDb).map(changeMap => {
+    // add more logic here for different migrations
+    // create table
+    // drop table
+    // rename table
+    // rename column
+    // change column
+    let value; //figure out logic for adding value for removeAction
+
+    const op = changeMap.get('op');
+    const changePath = changeMap.get('path');
+    const modelKey = changeMap.get('path').match(modelKeyRegex)[1];
+    const modelName = db.get(modelKey).get('name');
+    const attributeKey = changeMap.get('path').match(attributeKeyRegex)[1];
+    const attributeName = db.getIn([modelKey, 'attributes', attributeKey, 'name']);
+    return changeMap.set('model', modelName).set('action', getMigrationAction(op, changePath)).set('value', changeMap.value || {
+      name: attributeName
+    });
+  });
+};
 /******************************************/
 
 /****************MAIN FUNCTION *************/
 
 
-exports.getMigrationAction = getMigrationAction;
+exports.getListOfChanges = getListOfChanges;
 
 const runMigration = async () => {
   // get db from store
@@ -456,32 +527,10 @@ const runMigration = async () => {
   const now = Date.now(); // create config files and migration folders if they don't exist
 
   createConfigFiles(modelsPath, configPath, dbUrl); // ******* Find differences to migrate ***********//
-  // //TESTING ONLY - SHOULD IMPORT FROM STORE
-  // const attributes = db.getIn(['2', 'attributes'])
-  // const targetDb = db.setIn(['2', 'attributes'], attributes.push({
-  //   key: 21,
-  //   name: 'oregano',
-  //   type: 'INTEGER'
-  // }))
-  // //***************
   // get the diff between the two objects and
   // add model name and action to diff
 
-  const listOfChanges = diff(db, targetDb).map(changeMap => {
-    // add more logic here for different migrations
-    // create table
-    // drop table
-    // rename table
-    // rename column
-    // change column
-    let value; //figure out logic for adding value for removeAction
-
-    const op = changeMap.get('op');
-    const changePath = changeMap.get('path');
-    const modelKey = changeMap.get('path').match(modelKeyRegex)[1];
-    const modelName = targetDb.get(modelKey).get('name');
-    return changeMap.set('model', modelName).set('action', getMigrationAction(op, changePath)).set('value', value || changeMap.value);
-  }); // --> List of changes now has maps (objects) that have model, action, and value
+  const listOfChanges = getListOfChanges(db, targetDb); // --> List of changes now has maps (objects) that have model, action, and value
   // create migrations file by looping through List of changes and creating functions for each. This just gets the first one.
 
   const model = listOfChanges.get('0').get('model');
@@ -501,9 +550,10 @@ const runMigration = async () => {
     down: (queryInterface, Sequelize) => {
       return queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})
     }
-  }`; // write migration file
+  }`; //const migration = generateMigration()
+  // write migration file
 
-  shell.echo(`"use strict" \nmodule.exports = ${migration}`).to(`migrations/${now}-${model}.js`); // Run migration
+  shell.echo(`"use strict" \nmodule.exports = ${migration}`).to(`migrations/${now}.js`); // Run migration
   //if (shell.exec(`node_modules/.bin/sequelize db:migrate`).code !== 0)
 
   const migrationProcess = await shell.exec(`node_modules/.bin/sequelize db:migrate`, {
@@ -518,22 +568,16 @@ var _default = runMigration;
 exports.default = _default;
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("shelljs");
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-module.exports = require("path");
-
-/***/ }),
 /* 14 */
 /***/ (function(module, exports) {
 
-module.exports = require("immutablediff");
+module.exports = require("path");
 
 /***/ }),
 /* 15 */
@@ -757,6 +801,88 @@ function _default(state = initialDbUrl, action) {
       return state;
   }
 }
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _electron = _interopRequireDefault(__webpack_require__(25));
+
+var _spectron = __webpack_require__(26);
+
+var _immutable = __webpack_require__(0);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const beforeEach = function () {
+  this.timeout(10000);
+  this.app = new _spectron.Application({
+    path: _electron.default,
+    args: ["."],
+    startTimeout: 10000,
+    waitTimeout: 10000
+  });
+  return this.app.start();
+};
+
+const afterEach = function () {
+  this.timeout(10000);
+
+  if (this.app && this.app.isRunning()) {
+    return this.app.stop();
+  }
+
+  return undefined;
+};
+
+const db = (0, _immutable.fromJS)([{
+  //model object
+  key: 1,
+  name: 'users',
+  attributes: [{
+    // attribute objects
+    key: 1,
+    name: 'name',
+    type: 'string',
+    allowNull: false
+  }, {
+    key: 2,
+    name: 'email',
+    type: 'string',
+    allowNull: false
+  }]
+}]);
+const targetDb = db.setIn(['0', 'attributes', '2'], (0, _immutable.fromJS)({
+  name: 'isAdmin',
+  type: 'boolean'
+}));
+var _default = {
+  beforeEach,
+  afterEach,
+  db,
+  targetDb
+};
+exports.default = _default;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
+
+module.exports = require("electron");
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+module.exports = require("spectron");
 
 /***/ })
 /******/ ]);
