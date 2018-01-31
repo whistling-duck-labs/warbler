@@ -5,7 +5,7 @@ import runMigration from '../../script_testing/migrationScript'
 import {fetchDb} from '../store/db'
 
 const ControlPanel = (props) => (
-  <div>
+  <div className="migratePanel">
     <RaisedButton primary label='Migrate' onClick={() => props.runMigration(props.dbName)} />
   </div>
 )

@@ -27,15 +27,23 @@ export default class AddColumnForm extends Component {
     let submit = this.props.submit
     return (
     <div className="addColumnContainer">
-      <form onSubmit={(event) => submit(event, this.state)}>
-        <FloatingActionButton type="submit">
+      <form onSubmit={(event) => submit(event, this.state)} className="addColumnForm">
+        <FloatingActionButton
+        type="submit"
+        className="addColumnButton"
+        >
           <ContentAdd />
         </FloatingActionButton>
         <TextField
         name="propName"
         onChange={this.handleChange}
+        className="addColTextField"
         />
-        <TypeSelect handleTypeChange={this.handleTypeChange} />
+        <TypeSelect
+        handleTypeChange={this.handleTypeChange}
+        style={{alignSelf: "flex-start", marginLeft: 100, flexGrow: 1}}
+        className="addColType"
+         />
       </form>
     </div>
   )}
