@@ -6,7 +6,7 @@ export default class TypeSelect extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      value: "STRING"
+      value: 'STRING'
     }
     this.handleChange = this.handleChange.bind(this)
   }

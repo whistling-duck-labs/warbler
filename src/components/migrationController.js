@@ -38,8 +38,8 @@ class MigrationController extends Component {
     this.setState({selectedModel: idx})
   }
 
-  handleModelAdd (event, name) {
-    let newModel = Map(fromJS({name, attributes: []}))
+  handleModelAdd () {
+    let newModel = Map(fromJS({name: this.state.modelToAdd, attributes: []}))
     let newDb = this.props.targetDb.push(newModel)
     this.props.updateDB(newDb)
     this.setState({modelToAdd: ''})
@@ -57,7 +57,7 @@ class MigrationController extends Component {
           models={this.props.targetDb}
           update={(idx) => this.updateSelectedModel(idx)}
           dbName ={this.props.dbName}
-          handleModelAdd={(event, value) => this.handleModelAdd(event, value)}
+          handleModelAdd={() => this.handleModelAdd()}
           handleModelChange={(event) => this.handleModelChange(event)}
           modelValue={this.state.modelToAdd} />
         </div>

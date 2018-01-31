@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {List, ListItem} from 'material-ui/List';
 import AddModelForm from './addModelForm'
 
-let listItemStyle = {backgroundColor: "grey"}
+let listItemStyle = {backgroundColor: 'grey'}
 
 class ModelSelector extends Component {
   constructor (props) {
@@ -39,7 +39,7 @@ class ModelSelector extends Component {
         </List>
         <AddModelForm
         handleChange={(event) => this.props.handleModelChange(event)}
-        handleAdd={(event) => this.props.handleModelAdd(event, this.state.modelToAdd)}
+        handleAdd={() => this.props.handleModelAdd()}
         modelValue={this.props.modelValue} />
       </div>
     )
