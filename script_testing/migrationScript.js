@@ -7,9 +7,11 @@ const directoryPath = '/Users/Jon/Documents/fullstack/boilermaker'
 
 // Regexp to get model key inside runmigrations .map
 const modelKeyRegex = /\/(\d+)\//
-
+// Required because of bug with electron and shelljs
 shell.config.execPath = shell.which('node')
 
+
+/******************HELPER FUNCTIONS *******************/
 const createConfigFiles = (modelsPath, configPath, dbUrl) => {
   //import config data. We don't need username and password as long as password is null
   const dbName = dbUrl.replace('postgres://localhost:5432/', '')
@@ -29,6 +31,38 @@ const createConfigFiles = (modelsPath, configPath, dbUrl) => {
   shell.mkdir(`migrations`)
 }
 
+export const getMigrationAction = (op, changePath) => {
+  if (changePath.includes('attributes')) {
+    // for column actions
+    switch (op) {
+      case 'add':
+        return 'addColumn'
+      case 'remove':
+        return 'removeColumn'
+      case 'replace':
+        return changePath.includes('name') ? 'renameColumn' : 'changeColumn'
+      default:
+        return new Error(`migration type error, with operation ${op} and path ${changePath}`)
+    }
+  } else {
+    // for table actions
+    switch (op) {
+      case 'add':
+        return 'createTable'
+      case 'remove':
+        return 'dropTable'
+      case 'replace':
+        return 'renameTable'
+      default:
+        return new Error(`migration type error, with operation ${op} and path ${changePath}`)
+    }
+  }
+}
+
+/******************************************/
+
+
+/****************MAIN FUNCTION *************/
 const runMigration = async () => {
 
   // get db from store
@@ -60,9 +94,8 @@ const runMigration = async () => {
 
   // get the diff between the two objects and
   // add model name and action to diff
-  const listOfChanges = diff(db, targetDb).map(model => {
-    let migrationAction
-    let value
+  const listOfChanges = diff(db, targetDb).map(changeMap => {
+
     // add more logic here for different migrations
     // create table
     // drop table
@@ -70,20 +103,17 @@ const runMigration = async () => {
     // rename column
     // change column
 
-    const op = model.get('op')
-    const attributeMigrationActionMap = {
-      add: 'addColumn',
-      remove: 'removeColumn',
-      replace: 'changeColumn'
-    }
-
-    const modelKey = model.get('path').match(modelKeyRegex)[1]
+    let value //figure out logic for adding value for removeAction
+    const op = changeMap.get('op')
+    const changePath = changeMap.get('path')
+    const modelKey = changeMap.get('path').match(modelKeyRegex)[1]
     const modelName = targetDb.get(modelKey).get('name')
-    return model
+    return changeMap
       .set('model', modelName)
-      .set('action', migrationAction)
+      .set('action', getMigrationAction(op, changePath))
+      .set('value', value || changeMap.value)
   })
-  // --> List of changes now has objects that have model, action, and value
+  // --> List of changes now has maps (objects) that have model, action, and value
 
 
   // create migrations file by looping through List of changes and creating functions for each. This just gets the first one.
