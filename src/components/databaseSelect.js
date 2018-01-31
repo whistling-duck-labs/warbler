@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import {connect} from 'react-redux'
 import {fetchDbNames} from '../store/dbList'
@@ -53,6 +52,7 @@ class DatabaseSelect extends Component {
 }
 
 const mapState = state => ({
+  console.log('here', state.get('dbList'))
   dbList: state.get('dbList')
 })
 
