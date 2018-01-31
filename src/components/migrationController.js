@@ -43,10 +43,11 @@ class MigrationController extends Component {
         <ModelSelector
         models={this.props.targetDb}
         update={(idx) => this.updateSelectedModel(idx)}
-        className="modelSelector"
         dbName ={this.props.dbName} />
-        {this.props.targetDb.size && <ModelTable model={this.props.targetDb.get(this.state.selectedModel)} /> }
-        <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} className="addColumnForm"/>
+        <div className="tableFormContainer">
+          {this.props.targetDb.size && <ModelTable model={this.props.targetDb.get(this.state.selectedModel)} /> }
+          <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} className="addColumnForm"/>
+        </div>
         <ControlPanel />
       </div>
     )
