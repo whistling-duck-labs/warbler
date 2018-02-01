@@ -29,22 +29,23 @@ export default class AddColumnForm extends Component {
     <div className="addColumnContainer">
       <form onSubmit={(event) => submit(event, this.state)} className="addColumnForm">
         <FloatingActionButton
-        type="submit"
-        className="addColumnButton"
-        mini={true}
+          type="submit"
+          className="addColumnButton"
+          mini={true}
         >
           <ContentAdd />
         </FloatingActionButton>
         <TextField
-        name="propName"
-        onChange={this.handleChange}
-        className="addColTextField"
+          name="propName"
+          onChange={this.handleChange}
+          className="addColTextField"
+          style={{width: '40%'}}
         />
         <TypeSelect
-        handleTypeChange={this.handleTypeChange}
-        style={{alignSelf: 'flex-start', marginLeft: 100, flexGrow: 1}}
-        className="addColType"
-         />
+          handleTypeChange={this.handleTypeChange}
+          style={{alignSelf: 'flex-start', marginLeft: 100, flexGrow: 1}}
+          className="addColType"
+        />
       </form>
     </div>
   )}
