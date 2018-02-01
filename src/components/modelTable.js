@@ -8,6 +8,9 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentRemove from 'material-ui/svg-icons/content/remove';
+
 const ModelTable = (props) => {
   let properties = props.model.get('attributes')
   return (
@@ -25,6 +28,17 @@ const ModelTable = (props) => {
               <TableRow key={idx}>
                 <TableRowColumn>{colMap.get('name')}</TableRowColumn>
                 <TableRowColumn>{colMap.get('type')}</TableRowColumn>
+                <TableRowColumn>
+                  <div className="tableButtons">
+                    <FloatingActionButton
+                      className="deleteButton"
+                      onClick={(event) => props.deleteCol(event, idx)}
+                      mini={true}
+                    >
+                      <ContentRemove />
+                    </FloatingActionButton>
+                  </div>
+                </TableRowColumn>
               </TableRow>
             )
           })}

@@ -34,6 +34,19 @@ class MigrationController extends Component {
     this.props.updateDB(newDb)
   }
 
+  deleteColumn (evt, idx) {
+    let newDb = this.props.targetDb.update(this.state.selectedModel, model => {
+        return (
+          model.update('attributes', attr => {
+            return (
+              attr.delete(idx)
+            )
+          })
+        )
+    })
+    this.props.updateDB(newDb)
+  }
+
   updateSelectedModel (idx) {
     this.setState({selectedModel: idx})
   }
@@ -54,18 +67,24 @@ class MigrationController extends Component {
       <div className="migrationController">
           <div className="modelSelectorContainer">
           <ModelSelector
-          models={this.props.targetDb}
-          update={(idx) => this.updateSelectedModel(idx)}
-          dbName ={this.props.dbName}
-          handleModelAdd={() => this.handleModelAdd()}
-          handleModelChange={(event) => this.handleModelChange(event)}
-          modelValue={this.state.modelToAdd} />
+            models={this.props.targetDb}
+            update={(idx) => this.updateSelectedModel(idx)}
+            dbName ={this.props.dbName}
+            handleModelAdd={() => this.handleModelAdd()}
+            handleModelChange={(event) => this.handleModelChange(event)}
+            modelValue={this.state.modelToAdd}
+            />
         </div>
         <div className="tableFormContainer">
-          {this.props.targetDb.size && <ModelTable model={this.props.targetDb.get(this.state.selectedModel)} /> }
+          { this.props.targetDb.size &&
+            <ModelTable
+              model={this.props.targetDb.get(this.state.selectedModel)}
+              deleteCol={(evt, idx) => this.deleteColumn(evt, idx)}
+             />
+          }
           <AddColumnForm
-          submit={(event, value) => this.onAddColSubmit(event, value)}
-          className="addColumnForm" />
+            submit={(event, value) => this.onAddColSubmit(event, value)}
+            className="addColumnForm" />
         </div>
         <ControlPanel />
       </div>

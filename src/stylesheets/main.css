@@ -99,3 +99,11 @@ a {
   width: 90px;
 }
 
+.tableButtons {
+  display: flex;
+}
+
+.deleteButton {
+  justify-content: right;
+}
+
