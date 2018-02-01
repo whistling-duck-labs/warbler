@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import {connect} from 'react-redux'
 import {updateDB} from '../store/targetDb'
+import toastr from 'toastr'
+import '../stylesheets/toastr.min.css'
 
-import { ModelTable, AddColumnForm, ControlPanel, ModelSelector, SplashScreen } from './'
+import { ModelTable, AddColumnForm, ControlPanel, ModelSelector } from './'
 
 import {fromJS, Map} from 'immutable'
 
@@ -37,6 +39,14 @@ class MigrationController extends Component {
     this.setState({selectedModel: idx})
   }
 
+  returnToDatabases () {
+    if (this.props.targetDb.equals(this.props.db)) {
+      this.props.history.push('/')
+    } else {
+      toastr.error('Please Migrate or Undo your changes before going back to your databases.')
+    }
+  }
+
   render() {
     return (
       <div className="migrationController">
@@ -48,7 +58,7 @@ class MigrationController extends Component {
           {this.props.targetDb.size && <ModelTable model={this.props.targetDb.get(this.state.selectedModel)} /> }
           <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} className="addColumnForm"/>
         </div>
-        <ControlPanel />
+        <ControlPanel returnToDbs={() => this.returnToDatabases()} />
       </div>
     )
   }
@@ -56,6 +66,7 @@ class MigrationController extends Component {
 
 const mapState = state => ({
   targetDb: state.get('targetDb'),
+  db: state.get('db'),
   dbName: state.get('dbUrl').replace('postgres://localhost:5432/', '')
 })
 

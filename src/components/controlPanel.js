@@ -3,10 +3,17 @@ import {connect} from 'react-redux'
 import RaisedButton from 'material-ui/RaisedButton'
 import runMigration from '../../script_testing/migrationScript'
 import {fetchDb} from '../store/db'
+import Dialog from 'material-ui/Dialog'
+import ConfirmUndo from './confirmUndo'
 
 const ControlPanel = (props) => (
   <div className="migratePanel">
-    <RaisedButton primary label='Migrate' onClick={() => props.runMigration(props.dbName)} />
+    <RaisedButton className='button-databases' default label='Databases' onClick={() =>       props.returnToDbs()}
+    />
+    <ConfirmUndo fetchDb={props.fetchDb} dbName={props.dbName} />
+    <RaisedButton className='button-migrate' secondary label='Migrate' onClick={() =>
+      props.runMigration(props.dbName)}
+    />
   </div>
 )
 
@@ -25,6 +32,9 @@ const mapDispatch = dispatch => {
           dispatch(fetchDb(dbName))
         })
         .catch(console.error)
+    },
+    fetchDb (dbName) {
+      dispatch(fetchDb(dbName));
     }
   }
 }
