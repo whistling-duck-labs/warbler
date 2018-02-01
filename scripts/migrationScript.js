@@ -15,9 +15,8 @@ shell.config.execPath = shell.which('node')
 
 
 /******************HELPER FUNCTIONS *******************/
-const createConfigFiles = (modelsPath, configPath, dbUrl) => {
+const createConfigFiles = (modelsPath, configPath, dbName) => {
   //import config data. We don't need username and password as long as password is null
-  const dbName = dbUrl.replace('postgres://localhost:5432/', '')
   const config = `{
     "development": {
       "database": "${dbName}",
@@ -143,13 +142,14 @@ const generateMigrationContent = listOfChanges => {
 /******************************************/
 
 /****************MAIN FUNCTION *************/
-const runMigration = async () => {
+const runMigration = async (shouldGenerateModels) => {
 
   // get db from store
   const state = store.default.getState()
   const db = state.get('db')
   const targetDb = state.get('targetDb')
   const dbUrl = state.get('dbUrl')
+  const dbName = dbUrl.replace('postgres://localhost:5432/', '')
   shell.echo('starting migration')
 
   //********** setup *********//
@@ -159,7 +159,7 @@ const runMigration = async () => {
   const now = Date.now()
 
   // create config files and migration folders if they don't exist
-  createConfigFiles(modelsPath, configPath, dbUrl)
+  createConfigFiles(modelsPath, configPath, dbName)
 
 
   // ******* Find differences to migrate ***********//
@@ -183,6 +183,7 @@ const runMigration = async () => {
   const migrationProcess = await shell.exec(`node_modules/.bin/sequelize db:migrate`, {async: true})
   migrationProcess.stdout.on('data', function(data) {
     console.log('success', data)
+    shouldGenerateModels && shell.exec(`node_modules/.bin/sequelize-auto -o "./models" -d ${dbName} -h localhost -e postgres\n`)
   })
 }
 

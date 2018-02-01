@@ -5,15 +5,14 @@ import runMigration from '../../scripts/migrationScript'
 import {fetchDb} from '../store/db'
 import Dialog from 'material-ui/Dialog'
 import ConfirmUndo from './confirmUndo'
+import ConfirmMigration from './confirmMigration'
 
 const ControlPanel = (props) => (
   <div className="migratePanel">
     <RaisedButton className='button-databases' default label='Databases' onClick={() =>       props.returnToDbs()}
     />
     <ConfirmUndo fetchDb={props.fetchDb} dbName={props.dbName} />
-    <RaisedButton className='button-migrate' secondary label='Migrate' onClick={() =>
-      props.runMigration(props.dbName)}
-    />
+    <ConfirmMigration runMigration={props.runMigration} dbName={props.dbName} />
   </div>
 )
 
@@ -23,10 +22,10 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => {
   return {
-    runMigration (dbName) {
+    runMigration (dbName, shouldGenerateModels) {
       // TODO: change alerts
       alert('Migrating!')
-      runMigration()
+      runMigration(shouldGenerateModels)
         .then(res => {
           alert('Finished Migrating')
           dispatch(fetchDb(dbName))

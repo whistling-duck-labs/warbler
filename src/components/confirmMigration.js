@@ -1,24 +1,32 @@
-import React, { Component } from 'react';
-import Dialog from 'material-ui/Dialog';
-import RaisedButton from 'material-ui/RaisedButton';
+import React, { Component } from 'react'
+import Dialog from 'material-ui/Dialog'
+import RaisedButton from 'material-ui/RaisedButton'
+import Checkbox from 'material-ui/Checkbox'
+import Divider from 'material-ui/Divider'
 
 export default class ConfirmMigration extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      open: false
+      open: false,
+      checked: true
     }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
+    this.updateCheck = this.updateCheck.bind(this)
   }
 
   handleOpen () {
-    this.setState({open: true});
-  };
+    this.setState({open: true})
+  }
 
   handleClose () {
-    this.setState({open: false});
-  };
+    this.setState({open: false})
+  }
+
+  updateCheck () {
+    this.setState({checked: !this.state.checked})
+  }
 
   render() {
     const actions = [
@@ -28,30 +36,35 @@ export default class ConfirmMigration extends Component {
         onClick={this.handleClose}
       />,
       <RaisedButton
-        label="Undo all changes"
+        label="Migrate"
         secondary
         onClick={() => {
           this.handleClose()
-          this.props.fetchDb(this.props.dbName)
+          this.props.runMigration(this.props.dbName, this.state.checked)
         }}
       />
     ];
 
     return (
       <div>
-        <RaisedButton className='button-undo' primary label='Undo' onClick={() =>
+        <RaisedButton className='button-migrate' secondary label='Migrate' onClick={() =>
           this.handleOpen()}
         />
         <Dialog
-          title="Undo changes"
+          title="Execute Migration"
           actions={actions}
           modal={true}
           open={this.state.open}
         >
-          Are you sure you want to permanently undo unsaved changes to {this.props.dbName}?
+          Are you sure you want to migrate changes to {this.props.dbName}?
+          <Divider />
+          <Checkbox
+            label="Export Sequelize model files?"
+            checked={this.state.checked}
+            onCheck={this.updateCheck}
+          />
         </Dialog>
       </div>
-    );
+    )
   }
-
 }
