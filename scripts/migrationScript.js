@@ -171,7 +171,8 @@ const runMigration = async () => {
     // --> List of changes now has maps (objects) that have model, action, and value
 
 
-  // create migrations file content by looping through List of changes and creating functions for each. This just gets the first one.
+  // create migrations file content by looping through List of changes and creating
+  // functions for each. This just gets the first one.
   const migration = generateMigrationContent(listOfChanges)
 
   // write migration file
