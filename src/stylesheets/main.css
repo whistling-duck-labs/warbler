@@ -40,13 +40,14 @@ a {
   flex-wrap: wrap;
 }
 
-.modelSelector {
+.modelSelectorContainer {
   width: 20%;
   max-width: 500px;
   margin: 0px 20px 20px 20px;
   min-height: 50%;
   padding-right: 20px;
   border-right: thin solid grey ;
+  min-width: 200px;
 }
 
 .tableFormContainer {
@@ -64,9 +65,10 @@ a {
 }
 
 .addColumnButton {
-  height: 56px;
+  height: 40px;
   max-width: 56px;
-  align-self: flex-start;
+  align-self: flex-end;
+  margin-right: 30px;
 }
 
 .addColTextField {
@@ -87,5 +89,17 @@ a {
   flex: 1 1;
   justify-content: space-between;
   align-items: flex-end;
+}
+
+.addModelContainer {
+  display: flex;
+}
+
+.addModelButton {
+  height: 40px;
+}
+
+#addModelText {
+  width: 90px;
 }
 

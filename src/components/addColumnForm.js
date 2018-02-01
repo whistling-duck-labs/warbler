@@ -8,8 +8,8 @@ export default class AddColumnForm extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      name: "",
-      type: "string"
+      name: '',
+      type: 'STRING'
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleTypeChange = this.handleTypeChange.bind(this)
@@ -31,6 +31,7 @@ export default class AddColumnForm extends Component {
         <FloatingActionButton
         type="submit"
         className="addColumnButton"
+        mini={true}
         >
           <ContentAdd />
         </FloatingActionButton>
@@ -41,7 +42,7 @@ export default class AddColumnForm extends Component {
         />
         <TypeSelect
         handleTypeChange={this.handleTypeChange}
-        style={{alignSelf: "flex-start", marginLeft: 100, flexGrow: 1}}
+        style={{alignSelf: 'flex-start', marginLeft: 100, flexGrow: 1}}
         className="addColType"
          />
       </form>
