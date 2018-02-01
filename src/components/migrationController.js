@@ -46,6 +46,8 @@ class MigrationController extends Component {
     } else {
       toastr.error('Please Migrate or Undo your changes before going back to your databases.')
     }
+  }
+
   handleModelAdd () {
     let newModel = Map(fromJS({name: this.state.modelToAdd, attributes: []}))
     let newDb = this.props.targetDb.push(newModel)
