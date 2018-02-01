@@ -20,7 +20,7 @@ class DatabaseSelect extends Component {
 
   componentDidMount () {
     this.props.fetchDbNames()
-    setTimeout(this.splashControl, 4000);
+    setTimeout(this.splashControl, 500);
   }
 
   onSelect (dbname) {
@@ -39,8 +39,15 @@ class DatabaseSelect extends Component {
       <div className="databaseCards">
         {this.props.dbList.map((name, idx) => {
           return (
-            <Card key={idx} onClick={() => this.onSelect(name)} className="dbCard">
-              <CardText className="dbCardText" style={{fontSize: 11}}>
+            <Card
+              key={idx}
+              onClick={() => this.onSelect(name)}
+              className="dbCard"
+            >
+              <CardText
+                className="dbCardText"
+                style={{fontSize: 11}}
+              >
                 {name}
               </CardText>
             </Card>

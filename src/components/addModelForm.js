@@ -7,16 +7,18 @@ const AddModelForm = (props) => {
   return (
     <div className="addModelContainer">
       <FloatingActionButton
-      className="addModelButton"
-      mini={true}
-      style={{marginRight: 20}}
-      onClick={props.handleAdd}>
+        className="addModelButton"
+        mini={true}
+        style={{marginRight: 20}}
+        onClick={props.handleAdd}
+      >
         <ContentAdd className="addModelButtonIcon" />
       </FloatingActionButton>
         <TextField
-        onChange={props.handleChange}
-        id="addModelText"
-        value={props.modelValue} />
+          onChange={props.handleChange}
+          id="addModelText"
+          value={props.modelValue}
+        />
     </div>
   )
 }
