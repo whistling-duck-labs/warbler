@@ -29,18 +29,20 @@ class ModelSelector extends Component {
               if (idx === this.state.selectedModel) selectedStyle = listItemStyle
               return (
                 <ListItem
-                primaryText={model.get('name')}
-                key={idx}
-                onClick={() => this.handleSelect(event, idx)}
-                style={ selectedStyle } />
+                  primaryText={model.get('name')}
+                  key={idx}
+                  onClick={() => this.handleSelect(event, idx)}
+                  style={ selectedStyle }
+                />
               )
             })
           }
         </List>
         <AddModelForm
-        handleChange={(event) => this.props.handleModelChange(event)}
-        handleAdd={() => this.props.handleModelAdd()}
-        modelValue={this.props.modelValue} />
+          handleChange={(event) => this.props.handleModelChange(event)}
+          handleAdd={() => this.props.handleModelAdd()}
+          modelValue={this.props.modelValue}
+        />
       </div>
     )
   }

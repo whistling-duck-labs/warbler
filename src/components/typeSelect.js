@@ -23,9 +23,15 @@ export default class TypeSelect extends Component {
         floatingLabelText="Type"
         onChange={this.handleChange}
         value={this.state.value}
-        >
-          <MenuItem value="STRING" primaryText="STRING" />
-          <MenuItem value="INTEGER" primaryText="INTEGER" />
+      >
+          <MenuItem
+            value="STRING"
+            primaryText="STRING"
+          />
+          <MenuItem
+            value="INTEGER"
+            primaryText="INTEGER"
+          />
       </SelectField>
     )
   }
