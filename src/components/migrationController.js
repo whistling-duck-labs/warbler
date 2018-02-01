@@ -11,7 +11,8 @@ class MigrationController extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedModel: 0
+      selectedModel: 0,
+      modelToAdd: ''
     }
   }
 
@@ -22,13 +23,13 @@ class MigrationController extends Component {
     let colObj = fromJS({name, type})
     let newCol = Map(colObj)
     let newDb = this.props.targetDb.update(this.state.selectedModel, model => {
-      return (
-        model.update('attributes', attr => {
-          return (
-            attr.push(newCol)
-          )
-        })
-      )
+        return (
+          model.update('attributes', attr => {
+            return (
+              attr.push(newCol)
+            )
+          })
+        )
     })
     this.props.updateDB(newDb)
   }
@@ -37,16 +38,34 @@ class MigrationController extends Component {
     this.setState({selectedModel: idx})
   }
 
+  handleModelAdd () {
+    let newModel = Map(fromJS({name: this.state.modelToAdd, attributes: []}))
+    let newDb = this.props.targetDb.push(newModel)
+    this.props.updateDB(newDb)
+    this.setState({modelToAdd: ''})
+  }
+
+  handleModelChange (evt) {
+    this.setState({modelToAdd: evt.target.value})
+  }
+
   render() {
     return (
       <div className="migrationController">
-        <ModelSelector
-        models={this.props.targetDb}
-        update={(idx) => this.updateSelectedModel(idx)}
-        dbName ={this.props.dbName} />
+          <div className="modelSelectorContainer">
+          <ModelSelector
+          models={this.props.targetDb}
+          update={(idx) => this.updateSelectedModel(idx)}
+          dbName ={this.props.dbName}
+          handleModelAdd={() => this.handleModelAdd()}
+          handleModelChange={(event) => this.handleModelChange(event)}
+          modelValue={this.state.modelToAdd} />
+        </div>
         <div className="tableFormContainer">
           {this.props.targetDb.size && <ModelTable model={this.props.targetDb.get(this.state.selectedModel)} /> }
-          <AddColumnForm submit={(event, value) => this.onAddColSubmit(event, value)} className="addColumnForm"/>
+          <AddColumnForm
+          submit={(event, value) => this.onAddColSubmit(event, value)}
+          className="addColumnForm" />
         </div>
         <ControlPanel />
       </div>

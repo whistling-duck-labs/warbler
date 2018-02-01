@@ -20,7 +20,7 @@ const ModelTable = (props) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {properties.map((colMap, idx) => {
+          {properties && properties.map((colMap, idx) => {
             return (
               <TableRow key={idx}>
                 <TableRowColumn>{colMap.get('name')}</TableRowColumn>
