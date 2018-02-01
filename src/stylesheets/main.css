@@ -56,9 +56,6 @@ a {
   min-width: 200px;
 }
 
-.controlPanel {
-}
-
 .tableFormContainer {
   flex: 1 2 auto;
 }
@@ -93,7 +90,33 @@ a {
 }
 
 .migratePanel {
-  align-self: flex-end;
+  align-self: stretch;
+  display: flex;
+  flex: 1 1;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.addModelContainer {
+  display: flex;
+}
+
+.addModelButton {
+  height: 40px;
+}
+
+#addModelText {
+  width: 90px;
+}
+
+.splashContainer {
+  height: 600px;
+  width: 500px;
+}
+
+.splashImage {
+  width: 100%;
+  height: auto;
 }
 
 .addModelContainer {
