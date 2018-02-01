@@ -39,6 +39,7 @@ export default class AddColumnForm extends Component {
           name="propName"
           onChange={this.handleChange}
           className="addColTextField"
+          style={{width: '40%'}}
         />
         <TypeSelect
           handleTypeChange={this.handleTypeChange}

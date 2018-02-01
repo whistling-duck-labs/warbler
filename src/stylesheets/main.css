@@ -20,6 +20,7 @@ a {
 
 .container {
   text-align: center;
+  flex-grow: 1;
 }
 
 .databaseCards {
@@ -34,10 +35,15 @@ a {
   margin: 5px;
 }
 
+.migrationControllerContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .migrationController {
   display: flex;
   margin: 10px;
-  flex-wrap: wrap;
+  justify-content: stretch;
 }
 
 .modelSelectorContainer {
@@ -50,9 +56,11 @@ a {
   min-width: 200px;
 }
 
+.controlPanel {
+}
+
 .tableFormContainer {
-  width: 70%;
-  flex: 0 1 auto;
+  flex: 1 2 auto;
 }
 
 .dbTitle {
@@ -76,6 +84,7 @@ a {
   flex-grow: 1;
   max-width: 300px;
   margin-right: 50px;
+  width: 40%;
 }
 
 .addColType {
@@ -101,9 +110,16 @@ a {
 
 .tableButtons {
   display: flex;
+  justify-content: flex-end;
 }
 
-.deleteButton {
-  justify-content: right;
+.deleteButton button {
+  background-color: white !important;
+  height: 30px !important;
+  width: 30px !important;
 }
 
+.deleteButton svg {
+  fill: red !important;
+  height: 30px !important;
+}

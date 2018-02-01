@@ -20,7 +20,7 @@ class DatabaseSelect extends Component {
 
   componentDidMount () {
     this.props.fetchDbNames()
-    setTimeout(this.splashControl, 4000);
+    setTimeout(this.splashControl, 500);
   }
 
   onSelect (dbname) {
