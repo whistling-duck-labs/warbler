@@ -75,8 +75,14 @@ export const getListOfChanges = (db, targetDb) => {
     const op = changeMap.get('op')
     const changePath = changeMap.get('path')
     const modelKey = changeMap.get('path').match(regex.modelKey)[1]
-    const modelName = db.get(modelKey).get('name')
-    const attributeKey = changeMap.get('path').match(regex.attributeKey)[1]
+    let modelName
+    if (op === 'remove' || op === 'replace') {
+      modelName = db.get(modelKey).get('name')
+    }
+    else {
+      modelName = targetDb.get(modelKey).get('name')
+    }
+    const attributeKey = changeMap.get('path').match(regex.attributeKey) ? changeMap.get('path').match(regex.attributeKey)[1] : undefined
     const attributeName = db.getIn([modelKey, 'attributes', attributeKey, 'name'])
     return changeMap
       .set('model', modelName)
@@ -120,17 +126,38 @@ const generateMigrationContent = listOfChanges => {
     const model = change.get('model')
     const action = change.get('action')
     const downAction = getDownAction(action)
-    const type = change.get('value').get('type').toUpperCase()
+    const type = change.get('value').get('type')
     const name = change.get('value').get('name')
-    const upQuery = `queryInterface["${action}"]("${model}", "${name}", Sequelize.${type})`
+    let upQuery
+    let downQuery
+    if (action === 'createTable' || action === 'dropTable') {
+      // adding or dropping tables
+      upQuery = `queryInterface["${action}"]("${name}",
+        {
+          id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+          },
+          createdAt: {
+            type: Sequelize.DATE
+          },
+          updatedAt: {
+            type: Sequelize.DATE
+          }
+        })`
+      downQuery = `queryInterface["${downAction}"]("${name}")`
+    } else {
+      // working on columns
+      upQuery = `queryInterface["${action}"]("${model}", "${name}", Sequelize.${type})`
+      downQuery = `queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})`
+    }
 
     const upQueryWrapper = idx === 0 ? `${upQuery}` : `\n      .then(() => ${upQuery})`
+    const downQueryWrapper = idx === 0 ? `${downQuery}` : `\n      .then(() => ${downQuery})`
+
     // This adds a query to the up migration chain
     upMigration += upQueryWrapper
-
-
-    const downQuery = `queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})`
-    const downQueryWrapper = idx === 0 ? `${downQuery}` : `\n      .then(() => ${downQuery})`
     // Add down migration query to the down migration chain
     downMigration += downQueryWrapper
  })
