@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import { Dialog, RaisedButton, Checkbox, Divider } from 'material-ui'
+import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar'
+const remote = require('electron').remote
 
 export default class ConfirmMigration extends Component {
   constructor (props) {
     super(props)
     this.state = {
       open: false,
-      checked: true
+      checked: true,
+      directory: ''
     }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
@@ -25,23 +28,39 @@ export default class ConfirmMigration extends Component {
     this.setState({checked: !this.state.checked})
   }
 
+  openDirectory () {
+    remote.dialog.showOpenDialog({properties: ['openDirectory']}, (directory) => this.setState({directory}))
+  }
+
   render() {
-    const actions = [
-      <RaisedButton
-        label="Cancel"
-        primary
-        onClick={this.handleClose}
-        className='cancelButton'
-      />,
-      <RaisedButton
-        label="Migrate"
-        secondary
-        onClick={() => {
-          this.handleClose()
-          this.props.runMigration(this.props.dbName, this.state.checked)
-        }}
-      />
-    ];
+    const actions = (
+      <Toolbar>
+        <ToolbarGroup>
+          <RaisedButton
+            label="Choose Directory"
+            primary
+            onClick={() => {
+              this.openDirectory()
+            }}
+          />
+        </ToolbarGroup>
+        <ToolbarGroup>
+          <RaisedButton
+            label="Cancel"
+            primary
+            onClick={this.handleClose}
+          />
+          <RaisedButton
+            label="Migrate"
+            secondary
+            onClick={() => {
+              this.handleClose()
+              this.props.runMigration(this.state.checked, this.state.directory)
+            }}
+          />
+        </ToolbarGroup>
+      </Toolbar>
+    )
 
     return (
       <div>
@@ -57,10 +76,12 @@ export default class ConfirmMigration extends Component {
           Are you sure you want to migrate changes to {this.props.dbName}?
           <Divider />
           <Checkbox
-            label="Export Sequelize model files?"
+            label="Export Sequelize model files"
             checked={this.state.checked}
             onCheck={this.updateCheck}
+            className='model-export-checkbox'
           />
+
         </Dialog>
       </div>
     )

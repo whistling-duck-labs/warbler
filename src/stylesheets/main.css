@@ -116,6 +116,7 @@ a {
 .splashContainer {
   height: 500px;
   width: 400px;
+  margin: auto;
 }
 
 .splashImage {
@@ -159,4 +160,6 @@ td, th {
   text-align: center !important;
 }
 
-
+.model-export-checkbox {
+  margin-top: 3vh;
+}
