@@ -3,6 +3,7 @@ import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'mat
 import RaisedButton from 'material-ui/RaisedButton';
 import {connect} from 'react-redux'
 import {fetchDb} from '../store/db'
+import {fetchDbNames} from '../store/dbList'
 import {setDbUrl} from '../store/dbUrl'
 import {SplashScreen} from './'
 import {setTimeout} from 'timers';
@@ -23,6 +24,10 @@ class DatabaseSelect extends Component {
   componentDidMount () {
     this.props.fetchDbNames()
     setTimeout(this.splashControl, 4000)
+  }
+
+  splashControl () {
+    this.setState({isLoading: false})
   }
 
   onSelect (dbname) {
@@ -58,6 +63,6 @@ const mapState = state => ({
   dbList: state.get('dbList')
 })
 
-const mapDispatch = {fetchDb, setDbUrl}
+const mapDispatch = {fetchDbNames, fetchDb, setDbUrl}
 
 export default connect(mapState, mapDispatch)(DatabaseSelect)
