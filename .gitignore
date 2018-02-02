@@ -74,6 +74,7 @@ Thumbs.db
 .sequelizerc
 migrations
 config/config.json
+models
 
 # ignore pgconfig file if one exists
 config/pgconfig.js
