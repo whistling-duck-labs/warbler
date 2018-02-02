@@ -146,3 +146,9 @@ a {
   fill: red !important;
   height: 30px !important;
 }
+
+td, th {
+  text-align: center !important;
+}
+
+

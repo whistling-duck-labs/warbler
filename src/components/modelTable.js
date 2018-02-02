@@ -19,10 +19,14 @@ const ModelTable = (props) => {
         className="modelTable"
         style={{tableLayout: "auto"}}
       >
-        <TableHeader displaySelectAll={false}>
+        <TableHeader
+        displaySelectAll={false}
+        adjustForCheckbox={false}
+        >
           <TableRow>
-            <TableHeaderColumn width={100}>Property</TableHeaderColumn>
-            <TableHeaderColumn width={100}>Type</TableHeaderColumn>
+            <TableHeaderColumn>Property</TableHeaderColumn>
+            <TableHeaderColumn>Type</TableHeaderColumn>
+            <TableHeaderColumn />
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false} style={{width: '100%'}}>
