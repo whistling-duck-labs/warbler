@@ -7,6 +7,7 @@ import {fetchDb} from '../store/db'
 import {setDbUrl} from '../store/dbUrl'
 import { SplashScreen } from './'
 import { setTimeout } from 'timers';
+import DatabaseIcon from './databaseIcon'
 
 class DatabaseSelect extends Component {
   constructor (props) {
@@ -45,14 +46,10 @@ class DatabaseSelect extends Component {
               onClick={() => this.onSelect(name)}
               className="dbCard"
             >
-              <CardHeader
-                title={name}
-                avatar="./warbler-db-icon.png"
-              />
               <CardText
                 className="dbCardText"
-                style={{fontSize: 11}}
               >
+                <DatabaseIcon dbName={name} />
               </CardText>
             </Card>
           )
