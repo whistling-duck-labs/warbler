@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog'
 import RaisedButton from 'material-ui/RaisedButton'
 import Checkbox from 'material-ui/Checkbox'
 import Divider from 'material-ui/Divider'
+const remote = require('electron').remote
 
 export default class ConfirmMigration extends Component {
   constructor (props) {
@@ -11,6 +12,7 @@ export default class ConfirmMigration extends Component {
       open: false,
       checked: true
     }
+
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.updateCheck = this.updateCheck.bind(this)
@@ -28,8 +30,19 @@ export default class ConfirmMigration extends Component {
     this.setState({checked: !this.state.checked})
   }
 
+  openDirectory () {
+    remote.dialog.showOpenDialog({properties: ['openDirectory']}, (directory) => console.log(directory))
+  }
+
   render() {
     const actions = [
+      <RaisedButton
+      label="Choose Directory"
+      primary
+      onClick={() => {
+        this.openDirectory()
+      }}
+      />,
       <RaisedButton
         label="Cancel"
         primary
@@ -45,6 +58,8 @@ export default class ConfirmMigration extends Component {
       />
     ];
 
+
+
     return (
       <div>
         <RaisedButton className='button-migrate' secondary label='Migrate' onClick={() =>
@@ -59,10 +74,12 @@ export default class ConfirmMigration extends Component {
           Are you sure you want to migrate changes to {this.props.dbName}?
           <Divider />
           <Checkbox
-            label="Export Sequelize model files?"
+            label="Export Sequelize model files"
             checked={this.state.checked}
             onCheck={this.updateCheck}
+            className='model-export-checkbox'
           />
+
         </Dialog>
       </div>
     )
