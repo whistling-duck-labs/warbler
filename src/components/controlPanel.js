@@ -5,16 +5,22 @@ import runMigration from '../../scripts/migrationScript'
 import {fetchDb} from '../store/db'
 import Dialog from 'material-ui/Dialog'
 import ConfirmUndo from './confirmUndo'
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 
 const ControlPanel = (props) => (
-  <div className="migratePanel">
-    <RaisedButton className='button-databases' default label='Databases' onClick={() =>       props.returnToDbs()}
-    />
-    <ConfirmUndo fetchDb={props.fetchDb} dbName={props.dbName} />
-    <RaisedButton className='button-migrate' secondary label='Migrate' onClick={() =>
+  <Toolbar>
+    <ToolbarGroup firstChild={true}>
+      <RaisedButton default label='Databases' onClick={() =>       props.returnToDbs()}
+      />
+    </ToolbarGroup>
+    <ToolbarGroup>
+      <ConfirmUndo fetchDb={props.fetchDb} dbName={props.dbName} />
+      <ToolbarSeparator />
+      <RaisedButton secondary label='Migrate' onClick={() =>
       props.runMigration(props.dbName)}
-    />
-  </div>
+      />
+    </ToolbarGroup>
+  </Toolbar>
 )
 
 const mapState = state => ({

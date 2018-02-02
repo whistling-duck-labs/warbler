@@ -20,7 +20,6 @@ a {
 
 .container {
   text-align: center;
-  flex-grow: 1;
 }
 
 .databaseCards {
@@ -38,10 +37,12 @@ a {
 .migrationControllerContainer {
   display: flex;
   flex-direction: column;
+  height: 100vh;
 }
 
 .migrationController {
   display: flex;
+  flex: 1 1;
   margin: 10px;
   justify-content: stretch;
 }
@@ -89,16 +90,12 @@ a {
   margin-left: 100px;
 }
 
-.migratePanel {
-  align-self: stretch;
-  display: flex;
-  flex: 1 1;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
 .addModelContainer {
   display: flex;
+}
+
+.undoButton {
+  margin-right: 10px;
 }
 
 .addModelButton {
