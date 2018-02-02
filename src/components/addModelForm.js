@@ -18,6 +18,7 @@ const AddModelForm = (props) => {
           onChange={props.handleChange}
           id="addModelText"
           value={props.modelValue}
+          style={{width: 135}}
         />
     </div>
   )

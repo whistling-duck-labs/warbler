@@ -1,15 +1,23 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { Route, Switch, Router, withRouter } from 'react-router-dom'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import {blue800, red900} from 'material-ui/styles/colors';
 import { DatabaseSelect, MigrationController, SplashScreen } from './components'
 import createHashHistory from 'history/createHashHistory'
 import store from './store'
 
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: blue800,
+  }
+})
+
 const newHistory = createHashHistory();
 
 const Routes = () => (
-  <MuiThemeProvider>
+  <MuiThemeProvider muiTheme={muiTheme}>
     <Provider store={store}>
       <Router history={newHistory}>
           <Switch>

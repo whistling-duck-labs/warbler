@@ -21,7 +21,7 @@ class ModelSelector extends Component {
     let models = this.props.models
     return (
       <div className="modelSelector">
-        <List>
+        <List style={{maxHeight: '100%', overflow: 'auto', marginRight: 20}}>
           <div className="dbTitle">{this.props.dbName}</div>
           {
             models && models.map((model, idx) => {
