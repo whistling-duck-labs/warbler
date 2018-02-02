@@ -35,6 +35,10 @@ a {
   margin: 5px;
 }
 
+.dbIcon {
+  width: 10px;
+}
+
 .migrationControllerContainer {
   display: flex;
   flex-direction: column;
