@@ -11,11 +11,6 @@ import store from './store'
 const muiTheme = getMuiTheme({
   palette: {
     primary1Color: blue800,
-    secondary1Color: red900,
-    secondaryColor: red900,
-    secondary: red900,
-    primary2Color: red900,
-    primary3Color: red900
   }
 })
 
