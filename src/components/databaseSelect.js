@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
 import {connect} from 'react-redux'
-import {fetchDbNames} from '../store/dbList'
 import {fetchDb} from '../store/db'
 import {setDbUrl} from '../store/dbUrl'
-import { SplashScreen } from './'
-import { setTimeout } from 'timers';
+import {SplashScreen} from './'
+import {setTimeout} from 'timers';
 import DatabaseIcon from './databaseIcon'
+
 
 class DatabaseSelect extends Component {
   constructor (props) {
@@ -22,7 +22,7 @@ class DatabaseSelect extends Component {
 
   componentDidMount () {
     this.props.fetchDbNames()
-    setTimeout(this.splashControl, 4000);
+    setTimeout(this.splashControl, 4000)
   }
 
   onSelect (dbname) {
@@ -31,13 +31,8 @@ class DatabaseSelect extends Component {
     this.props.history.push('/control')
   }
 
-  splashControl() {
-    this.setState({isLoading: false})
-  }
-
   render () {
     return (
-      this.state.isLoading || !this.props.dbList.size ? <SplashScreen /> :
       <div className="databaseCards">
         {this.props.dbList.map((name, idx) => {
           return (
@@ -63,6 +58,6 @@ const mapState = state => ({
   dbList: state.get('dbList')
 })
 
-const mapDispatch = {fetchDbNames, fetchDb, setDbUrl}
+const mapDispatch = {fetchDb, setDbUrl}
 
 export default connect(mapState, mapDispatch)(DatabaseSelect)
