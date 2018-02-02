@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import Dialog from 'material-ui/Dialog'
-import RaisedButton from 'material-ui/RaisedButton'
-import Checkbox from 'material-ui/Checkbox'
-import Divider from 'material-ui/Divider'
+import { Dialog, RaisedButton, Checkbox, Divider } from 'material-ui/src'
 
 export default class ConfirmMigration extends Component {
   constructor (props) {
