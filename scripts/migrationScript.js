@@ -195,6 +195,7 @@ const runMigration = async () => {
   // get the diff between the two objects and
   // add model name and action to diff
   const listOfChanges = getListOfChanges(db, targetDb)
+  console.log(listOfChanges)
     // --> List of changes now has maps (objects) that have model, action, and value
 
 

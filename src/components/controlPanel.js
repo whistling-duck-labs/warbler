@@ -29,7 +29,6 @@ const mapDispatch = dispatch => {
       runMigration()
         .then(res => {
           alert('Finished Migrating')
-          dispatch(fetchDb(dbName))
         })
         .catch(console.error)
     },
