@@ -89,16 +89,12 @@ a {
   margin-left: 100px;
 }
 
-.migratePanel {
-  align-self: stretch;
-  display: flex;
-  flex: 1 1;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-
 .addModelContainer {
   display: flex;
+}
+
+.undoButton {
+  margin-right: 10px;
 }
 
 .addModelButton {
