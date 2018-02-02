@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Checkbox from 'material-ui/Checkbox'
 import Divider from 'material-ui/Divider'
 const remote = require('electron').remote
+import { Dialog, RaisedButton, Checkbox, Divider } from 'material-ui'
 
 export default class ConfirmMigration extends Component {
   constructor (props) {
@@ -12,7 +13,6 @@ export default class ConfirmMigration extends Component {
       open: false,
       checked: true
     }
-
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.updateCheck = this.updateCheck.bind(this)
@@ -56,9 +56,7 @@ export default class ConfirmMigration extends Component {
           this.props.runMigration(this.props.dbName, this.state.checked)
         }}
       />
-    ];
-
-
+    ]
 
     return (
       <div>

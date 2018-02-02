@@ -25,10 +25,11 @@ export default class ConfirmUndo extends Component {
       <RaisedButton
         label="Cancel"
         primary
+        className="undoButton"
         onClick={this.handleClose}
       />,
       <RaisedButton
-        label="Undo all changes"
+        label="Undo all"
         secondary
         onClick={() => {
           this.handleClose()
@@ -39,7 +40,7 @@ export default class ConfirmUndo extends Component {
 
     return (
       <div>
-        <RaisedButton className='button-undo' primary label='Undo' onClick={() =>
+        <RaisedButton primary label='Undo' onClick={() =>
           this.handleOpen()}
         />
         <Dialog

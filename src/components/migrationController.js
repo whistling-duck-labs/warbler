@@ -55,7 +55,7 @@ class MigrationController extends Component {
 
   returnToDatabases () {
     if (this.props.targetDb.equals(this.props.db)) {
-      this.props.history.push('/')
+      this.props.history.push('/database-select')
     } else {
       toastr.error('Please Migrate or Undo your changes before going back to your databases.')
     }
