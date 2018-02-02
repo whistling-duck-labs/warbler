@@ -169,7 +169,7 @@ const generateMigrationContent = listOfChanges => {
 /******************************************/
 
 /****************MAIN FUNCTION *************/
-const runMigration = async (shouldGenerateModels) => {
+const runMigration = async (shouldGenerateModels, directory) => {
 
   // get db from store
   const state = store.default.getState()
@@ -205,13 +205,24 @@ const runMigration = async (shouldGenerateModels) => {
   // write migration file
   shell.echo(`"use strict"\nmodule.exports = ${migration}`).to(`migrations/${now}.js`)
 
+  // copy migration files to user-chosen directory
+  directory && shell.cp('-R', './migrations', `${directory}/migrations`)
+
   // Run migration
   //if (shell.exec(`node_modules/.bin/sequelize db:migrate`).code !== 0)
-  const migrationProcess = await shell.exec(`node_modules/.bin/sequelize db:migrate`, {async: true})
-  migrationProcess.stdout.on('data', function(data) {
-    console.log('success', data)
+  shell.exec(`node_modules/.bin/sequelize db:migrate`, (code, stdout, stderr) => {
+    console.log(stdout)
+    console.log(stderr)
     shouldGenerateModels && shell.exec(`node_modules/.bin/sequelize-auto -o "./models" -d ${dbName} -h localhost -e postgres\n`)
+      // copy model files to user chosen directory
+    directory && shell.cp('-R', './models', `${directory}/models`)
   })
+  // migrationProcess.stdout.on('data', function(data) {
+  //   console.log('success', data)
+  // })
+  // migrationProcess.stderr.on('error', function(error) {
+  //   shell.exit(error)
+  // })
 }
 
 export default runMigration

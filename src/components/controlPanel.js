@@ -17,7 +17,7 @@ const ControlPanel = (props) => (
     <ToolbarGroup>
       <ConfirmUndo fetchDb={props.fetchDb} dbName={props.dbName} />
       <ToolbarSeparator />
-      <ConfirmMigration runMigration={props.runMigration} dbName={props.dbName} />
+      <ConfirmMigration runMigration={props.runMigration} />
     </ToolbarGroup>
   </Toolbar>
 )
@@ -28,10 +28,10 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => {
   return {
-    runMigration (dbName, shouldGenerateModels) {
+    runMigration (shouldGenerateModels, directory) {
       // TODO: change alerts
       alert('Migrating!')
-      runMigration(shouldGenerateModels)
+      runMigration(shouldGenerateModels, directory)
         .then(res => {
           alert('Finished Migrating')
         })
