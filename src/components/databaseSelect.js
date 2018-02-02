@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import RaisedButton from 'material-ui/RaisedButton';
 import {connect} from 'react-redux'
 import {fetchDbNames} from '../store/dbList'
 import {fetchDb} from '../store/db'
@@ -20,7 +21,7 @@ class DatabaseSelect extends Component {
 
   componentDidMount () {
     this.props.fetchDbNames()
-    setTimeout(this.splashControl, 500);
+    setTimeout(this.splashControl, 4000);
   }
 
   onSelect (dbname) {
@@ -44,11 +45,14 @@ class DatabaseSelect extends Component {
               onClick={() => this.onSelect(name)}
               className="dbCard"
             >
+              <CardHeader
+                title={name}
+                avatar="./warbler-db-icon.png"
+              />
               <CardText
                 className="dbCardText"
                 style={{fontSize: 11}}
               >
-                {name}
               </CardText>
             </Card>
           )
