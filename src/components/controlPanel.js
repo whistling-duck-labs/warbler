@@ -28,7 +28,6 @@ const mapDispatch = dispatch => {
       runMigration(shouldGenerateModels)
         .then(res => {
           alert('Finished Migrating')
-          dispatch(fetchDb(dbName))
         })
         .catch(console.error)
     },
