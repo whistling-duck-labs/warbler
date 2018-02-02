@@ -20,6 +20,7 @@ a {
 
 .container {
   text-align: center;
+  width: 100%;
 }
 
 .databaseCards {
@@ -54,11 +55,17 @@ a {
   min-height: 50%;
   padding-right: 20px;
   border-right: thin solid grey ;
-  min-width: 200px;
+  min-width: 235px;
+}
+
+.modelSelector {
+  max-height: 100%;
+  overflow: auto;
 }
 
 .tableFormContainer {
   flex: 1 2 auto;
+  overflow: auto;
 }
 
 .dbTitle {
@@ -125,7 +132,7 @@ a {
 }
 
 #addModelText {
-  width: 90px;
+  width: 70px;
 }
 
 .tableButtons {
@@ -142,6 +149,10 @@ a {
 .deleteButton svg {
   fill: red !important;
   height: 30px !important;
+}
+
+.cancelButton {
+  margin-right: 10px;
 }
 
 td, th {

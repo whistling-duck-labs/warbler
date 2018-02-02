@@ -31,6 +31,7 @@ export default class ConfirmMigration extends Component {
         label="Cancel"
         primary
         onClick={this.handleClose}
+        className='cancelButton'
       />,
       <RaisedButton
         label="Migrate"
