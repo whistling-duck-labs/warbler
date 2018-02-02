@@ -34,10 +34,17 @@ a {
   margin: 5px;
 }
 
+.migrationControllerContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 .migrationController {
   display: flex;
+  flex: 1 1;
   margin: 10px;
-  flex-wrap: wrap;
+  justify-content: stretch;
 }
 
 .modelSelectorContainer {
@@ -51,8 +58,7 @@ a {
 }
 
 .tableFormContainer {
-  width: 70%;
-  flex: 0 1 auto;
+  flex: 1 2 auto;
 }
 
 .dbTitle {
@@ -76,6 +82,7 @@ a {
   flex-grow: 1;
   max-width: 300px;
   margin-right: 50px;
+  width: 40%;
 }
 
 .addColType {
@@ -83,12 +90,30 @@ a {
   margin-left: 100px;
 }
 
-.migratePanel {
-  align-self: stretch;
+.addModelContainer {
   display: flex;
-  flex: 1 1;
-  justify-content: space-between;
-  align-items: flex-end;
+}
+
+.undoButton {
+  margin-right: 10px;
+}
+
+.addModelButton {
+  height: 40px;
+}
+
+#addModelText {
+  width: 90px;
+}
+
+.splashContainer {
+  height: 500px;
+  width: 400px;
+}
+
+.splashImage {
+  width: 100%;
+  height: auto;
 }
 
 .addModelContainer {
@@ -103,12 +128,18 @@ a {
   width: 90px;
 }
 
-.splashContainer {
-  height: 600px;
-  width: 500px;
+.tableButtons {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.splashImage {
-  width: 100%;
-  height: auto;
+.deleteButton button {
+  background-color: white !important;
+  height: 30px !important;
+  width: 30px !important;
+}
+
+.deleteButton svg {
+  fill: red !important;
+  height: 30px !important;
 }

@@ -25,8 +25,15 @@ class DatabaseSelect extends Component {
       <div className="databaseCards">
         {this.props.dbList.map((name, idx) => {
           return (
-            <Card key={idx} onClick={() => this.onSelect(name)} className="dbCard">
-              <CardText className="dbCardText" style={{fontSize: 11}}>
+            <Card
+              key={idx}
+              onClick={() => this.onSelect(name)}
+              className="dbCard"
+            >
+              <CardText
+                className="dbCardText"
+                style={{fontSize: 11}}
+              >
                 {name}
               </CardText>
             </Card>
