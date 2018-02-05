@@ -7,9 +7,9 @@ const directoryPath = '/Users/Jon/Documents/fullstack/boilermaker'
 
 // Regexp to get model key inside runmigrations .map
 export const regex = {
-                modelKey: /\/(\d+)/,
-                attributeKey: /attributes\/(\d+)/
-              }
+  modelKey: /\/(\d+)/,
+  attributeKey: /attributes\/(\d+)/
+}
 // Required because of bug with electron and shelljs
 shell.config.execPath = shell.which('node')
 
@@ -23,12 +23,12 @@ const createConfigFiles = (modelsPath, configPath, dbName) => {
       "host": "127.0.0.1",
       "dialect": "postgres"
     }
-  }`
+  }` //consider JSON.stringify
   // setup sequelizerc file
   shell.touch(`.sequelizerc`)
   shell.echo(`const path = require('path')\nmodule.exports = {'config': '${configPath}',\n  'models-path': '${modelsPath}'\n}`).to(`.sequelizerc`)
   // setup config file with db credentials
-  shell.echo(config).to(`config/config.json`)
+  shell.echo(config).to(configPath)
   // create migrations folder
   shell.mkdir(`migrations`)
 }
@@ -71,7 +71,7 @@ export const getListOfChanges = (db, targetDb) => {
     // rename column
     // change column
 
-    let value //figure out logic for adding value for removeAction
+    //figure out logic for adding value for removeAction
     const op = changeMap.get('op')
     const changePath = changeMap.get('path')
     const modelKey = changeMap.get('path').match(regex.modelKey)[1]
@@ -217,12 +217,6 @@ const runMigration = async (shouldGenerateModels, directory) => {
       // copy model files to user chosen directory
     directory && shell.cp('-R', './models', `${directory}/models`)
   })
-  // migrationProcess.stdout.on('data', function(data) {
-  //   console.log('success', data)
-  // })
-  // migrationProcess.stderr.on('error', function(error) {
-  //   shell.exit(error)
-  // })
 }
 
 export default runMigration

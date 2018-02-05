@@ -10,9 +10,12 @@ import {
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
+import { sortImmutableByKeys } from './modelSelector'
 
 const ModelTable = (props) => {
+  if (!props.model) return ''
   let properties = props.model.get('attributes')
+  let propertyKeysArr = sortImmutableByKeys(properties)
   return (
     <div className="tableContainer">
       <Table
@@ -30,16 +33,17 @@ const ModelTable = (props) => {
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false} style={{width: '100%'}}>
-          {properties && properties.map((colMap, idx) => {
+          {properties && propertyKeysArr.map((key, idx) => {
+            console.log('iterating')
             return (
               <TableRow key={idx}>
-                <TableRowColumn>{colMap.get('name')}</TableRowColumn>
-                <TableRowColumn>{colMap.get('type')}</TableRowColumn>
+                <TableRowColumn>{properties.get(key).get('name')}</TableRowColumn>
+                <TableRowColumn>{properties.get(key).get('type')}</TableRowColumn>
                 <TableRowColumn>
                   <div className="tableButtons">
                     <FloatingActionButton
                       className="deleteButton"
-                      onClick={(event) => props.deleteCol(event, idx)}
+                      onClick={(event) => props.deleteCol(event, key)}
                       mini={true}
                     >
                       <ContentRemove />

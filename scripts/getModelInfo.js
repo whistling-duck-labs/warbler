@@ -20,14 +20,13 @@ async function getModelInfo(selectedDbName) {
   const promisedDB = buildModelObjects(modelNames, client)
 
   return Promise.all(promisedDB).then(dbArray => {
-    const db = {
-      name: ''
-    }
+    const db = {}
     let modelKey = 1
     dbArray.forEach(model => {
       db[modelKey] = model
       modelKey++
     })
+    db.nextModelKey = Object.keys(db).length + 1
     return fromJS(db)
   })
 }
@@ -40,24 +39,29 @@ function buildModelObjects(modelNames, client) {
     }
 
     // Get each attribute on a model, their index, and data type
-    const attributeInfo = await client.query(`SELECT column_name, ordinal_position, data_type
-                                           FROM information_schema.columns
-                                           WHERE table_name = '${model}'`)
+    const attributeInfo = await client.query(`
+      SELECT column_name, ordinal_position, data_type
+      FROM information_schema.columns
+      WHERE table_name = $1`,
+      [model]
+    )
 
     modelObject.attributes = buildModelAttributeMap(attributeInfo)
+    modelObject.nextAttributeKey = Object.keys(modelObject.attributes).length + 1
     return modelObject
   })
 }
 
 function buildModelAttributeMap(attributeInfo) {
   const attributeMap = {}
-  const dataTypeMapping = { 'character varying': 'STRING',
-                            'integer': 'INTEGER',
-                            'timestamp with time zone': 'DATE',
-                            'boolean': 'BOOLEAN',
-                            'text': 'TEXT',
-                            'double precision': 'FLOAT'
-                          }
+  const dataTypeMapping = {
+    'character varying': 'STRING',
+    'integer': 'INTEGER',
+    'timestamp with time zone': 'DATE',
+    'boolean': 'BOOLEAN',
+    'text': 'TEXT',
+    'double precision': 'FLOAT'
+  }
   let attributeKey = 1
   attributeInfo.rows.forEach(attribute => {
       attributeMap[attributeKey] = {

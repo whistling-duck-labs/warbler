@@ -1,4 +1,4 @@
-import {fromJS, Map} from 'immutable'
+import {Map} from 'immutable'
 import getModelInfo from '../../scripts/getModelInfo'
 import toastr from 'toastr'
 // actions
@@ -12,7 +12,7 @@ export const fetchDb = dbName => dispatch => {
   // fetch all db info
   getModelInfo(dbName)
     .then(db => dispatch(initDB(db)))
-    .catch(toastr.error('Error retrieving database information'))
+    .catch(() => toastr.error('Error retrieving database information'))
 }
 
 // initial state

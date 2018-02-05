@@ -4,6 +4,10 @@ import AddModelForm from './addModelForm'
 
 let listItemStyle = {backgroundColor: 'grey'}
 
+export const sortImmutableByKeys = (map) => {
+  return Object.keys(map.toJS()).sort((a, b) => Number(a) < Number(b))
+}
+
 class ModelSelector extends Component {
   constructor (props) {
     super(props)
@@ -16,23 +20,38 @@ class ModelSelector extends Component {
     this.props.update(idx)
     this.setState({selectedModel: idx})
   }
+  /* .css
+  .full-height {
+    maxHeight: 100%';
+  }
+  .overflow {
+    overflow: auto;
+  }
+  .margin-right-medium {
+    marginRight: 20px;
+  }
+  */
 
   render() {
     let models = this.props.models
-    if (models) console.log('true')
+    let modelKeysArr
+    if (models) {
+      console.log('MODELS', models)
+      modelKeysArr = sortImmutableByKeys(models)
+      console.log('SORTED MODEL KEYS', modelKeysArr)
+    }
     let count = 0;
     return (
       <div className="modelSelector">
-        <List style={{maxHeight: '100%', overflow: 'auto', marginRight: 20}}>
+        <List className="full-height overflow margin-right-medium">
           <div className="dbTitle">{this.props.dbName}</div>
           {
-            models && models.keySeq().map(key => {
+            models && modelKeysArr.map(key => {
               let selectedStyle = null;
               count++;
               if (key === this.state.selectedModel) selectedStyle = listItemStyle
-              console.log(key, '===', this.state.selectedModel)
 
-              if (key !== 'name') {
+              if (key !== 'name' && key !== 'nextModelKey') {
                 return (
                   <ListItem
                     primaryText={models.get(key).get('name')}
