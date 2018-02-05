@@ -7,9 +7,9 @@ const directoryPath = '/Users/Jon/Documents/fullstack/boilermaker'
 
 // Regexp to get model key inside runmigrations .map
 export const regex = {
-                modelKey: /\/(\d+)/,
-                attributeKey: /attributes\/(\d+)/
-              }
+  modelKey: /\/(\d+)/,
+  attributeKey: /attributes\/(\d+)/
+}
 // Required because of bug with electron and shelljs
 shell.config.execPath = shell.which('node')
 
@@ -23,12 +23,12 @@ const createConfigFiles = (modelsPath, configPath, dbName) => {
       "host": "127.0.0.1",
       "dialect": "postgres"
     }
-  }`
+  }` //consider JSON.stringify
   // setup sequelizerc file
   shell.touch(`.sequelizerc`)
   shell.echo(`const path = require('path')\nmodule.exports = {'config': '${configPath}',\n  'models-path': '${modelsPath}'\n}`).to(`.sequelizerc`)
   // setup config file with db credentials
-  shell.echo(config).to(`config/config.json`)
+  shell.echo(config).to(configPath)
   // create migrations folder
   shell.mkdir(`migrations`)
 }
@@ -63,6 +63,18 @@ export const getMigrationAction = (op, changePath) => {
 
 export const getListOfChanges = (db, targetDb) => {
   return diff(db, targetDb).map(changeMap => {
+<<<<<<< HEAD
+=======
+
+    // add more logic here for different migrations
+    // create table
+    // drop table
+    // rename table
+    // rename column
+    // change column
+
+    //figure out logic for adding value for removeAction
+>>>>>>> 114ad30f41e102a4a2dd8425be36034f318f08ef
     const op = changeMap.get('op')
     const changePath = changeMap.get('path')
     const modelKey = changePath.match(regex.modelKey)[1]
