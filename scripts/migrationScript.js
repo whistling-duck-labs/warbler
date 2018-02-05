@@ -62,19 +62,10 @@ export const getMigrationAction = (op, changePath) => {
 }
 
 export const getListOfChanges = (db, targetDb) => {
-  return diff(db, targetDb).map(changeMap => {
-<<<<<<< HEAD
-=======
-
-    // add more logic here for different migrations
-    // create table
-    // drop table
-    // rename table
-    // rename column
-    // change column
-
-    //figure out logic for adding value for removeAction
->>>>>>> 114ad30f41e102a4a2dd8425be36034f318f08ef
+  return diff(db, targetDb)
+  // ignore changes to nextKey value
+  .filter(changeMap => !changeMap.get('path').includes('nextAttributeKey'))
+  .map(changeMap => {
     const op = changeMap.get('op')
     const changePath = changeMap.get('path')
     const modelKey = changePath.match(regex.modelKey)[1]
@@ -130,6 +121,7 @@ const generateMigrationContent = listOfChanges => {
     const model = change.get('model')
     const action = change.get('action')
     const downAction = getDownAction(action)
+    console.log(change)
     const type = change.get('value').get('type')
     const name = change.get('value').get('name')
     let upQuery
