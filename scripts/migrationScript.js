@@ -63,25 +63,17 @@ export const getMigrationAction = (op, changePath) => {
 
 export const getListOfChanges = (db, targetDb) => {
   return diff(db, targetDb).map(changeMap => {
-
-    // add more logic here for different migrations
-    // create table
-    // drop table
-    // rename table
-    // rename column
-    // change column
-
-    let value //figure out logic for adding value for removeAction
     const op = changeMap.get('op')
     const changePath = changeMap.get('path')
-    const modelKey = changeMap.get('path').match(regex.modelKey)[1]
+    const modelKey = changePath.match(regex.modelKey)[1]
     let modelName
     if (op === 'remove' || op === 'replace') {
       modelName = db.get(modelKey).get('name')
     }
-    else {
+    else { // op is 'add'
       modelName = targetDb.get(modelKey).get('name')
     }
+    // if op is remove, we need to manually set the value with the attribute name
     const attributeKey = changeMap.get('path').match(regex.attributeKey) ? changeMap.get('path').match(regex.attributeKey)[1] : undefined
     const attributeName = db.getIn([modelKey, 'attributes', attributeKey, 'name'])
     return changeMap
@@ -132,20 +124,24 @@ const generateMigrationContent = listOfChanges => {
     let downQuery
     if (action === 'createTable' || action === 'dropTable') {
       // adding or dropping tables
-      upQuery = `queryInterface["${action}"]("${name}",
-        {
-          id: {
-            type: Sequelize.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-          },
-          createdAt: {
-            type: Sequelize.DATE
-          },
-          updatedAt: {
-            type: Sequelize.DATE
-          }
-        })`
+      const modelObject = {
+        id: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        createdAt: {
+          type: Sequelize.DATE
+        },
+        updatedAt: {
+          type: Sequelize.DATE
+        }
+      }
+      // add new attributes (columns) to the model (table)
+      const attributes = change.getIn(['value', 'attributes'])
+      attributes && attributes.forEach(value => modelObject[value.get('name')] = {type: `Sequelize.${value.get('type')}`})
+
+      upQuery = `queryInterface["${action}"]("${name}", ${modelObject})`
       downQuery = `queryInterface["${downAction}"]("${name}")`
     } else {
       // working on columns

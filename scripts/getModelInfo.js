@@ -20,9 +20,7 @@ async function getModelInfo(selectedDbName) {
   const promisedDB = buildModelObjects(modelNames, client)
 
   return Promise.all(promisedDB).then(dbArray => {
-    const db = {
-      name: ''
-    }
+    const db = {}
     let modelKey = 1
     dbArray.forEach(model => {
       db[modelKey] = model
