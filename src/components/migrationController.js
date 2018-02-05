@@ -73,6 +73,7 @@ class MigrationController extends Component {
   }
 
   render() {
+    console.log(this.state.pie)
     return (
       <div className="migrationControllerContainer">
         <div className="migrationController">
