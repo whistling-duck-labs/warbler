@@ -14,7 +14,7 @@ class SplashScreen extends Component {
     console.log(setTimeout.toString())
     setTimeout(() => {
       this.props.history.push('/database-select')
-    }, 3000)
+    }, 100)
   }
 
   render () {

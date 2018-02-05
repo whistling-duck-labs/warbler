@@ -73,21 +73,20 @@ class MigrationController extends Component {
   }
 
   render() {
-    console.log(this.state.pie)
     return (
       <div className="migrationControllerContainer">
         <div className="migrationController">
-            <div className="modelSelectorContainer">
-            <ModelSelector
-              models={this.props.targetDb}
-              update={(idx) => this.updateSelectedModel(idx)}
-              dbName ={this.props.dbName}
-              handleModelAdd={() => this.handleModelAdd()}
-              handleModelChange={(event) => this.handleModelChange(event)}
-              modelValue={this.state.modelToAdd}
-              />
-          </div>
-          <div className="tableFormContainer">
+           <div className="modelSelectorContainer">
+             <ModelSelector
+               models={this.props.targetDb}
+               update={(idx) => this.updateSelectedModel(idx)}
+               dbName ={this.props.dbName}
+               handleModelAdd={() => this.handleModelAdd()}
+               handleModelChange={(event) => this.handleModelChange(event)}
+               modelValue={this.state.modelToAdd}
+               />
+           </div>
+          {/*<div className="tableFormContainer">
             { this.props.targetDb.size &&
               <ModelTable
                 model={this.props.targetDb.get(this.state.selectedModel)}
@@ -97,7 +96,7 @@ class MigrationController extends Component {
             <AddColumnForm
               submit={(event, value) => this.onAddColSubmit(event, value)}
               className="addColumnForm" />
-          </div>
+          </div>*/}
         </div>
         <ControlPanel
           className="controlPanel"

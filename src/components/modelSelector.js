@@ -8,7 +8,7 @@ class ModelSelector extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedModel: 0
+      selectedModel: 1
     }
   }
 
@@ -19,22 +19,29 @@ class ModelSelector extends Component {
 
   render() {
     let models = this.props.models
+    if (models) console.log('true')
+    let count = 0;
     return (
       <div className="modelSelector">
         <List style={{maxHeight: '100%', overflow: 'auto', marginRight: 20}}>
           <div className="dbTitle">{this.props.dbName}</div>
           {
-            models && models.map((model, idx) => {
+            models && models.keySeq().map(key => {
               let selectedStyle = null;
-              if (idx === this.state.selectedModel) selectedStyle = listItemStyle
-              return (
-                <ListItem
-                  primaryText={model.get('name')}
-                  key={idx}
-                  onClick={() => this.handleSelect(event, idx)}
-                  style={ selectedStyle }
-                />
-              )
+              count++;
+              if (key === this.state.selectedModel) selectedStyle = listItemStyle
+              console.log(key, '===', this.state.selectedModel)
+
+              if (key !== 'name') {
+                return (
+                  <ListItem
+                    primaryText={models.get(key).get('name')}
+                    key={count}
+                    onClick={() => this.handleSelect(event, key)}
+                    style={ selectedStyle }
+                  />
+                )
+              }
             })
           }
         </List>
