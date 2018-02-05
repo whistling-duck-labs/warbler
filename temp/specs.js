@@ -86,7 +86,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = _default;
-exports.fetchDb = exports.INIT_DB = void 0;
+exports.fetchDb = exports.initDB = exports.INIT_DB = void 0;
 
 var _immutable = __webpack_require__(0);
 
@@ -103,6 +103,8 @@ const initDB = db => ({
   db: db
 }); // thunk
 
+
+exports.initDB = initDB;
 
 const fetchDb = dbName => dispatch => {
   // fetch all db info
@@ -432,9 +434,8 @@ exports.regex = regex;
 shell.config.execPath = shell.which('node');
 /******************HELPER FUNCTIONS *******************/
 
-const createConfigFiles = (modelsPath, configPath, dbUrl) => {
+const createConfigFiles = (modelsPath, configPath, dbName) => {
   //import config data. We don't need username and password as long as password is null
-  const dbName = dbUrl.replace('postgres://localhost:5432/', '');
   const config = `{
     "development": {
       "database": "${dbName}",
@@ -499,69 +500,148 @@ const getListOfChanges = (db, targetDb) => {
 
     const op = changeMap.get('op');
     const changePath = changeMap.get('path');
-    const modelKey = changeMap.get('path').match(modelKeyRegex)[1];
-    const modelName = db.get(modelKey).get('name');
-    const attributeKey = changeMap.get('path').match(attributeKeyRegex)[1];
+    const modelKey = changeMap.get('path').match(regex.modelKey)[1];
+    let modelName;
+
+    if (op === 'remove' || op === 'replace') {
+      modelName = db.get(modelKey).get('name');
+    } else {
+      modelName = targetDb.get(modelKey).get('name');
+    }
+
+    const attributeKey = changeMap.get('path').match(regex.attributeKey) ? changeMap.get('path').match(regex.attributeKey)[1] : undefined;
     const attributeName = db.getIn([modelKey, 'attributes', attributeKey, 'name']);
-    return changeMap.set('model', modelName).set('action', getMigrationAction(op, changePath)).set('value', changeMap.value || {
+    return changeMap.set('model', modelName).set('action', getMigrationAction(op, changePath)).set('value', changeMap.get('value') || fromJS({
       name: attributeName
-    });
+    }));
   });
+};
+
+exports.getListOfChanges = getListOfChanges;
+
+const getDownAction = upAction => {
+  switch (upAction) {
+    case 'addColumn':
+      return 'removeColumn';
+
+    case 'removeColumn':
+      return 'addColumn';
+
+    case 'renameColumn':
+      return 'renameColumn';
+
+    case 'changeColumn':
+      return 'changeColumn';
+
+    case 'createTable':
+      return 'dropTable';
+
+    case 'dropTable':
+      return 'createTable';
+
+    case 'renameTable':
+      return 'renameTable';
+
+    default:
+      throw new Error('Could not generate down Action: Up action was not recognized: ' + upAction);
+  }
+};
+
+const generateMigrationContent = listOfChanges => {
+  let upMigration = `{
+  up: (queryInterface, Sequelize) => {
+    return `;
+  let downMigration = `\n  },
+  down: (queryInterface, Sequelize) => {
+    return `;
+  let migrationEnding = `\n  }
+}`;
+  listOfChanges.forEach((change, idx) => {
+    const model = change.get('model');
+    const action = change.get('action');
+    const downAction = getDownAction(action);
+    const type = change.get('value').get('type');
+    const name = change.get('value').get('name');
+    let upQuery;
+    let downQuery;
+
+    if (action === 'createTable' || action === 'dropTable') {
+      // adding or dropping tables
+      upQuery = `queryInterface["${action}"]("${name}",
+        {
+          id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+          },
+          createdAt: {
+            type: Sequelize.DATE
+          },
+          updatedAt: {
+            type: Sequelize.DATE
+          }
+        })`;
+      downQuery = `queryInterface["${downAction}"]("${name}")`;
+    } else {
+      // working on columns
+      upQuery = `queryInterface["${action}"]("${model}", "${name}", Sequelize.${type})`;
+      downQuery = `queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})`;
+    }
+
+    const upQueryWrapper = idx === 0 ? `${upQuery}` : `\n      .then(() => ${upQuery})`;
+    const downQueryWrapper = idx === 0 ? `${downQuery}` : `\n      .then(() => ${downQuery})`; // This adds a query to the up migration chain
+
+    upMigration += upQueryWrapper; // Add down migration query to the down migration chain
+
+    downMigration += downQueryWrapper;
+  });
+  return upMigration + downMigration + migrationEnding;
 };
 /******************************************/
 
 /****************MAIN FUNCTION *************/
 
 
-exports.getListOfChanges = getListOfChanges;
-
-const runMigration = async () => {
+const runMigration = async (shouldGenerateModels, directory) => {
   // get db from store
   const state = store.default.getState();
   const db = state.get('db');
+  const targetDb = state.get('targetDb');
   const dbUrl = state.get('dbUrl');
+  const dbName = dbUrl.replace('postgres://localhost:5432/', '');
   shell.echo('starting migration'); //********** setup *********//
 
   const modelsPath = path.resolve('server', 'db', 'models');
   const configPath = path.resolve('config', 'config.json');
   const now = Date.now(); // create config files and migration folders if they don't exist
 
-  createConfigFiles(modelsPath, configPath, dbUrl); // ******* Find differences to migrate ***********//
+  createConfigFiles(modelsPath, configPath, dbName); // ******* Find differences to migrate ***********//
   // get the diff between the two objects and
   // add model name and action to diff
 
   const listOfChanges = getListOfChanges(db, targetDb); // --> List of changes now has maps (objects) that have model, action, and value
-  // create migrations file by looping through List of changes and creating functions for each. This just gets the first one.
+  // create migrations file content by looping through List of changes and creating
+  // functions for each. This just gets the first one.
 
-  const model = listOfChanges.get('0').get('model');
-  const action = listOfChanges.get('0').get('action');
-  let downAction; // add more logic here for opposite (down) actions
+  const migration = generateMigrationContent(listOfChanges); // write migration file
 
-  if (action === 'addColumn') {
-    downAction = 'removeColumn';
-  }
+  shell.echo(`"use strict"\nmodule.exports = ${migration}`).to(`migrations/${now}.js`); // copy migration files to user-chosen directory
 
-  const type = listOfChanges.get('0').get('value').get('type');
-  const name = listOfChanges.get('0').get('value').get('name');
-  const migration = `{
-    up: (queryInterface, Sequelize) => {
-      return queryInterface["${action}"]("${model}", "${name}", Sequelize.${type})
-    },
-    down: (queryInterface, Sequelize) => {
-      return queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})
-    }
-  }`; //const migration = generateMigration()
-  // write migration file
-
-  shell.echo(`"use strict" \nmodule.exports = ${migration}`).to(`migrations/${now}.js`); // Run migration
+  directory && shell.cp('-R', './migrations', `${directory}/migrations`); // Run migration
   //if (shell.exec(`node_modules/.bin/sequelize db:migrate`).code !== 0)
 
-  const migrationProcess = await shell.exec(`node_modules/.bin/sequelize db:migrate`, {
-    async: true
-  });
-  migrationProcess.stdout.on('data', function (data) {
-    console.log('success', data);
-  });
+  shell.exec(`node_modules/.bin/sequelize db:migrate`, (code, stdout, stderr) => {
+    console.log(stdout);
+    console.log(stderr);
+    shouldGenerateModels && shell.exec(`node_modules/.bin/sequelize-auto -o "./models" -d ${dbName} -h localhost -e postgres\n`); // copy model files to user chosen directory
+
+    directory && shell.cp('-R', './models', `${directory}/models`);
+  }); // migrationProcess.stdout.on('data', function(data) {
+  //   console.log('success', data)
+  // })
+  // migrationProcess.stderr.on('error', function(error) {
+  //   shell.exit(error)
+  // })
 };
 
 var _default = runMigration;

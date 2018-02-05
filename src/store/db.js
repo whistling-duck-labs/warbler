@@ -3,7 +3,7 @@ import getModelInfo from '../../scripts/getModelInfo'
 // actions
 export const INIT_DB = 'INIT_DB'
 
-const initDB = (db) => ({type: INIT_DB, db: db})
+export const initDB = (db) => ({type: INIT_DB, db: db})
 
 // thunk
 
