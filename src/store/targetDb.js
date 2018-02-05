@@ -1,4 +1,4 @@
-import {List} from 'immutable'
+import {Map} from 'immutable'
 import {INIT_DB} from './db'
 
 // actions
@@ -9,7 +9,7 @@ export const updateDB = (targetDb) => ({type: UPDATE_DB, targetDb})
 
 // reducer
 
-const initialState = List([])
+const initialState = Map({})
 
 export default function (state = initialState, action) {
   switch (action.type) {

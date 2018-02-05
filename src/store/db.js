@@ -1,49 +1,18 @@
 import {fromJS, Map} from 'immutable'
 import getModelInfo from '../../scripts/getModelInfo'
+import toastr from 'toastr'
 // actions
 export const INIT_DB = 'INIT_DB'
 
-const initDB = (db) => ({type: INIT_DB, db: db})
+const initDB = (db) => ({type: INIT_DB, db})
 
 // thunk
 
 export const fetchDb = dbName => dispatch => {
-  // JON WILL FIX: FOR NOW HARDCODING NEW STRUCTURE
-  // getModelInfo(dbName)
-  //   .then(db => dispatch(initDB(db)))
-  //   .catch(console.error)
-
-  const exampleDb = fromJS({
-    name: 'testDb',
-    1: {
-      name: 'users',
-      attributes: {
-        1: {
-          name: 'email',
-          type: 'STRING'
-        },
-        2: {
-          name: 'firstName',
-          type: 'STRING'
-        }
-      }
-    },
-    2: {
-      name: 'puppies',
-      attributes: {
-        1: {
-          name: 'breed',
-          type: 'STRING'
-        },
-        2: {
-          name: 'age',
-          type: 'INTEGER'
-        }
-      }
-    }
-  })
-
-  return dispatch(initDB(exampleDb))
+  // fetch all db info
+  getModelInfo(dbName)
+    .then(db => dispatch(initDB(db)))
+    .catch(toastr.error('Error retrieving database information'))
 }
 
 // initial state
