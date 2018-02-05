@@ -18,7 +18,6 @@ export const fetchDbNames = () => dispatch => {
       const dbList = List(dbs)
       return dispatch(populateDbList(dbList))
     })
-    .catch(toastr.error('Error reading your databases'))
 }
 
 // reducer

@@ -1,16 +1,17 @@
+* {
+  font-family: 'Lato', sans-serif;
+}
+
 html,
 body {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-body {
   display: flex;
   justify-content: center;
-  font-family: sans-serif;
   color: #525252;
+  background-color: #FDFDF8;
 }
 
 a {
@@ -28,6 +29,12 @@ a {
   flex-wrap: wrap;
   margin-top: 20%;
   justify-content: center;
+  opacity: 0;
+}
+
+.databaseCards.visible {
+  transition: opacity .6s;
+  opacity: 100;
 }
 
 .dbCard {
@@ -121,6 +128,12 @@ a {
   height: 500px;
   width: 400px;
   margin: auto;
+  opacity: 0;
+}
+
+.splashContainer.visible {
+  transition: opacity 1s ease-in;
+  opacity: 100;
 }
 
 .splashImage {
@@ -166,4 +179,17 @@ td, th {
 
 .model-export-checkbox {
   margin-top: 3vh;
+}
+
+.project-prompt-modal * {
+  text-align: center;
+}
+
+.project-prompt-action {
+  display: flex;
+  justify-content: space-around;
+}
+
+.folder {
+  cursor: pointer;
 }

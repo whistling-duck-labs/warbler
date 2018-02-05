@@ -205,20 +205,14 @@ const runMigration = async (shouldGenerateModels, directory) => {
   directory && shell.cp('-R', './migrations', `${directory}/migrations`)
 
   // Run migration
-  //if (shell.exec(`node_modules/.bin/sequelize db:migrate`).code !== 0)
-  shell.exec(`node_modules/.bin/sequelize db:migrate`, (code, stdout, stderr) => {
+  const migrationProcess = await shell.exec(`node_modules/.bin/sequelize db:migrate`, (code, stdout, stderr) => {
     console.log(stdout)
     console.log(stderr)
     shouldGenerateModels && shell.exec(`node_modules/.bin/sequelize-auto -o "./models" -d ${dbName} -h localhost -e postgres\n`)
       // copy model files to user chosen directory
     directory && shell.cp('-R', './models', `${directory}/models`)
   })
-  // migrationProcess.stdout.on('data', function(data) {
-  //   console.log('success', data)
-  // })
-  // migrationProcess.stderr.on('error', function(error) {
-  //   shell.exit(error)
-  // })
+  return 1
 }
 
 export default runMigration
