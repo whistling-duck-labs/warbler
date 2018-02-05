@@ -13,8 +13,11 @@ import ContentRemove from 'material-ui/svg-icons/content/remove';
 
 const ModelTable = (props) => {
   let properties = props.model.get('attributes')
+  let modName = props.model.get('name')
+  console.log('model', modName)
   return (
     <div className="tableContainer">
+      <div className="dbTitle">Properties for: {modName}</div>
       <Table
         className="modelTable"
         style={{tableLayout: "auto"}}

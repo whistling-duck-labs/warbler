@@ -18,17 +18,17 @@ class DatabaseSelect extends Component {
       dbList: this.props.dbList,
       foo: 10
     }
-    this.splashControl = this.splashControl.bind(this)
+    // this.splashControl = this.splashControl.bind(this)
   }
 
   componentDidMount () {
     this.props.fetchDbNames()
-    setTimeout(this.splashControl, 4000)
+    // setTimeout(this.splashControl, 4000)
   }
 
-  splashControl () {
-    this.setState({isLoading: false})
-  }
+  // splashControl () {
+  //   this.setState({isLoading: false})
+  // }
 
   onSelect (dbname) {
     this.props.fetchDb(dbname)
