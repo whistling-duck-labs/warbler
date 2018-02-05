@@ -31,6 +31,7 @@ describe('actions', () => {
       db: db
     }
     const actualAction = initDB(db)
+
     expect(expectedAction).to.deep.equal(actualAction)
   })
 })
