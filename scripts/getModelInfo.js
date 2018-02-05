@@ -19,29 +19,38 @@ async function getModelInfo(selectedDbName) {
 
   const promisedDB = buildModelObjects(modelNames, client)
 
-  return Promise.all(promisedDB).then(db => fromJS(db))
+  return Promise.all(promisedDB).then(dbArray => {
+    const db = {
+      name: ''
+    }
+    let modelKey = 1
+    dbArray.forEach(model => {
+      db[modelKey] = model
+      modelKey++
+    })
+    return fromJS(db)
+  })
 }
 
 function buildModelObjects(modelNames, client) {
-  return modelNames.map(async (model, idx) => {
+  return modelNames.map(async model => {
     const modelObject = {
-      key: idx,
       name: model,
-      attributes: []
+      attributes: {}
     }
 
     // Get each attribute on a model, their index, and data type
-    const attributes = await client.query(`SELECT column_name, ordinal_position, data_type
+    const attributeInfo = await client.query(`SELECT column_name, ordinal_position, data_type
                                            FROM information_schema.columns
                                            WHERE table_name = '${model}'`)
 
-    const modelAttributeList = buildModelAttributeList(attributes)
-    modelObject.attributes = modelAttributeList
+    modelObject.attributes = buildModelAttributeMap(attributeInfo)
     return modelObject
   })
 }
 
-function buildModelAttributeList(attributes) {
+function buildModelAttributeMap(attributeInfo) {
+  const attributeMap = {}
   const dataTypeMapping = { 'character varying': 'STRING',
                             'integer': 'INTEGER',
                             'timestamp with time zone': 'DATE',
@@ -49,14 +58,15 @@ function buildModelAttributeList(attributes) {
                             'text': 'TEXT',
                             'double precision': 'FLOAT'
                           }
-
-  return attributes.rows.map(attribute => {
-    return {
-      key: attribute.ordinal_position,
-      name: attribute.column_name,
-      type: dataTypeMapping[attribute.data_type] || attribute.data_type
-    }
+  let attributeKey = 1
+  attributeInfo.rows.forEach(attribute => {
+      attributeMap[attributeKey] = {
+        name: attribute.column_name,
+        type: dataTypeMapping[attribute.data_type] || attribute.data_type
+      }
+      attributeKey++
   })
+  return attributeMap
 }
 
 export default getModelInfo
