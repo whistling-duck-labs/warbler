@@ -26,7 +26,7 @@
     "unit": "electron-mocha temp/specs.js --renderer --require source-map-support/register",
     "pree2e": "webpack --config=build/webpack.app.config.js --env=test --display=none && webpack --config=build/webpack.e2e.config.js --env=test --display=none",
     "e2e": "mocha temp/e2e.js --require source-map-support/register",
-    "test": "npm run unit && npm run e2e",
+    "test": "npm run unit",
     "testredux": "NODE_ENV=test mocha src/tests/actions.spec.js --compilers js:babel-register",
     "start": "node build/start.js",
     "release": "npm test && webpack --config=build/webpack.app.config.js --env=production && electron-builder"
