@@ -2,6 +2,7 @@ const shell = require('shelljs')
 const path = require('path')
 const diff = require('immutablediff')
 const {fromJS} = require('immutable')
+const Sequelize = require('sequelize')
 const store = require('../src/store')
 const directoryPath = '/Users/Jon/Documents/fullstack/boilermaker'
 
@@ -62,26 +63,22 @@ export const getMigrationAction = (op, changePath) => {
 }
 
 export const getListOfChanges = (db, targetDb) => {
-  return diff(db, targetDb).map(changeMap => {
-
-    // add more logic here for different migrations
-    // create table
-    // drop table
-    // rename table
-    // rename column
-    // change column
-
-    //figure out logic for adding value for removeAction
+  console.log(diff(db, targetDb))
+  return diff(db, targetDb)
+  // ignore changes to nextKey value
+  .filter(changeMap => !(changeMap.get('path').includes('nextAttributeKey') || changeMap.get('path').includes('nextModelKey')))
+  .map(changeMap => {
     const op = changeMap.get('op')
     const changePath = changeMap.get('path')
-    const modelKey = changeMap.get('path').match(regex.modelKey)[1]
+    const modelKey = changePath.match(regex.modelKey)[1]
     let modelName
     if (op === 'remove' || op === 'replace') {
       modelName = db.get(modelKey).get('name')
     }
-    else {
+    else { // op is 'add'
       modelName = targetDb.get(modelKey).get('name')
     }
+    // if op is remove, we need to manually set the value with the attribute name
     const attributeKey = changeMap.get('path').match(regex.attributeKey) ? changeMap.get('path').match(regex.attributeKey)[1] : undefined
     const attributeName = db.getIn([modelKey, 'attributes', attributeKey, 'name'])
     return changeMap
@@ -126,26 +123,31 @@ const generateMigrationContent = listOfChanges => {
     const model = change.get('model')
     const action = change.get('action')
     const downAction = getDownAction(action)
+    console.log(change)
     const type = change.get('value').get('type')
     const name = change.get('value').get('name')
     let upQuery
     let downQuery
     if (action === 'createTable' || action === 'dropTable') {
       // adding or dropping tables
-      upQuery = `queryInterface["${action}"]("${name}",
-        {
-          id: {
-            type: Sequelize.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-          },
-          createdAt: {
-            type: Sequelize.DATE
-          },
-          updatedAt: {
-            type: Sequelize.DATE
-          }
-        })`
+      const modelObject = {
+        id: {
+          type: Sequelize.INTEGER,
+          primaryKey: true,
+          autoIncrement: true
+        },
+        createdAt: {
+          type: Sequelize.DATE
+        },
+        updatedAt: {
+          type: Sequelize.DATE
+        }
+      }
+      // add new attributes (columns) to the model (table)
+      const attributes = change.getIn(['value', 'attributes'])
+      attributes && attributes.forEach(value => modelObject[value.get('name')] = {type: `Sequelize.${value.get('type')}`})
+
+      upQuery = `queryInterface["${action}"]("${name}", ${JSON.stringify(modelObject)})`
       downQuery = `queryInterface["${downAction}"]("${name}")`
     } else {
       // working on columns
@@ -169,7 +171,7 @@ const generateMigrationContent = listOfChanges => {
 /******************************************/
 
 /****************MAIN FUNCTION *************/
-const runMigration = async (shouldGenerateModels, directory) => {
+const runMigration = (shouldGenerateModels, directory) => {
 
   // get db from store
   const state = store.default.getState()
@@ -209,14 +211,11 @@ const runMigration = async (shouldGenerateModels, directory) => {
   directory && shell.cp('-R', './migrations', `${directory}/migrations`)
 
   // Run migration
-  //if (shell.exec(`node_modules/.bin/sequelize db:migrate`).code !== 0)
-  shell.exec(`node_modules/.bin/sequelize db:migrate`, (code, stdout, stderr) => {
-    console.log(stdout)
-    console.log(stderr)
-    shouldGenerateModels && shell.exec(`node_modules/.bin/sequelize-auto -o "./models" -d ${dbName} -h localhost -e postgres\n`)
-      // copy model files to user chosen directory
-    directory && shell.cp('-R', './models', `${directory}/models`)
-  })
+  shell.exec(`node_modules/.bin/sequelize db:migrate`)
+  // copy model files to user chosen directory
+  shouldGenerateModels && shell.exec(`node_modules/.bin/sequelize-auto -o "./models" -d ${dbName} -h localhost -e postgres\n`)
+  directory && shell.cp('-R', './models', `${directory}/models`)
+  return 1
 }
 
 export default runMigration
