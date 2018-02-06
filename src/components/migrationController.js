@@ -13,39 +13,36 @@ class MigrationController extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedModel: 0,
-      modelToAdd: ''
+      selectedModel: 1,
+      modelToAdd: '',
+      validName: false
     }
   }
 
-  onAddColSubmit (evt, value) {
+  addColumn (evt, value) {
     evt.preventDefault();
-    let name = value.name
-    let type = value.type
-    let colObj = fromJS({name, type})
-    let newCol = Map(colObj)
-    let newDb = this.props.targetDb.update(this.state.selectedModel, model => {
-        return (
-          model.update('attributes', attr => {
-            return (
-              attr.push(newCol)
-            )
-          })
-        )
-    })
+    if (value.isValid) {
+      let name = value.name
+      let type = value.type
+      let colObj = fromJS({name, type})
+      let newCol = Map(colObj)
+      let nextKey = this.props.targetDb.get(this.state.selectedModel.toString()).get('nextAttributeKey')
+      let newDb = this.props.targetDb.update(this.state.selectedModel.toString(), model => {
+        return model.update('attributes', attr => {
+          return attr.set(nextKey.toString(), newCol)
+        }).update('nextAttributeKey', () => nextKey + 1)
+      })
+      this.props.updateDB(newDb)
+    }
+  }
+
+  deleteColumn (evt, key) {
+    let newDb = this.props.targetDb.deleteIn([this.state.selectedModel.toString(), 'attributes', `${key}`]);
     this.props.updateDB(newDb)
   }
 
-  deleteColumn (evt, idx) {
-    let newDb = this.props.targetDb.update(this.state.selectedModel, model => {
-        return (
-          model.update('attributes', attr => {
-            return (
-              attr.delete(idx)
-            )
-          })
-        )
-    })
+  deleteModel (evt, key) {
+    let newDb = this.props.targetDb.delete(key.toString())
     this.props.updateDB(newDb)
   }
 
@@ -62,39 +59,49 @@ class MigrationController extends Component {
   }
 
   handleModelAdd () {
-    let newModel = Map(fromJS({name: this.state.modelToAdd, attributes: []}))
-    let newDb = this.props.targetDb.push(newModel)
-    this.props.updateDB(newDb)
-    this.setState({modelToAdd: ''})
+    if (this.state.validName) {
+      let nextKey = this.props.targetDb.get('nextModelKey').toString()
+      let newModel = fromJS({name: this.state.modelToAdd, attributes: {}, nextAttributeKey: 1})
+      let newDb = this.props.targetDb.set(nextKey, newModel).set('nextModelKey', nextKey + 1)
+      this.props.updateDB(newDb)
+      this.setState({modelToAdd: '', validName: false})
+    }
   }
 
   handleModelChange (evt) {
     this.setState({modelToAdd: evt.target.value})
+    if (evt.target.value) {
+      this.setState({validName: true})
+    }
+    else {
+      this.setState({validName: false})
+    }
   }
 
   render() {
     return (
       <div className="migrationControllerContainer">
         <div className="migrationController">
-            <div className="modelSelectorContainer">
-            <ModelSelector
-              models={this.props.targetDb}
-              update={(idx) => this.updateSelectedModel(idx)}
-              dbName ={this.props.dbName}
-              handleModelAdd={() => this.handleModelAdd()}
-              handleModelChange={(event) => this.handleModelChange(event)}
-              modelValue={this.state.modelToAdd}
-              />
-          </div>
+           <div className="modelSelectorContainer">
+             <ModelSelector
+               models={this.props.targetDb}
+               update={(idx) => this.updateSelectedModel(idx)}
+               dbName ={this.props.dbName}
+               handleModelAdd={() => this.handleModelAdd()}
+               handleModelChange={(event) => this.handleModelChange(event)}
+               modelValue={this.state.modelToAdd}
+               deleteModel={(evt, idx) => this.deleteModel(evt, idx)}
+               />
+           </div>
           <div className="tableFormContainer">
-            { this.props.targetDb.size &&
+            {
               <ModelTable
                 model={this.props.targetDb.get(this.state.selectedModel)}
                 deleteCol={(evt, idx) => this.deleteColumn(evt, idx)}
                />
             }
             <AddColumnForm
-              submit={(event, value) => this.onAddColSubmit(event, value)}
+              submit={(event, value) => this.addColumn(event, value)}
               className="addColumnForm" />
           </div>
         </div>
