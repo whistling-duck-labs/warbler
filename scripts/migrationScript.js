@@ -122,7 +122,6 @@ const generateMigrationContent = listOfChanges => {
     const model = change.get('model')
     const action = change.get('action')
     const downAction = getDownAction(action)
-    console.log(change)
     const type = change.get('value').get('type')
     const name = change.get('value').get('name')
     let upQuery
