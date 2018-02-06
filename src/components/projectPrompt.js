@@ -1,25 +1,31 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Dialog, RaisedButton, Checkbox, Divider } from 'material-ui'
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar'
+import {setProjectDirPath} from '../store/project'
 const remote = require('electron').remote
 
-export default class ProjectPrompt extends Component {
+class ProjectPrompt extends Component {
+
   constructor (props) {
     super(props)
     this.state = {
       open: false,
-      directory: ''
     }
 
     this.handleClose = this.handleClose.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
     this.openDirectory = this.openDirectory.bind(this)
+    this.createDirectory = this.createDirectory.bind(this)
   }
 
   handleClose () {
-    this.setState({open: false})
-    this.props.history.push('/database-select')
+    if(this.props.projectDirPath) {
+      this.setState({open: false})
+      this.props.history.push('/database-select')
+    }
   }
+
 
   handleOpen () {
     this.setState({open: true})
@@ -27,7 +33,14 @@ export default class ProjectPrompt extends Component {
 
   openDirectory () {
     remote.dialog.showOpenDialog({properties: ['openDirectory']}, (directory) => {
-      this.setState({directory})
+      this.props.setProjectDirPath(directory[0])
+      this.handleClose()
+    })
+  }
+
+  createDirectory () {
+    remote.dialog.showOpenDialog({properties: ['openDirectory', 'createDirectory']}, (directory) => {
+      this.props.setProjectDirPath(directory[0])
       this.handleClose()
     })
   }
@@ -39,7 +52,7 @@ export default class ProjectPrompt extends Component {
           <img src='../resources/icons/folder.png' alt="Import"/>
           <h2>Import a Project</h2>
         </div>
-        <div className='folder' onClick={this.openDirectory}>
+        <div className='folder' onClick={this.createDirectory}>
             <img src='../resources/icons/folder.png' alt="Create"/>
             <h2>Create a New Project</h2>
         </div>
@@ -67,3 +80,11 @@ export default class ProjectPrompt extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  projectDirPath: state.get('projectDirPath')
+})
+
+const mapDispatchToProps = {setProjectDirPath}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectPrompt)
