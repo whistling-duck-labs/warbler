@@ -17,8 +17,10 @@ export default class ProjectPrompt extends Component {
   }
 
   handleClose () {
-    this.setState({open: false})
-    this.props.history.push('/database-select')
+    if(this.state.directory) {
+      this.setState({open: false})
+      this.props.history.push('/database-select')
+    }
   }
 
   handleOpen () {
