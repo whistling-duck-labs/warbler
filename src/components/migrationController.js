@@ -41,6 +41,11 @@ class MigrationController extends Component {
     this.props.updateDB(newDb)
   }
 
+  deleteModel (evt, key) {
+    let newDb = this.props.targetDb.delete(key.toString())
+    this.props.updateDB(newDb)
+  }
+
   updateSelectedModel (idx) {
     this.setState({selectedModel: idx})
   }
@@ -85,6 +90,7 @@ class MigrationController extends Component {
                handleModelAdd={() => this.handleModelAdd()}
                handleModelChange={(event) => this.handleModelChange(event)}
                modelValue={this.state.modelToAdd}
+               deleteModel={(evt, idx) => this.deleteModel(evt, idx)}
                />
            </div>
           <div className="tableFormContainer">
