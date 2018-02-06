@@ -31,8 +31,6 @@ describe('The migration script', () => {
   describe('has a getListOfChanges function', () => {
     it('returns the list of changes', () => {
       const changes = diff(db, targetDb)
-      console.log(fromJS)
-      console.log('puppyBowl')
     })
   })
 })

@@ -204,3 +204,16 @@ td, th {
 .listContainer {
   padding: 8px 20px 8px 0px !important;
 }
+
+.listItemContainer:hover .deleteButton {
+  opacity: 100;
+}
+
+.deleteButton {
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+tr:hover .deleteButton {
+  opacity: 100;
+}

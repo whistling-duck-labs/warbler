@@ -63,7 +63,6 @@ export const getMigrationAction = (op, changePath) => {
 }
 
 export const getListOfChanges = (db, targetDb) => {
-  console.log(diff(db, targetDb))
   return diff(db, targetDb)
   // ignore changes to nextKey value
   .filter(changeMap => !(changeMap.get('path').includes('nextAttributeKey') || changeMap.get('path').includes('nextModelKey')))
@@ -78,13 +77,12 @@ export const getListOfChanges = (db, targetDb) => {
     else { // op is 'add'
       modelName = targetDb.get(modelKey).get('name')
     }
-    // if op is remove, we need to manually set the value with the attribute name
     const attributeKey = changeMap.get('path').match(regex.attributeKey) ? changeMap.get('path').match(regex.attributeKey)[1] : undefined
     const attributeName = db.getIn([modelKey, 'attributes', attributeKey, 'name'])
     return changeMap
       .set('model', modelName)
       .set('action', getMigrationAction(op, changePath))
-      .set('value', changeMap.get('value') || fromJS({ name: attributeName }))
+      .set('value', changeMap.get('value') || fromJS({ name: attributeName || modelName }))
   })
 }
 
@@ -130,24 +128,25 @@ const generateMigrationContent = listOfChanges => {
     let downQuery
     if (action === 'createTable' || action === 'dropTable') {
       // adding or dropping tables
-      const modelObject = {
+      let modelObject = `{
         id: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true
         },
         createdAt: {
-          type: Sequelize.DATE
+          type: Sequelize.DATE,
+          notType: 'color'
         },
         updatedAt: {
           type: Sequelize.DATE
-        }
-      }
+        },\n`
       // add new attributes (columns) to the model (table)
       const attributes = change.getIn(['value', 'attributes'])
-      attributes && attributes.forEach(value => modelObject[value.get('name')] = {type: `Sequelize.${value.get('type')}`})
+      attributes && attributes.forEach(value => modelObject += `${value.get('name')}: {\n  type: Sequelize.${value.get('type')}\n},`)
+      modelObject += `\n}`
 
-      upQuery = `queryInterface["${action}"]("${name}", ${JSON.stringify(modelObject)})`
+      upQuery = `queryInterface["${action}"]("${name}", ${modelObject})`
       downQuery = `queryInterface["${downAction}"]("${name}")`
     } else {
       // working on columns
