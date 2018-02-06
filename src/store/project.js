@@ -1,29 +1,21 @@
 import {Map} from 'immutable'
 import toastr from 'toastr'
 // actions
-export const ADD_PROJECT_DIR = 'ADD_PROJECT_DIR'
+export const ADD_PROJECT_DIR_PATH = 'ADD_PROJECT_DIR_PATH'
 
-const initProject = (projectDir) => ({type: INIT_DB, projectDir})
-
-// thunk
-
-export const addProjectDir = projectDir => dispatch => {
-  // add project dir to store
-  getModelInfo(dbName)
-    .then(db => dispatch(initDB(db)))
-    .catch(() => toastr.error('Error adding project dir'))
-}
+// action creator that sets project path
+const setProjectDirPath = projectDirPath => ({type: INIT_DB, projectDirPath})
 
 // initial state
 
-const initialProjectDir = Map({})
+const initialProjectDirPath = ''
 
 // reducer
 
-export default function (state = initialProjectDir, action) {
+export default function (state = initialProjectDirPath, action) {
   switch (action.type) {
-    case ADD_PROJECT_DIR:
-      return action.projectDir
+    case ADD_PROJECT_DIR_PATH:
+      return action.projectDirPath
     default:
       return state
   }
