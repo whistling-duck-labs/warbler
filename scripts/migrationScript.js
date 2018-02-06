@@ -24,7 +24,7 @@ const createConfigFiles = (modelsPath, configPath, dbName) => {
       "host": "127.0.0.1",
       "dialect": "postgres"
     }
-  }`
+  }` //consider JSON.stringify
   // setup sequelizerc file
   shell.touch(`.sequelizerc`)
   shell.echo(`const path = require('path')\nmodule.exports = {'config': '${configPath}',\n  'models-path': '${modelsPath}'\n}`).to(`.sequelizerc`)
