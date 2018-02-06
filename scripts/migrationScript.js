@@ -130,24 +130,25 @@ const generateMigrationContent = listOfChanges => {
     let downQuery
     if (action === 'createTable' || action === 'dropTable') {
       // adding or dropping tables
-      const modelObject = {
+      let modelObject = `{
         id: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true
         },
         createdAt: {
-          type: Sequelize.DATE
+          type: Sequelize.DATE,
+          notType: 'color'
         },
         updatedAt: {
           type: Sequelize.DATE
-        }
-      }
+        },\n`
       // add new attributes (columns) to the model (table)
       const attributes = change.getIn(['value', 'attributes'])
-      attributes && attributes.forEach(value => modelObject[value.get('name')] = {type: `Sequelize.${value.get('type')}`})
+      attributes && attributes.forEach(value => modelObject += `${value.get('name')}: {\n  type: Sequelize.${value.get('type')}\n},`)
+      modelObject += `\n}`
 
-      upQuery = `queryInterface["${action}"]("${name}", ${JSON.stringify(modelObject)})`
+      upQuery = `queryInterface["${action}"]("${name}", ${modelObject})`
       downQuery = `queryInterface["${downAction}"]("${name}")`
     } else {
       // working on columns
