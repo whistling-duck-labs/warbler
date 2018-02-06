@@ -78,13 +78,13 @@ export const getListOfChanges = (db, targetDb) => {
     else { // op is 'add'
       modelName = targetDb.get(modelKey).get('name')
     }
-    // if op is remove, we need to manually set the value with the attribute name
+    // if op is remove, we need to manually set the value with the attribute name or model name
     const attributeKey = changeMap.get('path').match(regex.attributeKey) ? changeMap.get('path').match(regex.attributeKey)[1] : undefined
     const attributeName = db.getIn([modelKey, 'attributes', attributeKey, 'name'])
     return changeMap
       .set('model', modelName)
       .set('action', getMigrationAction(op, changePath))
-      .set('value', changeMap.get('value') || fromJS({ name: attributeName }))
+      .set('value', changeMap.get('value') || fromJS({ name: attributeName || modelName }))
   })
 }
 
