@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { Dialog, RaisedButton, Checkbox, Divider } from 'material-ui'
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar'
 import {setProjectDirPath} from '../store/project'
-import shell from 'shelljs'
 const remote = require('electron').remote
 
 class ProjectPrompt extends Component {
@@ -20,7 +19,7 @@ class ProjectPrompt extends Component {
   }
 
   handleClose () {
-    if(this.state.directory) {
+    if(this.props.projectDirPath) {
       this.setState({open: false})
       this.props.history.push('/database-select')
     }
@@ -32,22 +31,19 @@ class ProjectPrompt extends Component {
 
   openDirectory () {
     remote.dialog.showOpenDialog({properties: ['openDirectory']}, (directory) => {
-      console.log(directory[0])
       this.props.setProjectDirPath(directory[0])
       this.handleClose()
     })
   }
 
   createDirectory () {
-    remote.dialog.showSaveDialog((directory) => {
+    remote.dialog.showOpenDialog({properties: ['openDirectory', 'createDirectory']}, (directory) => {
       this.props.setProjectDirPath(directory[0])
-      shell.mkdir(this.props.projectDirPath)
       this.handleClose()
     })
   }
 
   render() {
-      console.log(this.props)
     const actions = (
       <div className='project-prompt-action'>
         <div className='folder' onClick={this.openDirectory}>
