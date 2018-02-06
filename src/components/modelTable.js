@@ -29,7 +29,7 @@ const ModelTable = (props) => {
           <TableRow>
             <TableHeaderColumn>Property</TableHeaderColumn>
             <TableHeaderColumn>Type</TableHeaderColumn>
-            <TableHeaderColumn />
+            <TableHeaderColumn>Edit</TableHeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody displayRowCheckbox={false} style={{width: '100%'}}>
@@ -37,7 +37,7 @@ const ModelTable = (props) => {
             return (
               <TableRow key={idx}>
                 <TableRowColumn>{properties.get(key).get('name')}</TableRowColumn>
-                <TableRowColumn>{properties.get(key).get('type')}</TableRowColumn>
+                <TableRowColumn>{properties.get(key).get('type').toLowerCase()}</TableRowColumn>
                 <TableRowColumn>
                   <div className="tableButtons">
                     <FloatingActionButton
