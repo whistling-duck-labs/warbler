@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import {List, ListItem} from 'material-ui/List';
 import AddModelForm from './addModelForm'
 
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentRemove from 'material-ui/svg-icons/content/remove';
+
 let listItemStyle = {backgroundColor: 'grey'}
 
 export const sortImmutableByKeys = (map) => {
@@ -20,17 +23,6 @@ class ModelSelector extends Component {
     this.props.update(idx)
     this.setState({selectedModel: idx})
   }
-  /* .css
-  .full-height {
-    maxHeight: 100%';
-  }
-  .overflow {
-    overflow: auto;
-  }
-  .margin-right-medium {
-    marginRight: 20px;
-  }
-  */
 
   render() {
     let models = this.props.models
@@ -43,7 +35,7 @@ class ModelSelector extends Component {
     let count = 0;
     return (
       <div className="modelSelector">
-        <List className="full-height overflow margin-right-medium">
+        <List className="listContainer">
           <div className="dbTitle">{this.props.dbName}</div>
           {
             models && modelKeysArr.map(key => {
@@ -53,12 +45,21 @@ class ModelSelector extends Component {
 
               if (key !== 'name' && key !== 'nextModelKey') {
                 return (
-                  <ListItem
-                    primaryText={models.get(key).get('name')}
-                    key={count}
-                    onClick={() => this.handleSelect(event, key)}
-                    style={ selectedStyle }
-                  />
+                  <div className="listItemContainer">
+                    <ListItem
+                      primaryText={models.get(key).get('name')}
+                      key={count}
+                      onClick={() => this.handleSelect(event, key)}
+                      style={ selectedStyle }
+                    />
+                    <FloatingActionButton
+                          className="deleteButton"
+                          onClick={(event) => this.props.deleteModel(event, key)}
+                          mini={true}
+                    >
+                      <ContentRemove />
+                    </FloatingActionButton>
+                  </div>
                 )
               }
             })
