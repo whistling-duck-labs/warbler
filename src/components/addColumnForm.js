@@ -9,7 +9,8 @@ export default class AddColumnForm extends Component {
     super(props)
     this.state = {
       name: '',
-      type: 'STRING'
+      type: 'STRING',
+      isValid: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleTypeChange = this.handleTypeChange.bind(this)
@@ -17,17 +18,34 @@ export default class AddColumnForm extends Component {
 
   handleChange (event, value){
     this.setState({name: value});
+    if (value.length) {
+      this.setState({isValid: true})
+    }
+    else {this.setState({isValid: false})}
   }
 
   handleTypeChange (value) {
     this.setState({type: value})
   }
 
+  clearField () {
+    if (this.state.isValid) {
+      this.setState({name: '', isValid: false})
+    }
+  }
+
   render () {
     let submit = this.props.submit
     return (
     <div className="addColumnContainer">
-      <form onSubmit={(event) => submit(event, this.state)} className="addColumnForm">
+      <form
+        onSubmit={(event) => {
+            submit(event, this.state)
+            this.clearField()
+          }
+        }
+        className="addColumnForm"
+      >
         <FloatingActionButton
           type="submit"
           className="addColumnButton"
@@ -40,6 +58,7 @@ export default class AddColumnForm extends Component {
           onChange={this.handleChange}
           className="addColTextField"
           style={{width: '40%'}}
+          value={this.state.name}
         />
         <TypeSelect
           handleTypeChange={this.handleTypeChange}
