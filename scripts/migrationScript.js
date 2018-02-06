@@ -2,6 +2,7 @@ const shell = require('shelljs')
 const path = require('path')
 const diff = require('immutablediff')
 const {fromJS} = require('immutable')
+const Sequelize = require('sequelize')
 const store = require('../src/store')
 const directoryPath = '/Users/Jon/Documents/fullstack/boilermaker'
 
@@ -62,9 +63,10 @@ export const getMigrationAction = (op, changePath) => {
 }
 
 export const getListOfChanges = (db, targetDb) => {
+  console.log(diff(db, targetDb))
   return diff(db, targetDb)
   // ignore changes to nextKey value
-  .filter(changeMap => !changeMap.get('path').includes('nextAttributeKey'))
+  .filter(changeMap => !(changeMap.get('path').includes('nextAttributeKey') || changeMap.get('path').includes('nextModelKey')))
   .map(changeMap => {
     const op = changeMap.get('op')
     const changePath = changeMap.get('path')
@@ -145,7 +147,7 @@ const generateMigrationContent = listOfChanges => {
       const attributes = change.getIn(['value', 'attributes'])
       attributes && attributes.forEach(value => modelObject[value.get('name')] = {type: `Sequelize.${value.get('type')}`})
 
-      upQuery = `queryInterface["${action}"]("${name}", ${modelObject})`
+      upQuery = `queryInterface["${action}"]("${name}", ${JSON.stringify(modelObject)})`
       downQuery = `queryInterface["${downAction}"]("${name}")`
     } else {
       // working on columns
@@ -169,7 +171,7 @@ const generateMigrationContent = listOfChanges => {
 /******************************************/
 
 /****************MAIN FUNCTION *************/
-const runMigration = async (shouldGenerateModels, directory) => {
+const runMigration = (shouldGenerateModels, directory) => {
 
   // get db from store
   const state = store.default.getState()
@@ -209,13 +211,10 @@ const runMigration = async (shouldGenerateModels, directory) => {
   directory && shell.cp('-R', './migrations', `${directory}/migrations`)
 
   // Run migration
-  const migrationProcess = await shell.exec(`node_modules/.bin/sequelize db:migrate`, (code, stdout, stderr) => {
-    console.log(stdout)
-    console.log(stderr)
-    shouldGenerateModels && shell.exec(`node_modules/.bin/sequelize-auto -o "./models" -d ${dbName} -h localhost -e postgres\n`)
-      // copy model files to user chosen directory
-    directory && shell.cp('-R', './models', `${directory}/models`)
-  })
+  shell.exec(`node_modules/.bin/sequelize db:migrate`)
+  // copy model files to user chosen directory
+  shouldGenerateModels && shell.exec(`node_modules/.bin/sequelize-auto -o "./models" -d ${dbName} -h localhost -e postgres\n`)
+  directory && shell.cp('-R', './models', `${directory}/models`)
   return 1
 }
 

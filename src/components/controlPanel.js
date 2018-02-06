@@ -11,13 +11,13 @@ import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui
 const ControlPanel = (props) => (
   <Toolbar>
     <ToolbarGroup firstChild={true}>
-      <RaisedButton className='button-databases' default label='Databases' onClick={() =>       props.returnToDbs()}
+      <RaisedButton className='button-databases' default label='Databases' onClick={() => props.returnToDbs()}
       />
     </ToolbarGroup>
     <ToolbarGroup>
       <ConfirmUndo fetchDb={props.fetchDb} dbName={props.dbName} />
       <ToolbarSeparator />
-      <ConfirmMigration runMigration={props.runMigration} />
+      <ConfirmMigration runMigration={props.runMigration} dbName={props.dbName} />
     </ToolbarGroup>
   </Toolbar>
 )
@@ -28,17 +28,15 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => {
   return {
-    runMigration (shouldGenerateModels, directory) {
+    runMigration (shouldGenerateModels, directory, dbName) {
       // TODO: change alerts
       alert('Migrating!')
       runMigration(shouldGenerateModels, directory)
-        .then(res => {
-          alert('Finished Migrating')
-        })
-        .catch(console.error)
+      alert('Finished Migrating')
+      dispatch(fetchDb(dbName))
     },
     fetchDb (dbName) {
-      dispatch(fetchDb(dbName));
+      dispatch(fetchDb(dbName))
     }
   }
 }
