@@ -14,23 +14,26 @@ class MigrationController extends Component {
     super(props)
     this.state = {
       selectedModel: 1,
-      modelToAdd: ''
+      modelToAdd: '',
+      validName: false
     }
   }
 
   addColumn (evt, value) {
     evt.preventDefault();
-    let name = value.name
-    let type = value.type
-    let colObj = fromJS({name, type})
-    let newCol = Map(colObj)
-    let nextKey = this.props.targetDb.get(this.state.selectedModel.toString()).get('nextAttributeKey')
-    let newDb = this.props.targetDb.update(this.state.selectedModel.toString(), model => {
-      return model.update('attributes', attr => {
-        return attr.set(nextKey.toString(), newCol)
-      }).update('nextAttributeKey', () => nextKey + 1)
-    })
-    this.props.updateDB(newDb)
+    if (value.isValid) {
+      let name = value.name
+      let type = value.type
+      let colObj = fromJS({name, type})
+      let newCol = Map(colObj)
+      let nextKey = this.props.targetDb.get(this.state.selectedModel.toString()).get('nextAttributeKey')
+      let newDb = this.props.targetDb.update(this.state.selectedModel.toString(), model => {
+        return model.update('attributes', attr => {
+          return attr.set(nextKey.toString(), newCol)
+        }).update('nextAttributeKey', () => nextKey + 1)
+      })
+      this.props.updateDB(newDb)
+    }
   }
 
   deleteColumn (evt, key) {
@@ -51,15 +54,23 @@ class MigrationController extends Component {
   }
 
   handleModelAdd () {
-    let nextKey = this.props.targetDb.get('nextModelKey').toString()
-    let newModel = fromJS({name: this.state.modelToAdd, attributes: {}, nextAttributeKey: 1})
-    let newDb = this.props.targetDb.set(nextKey, newModel).set('nextModelKey', nextKey + 1)
-    this.props.updateDB(newDb)
-    this.setState({modelToAdd: ''})
+    if (this.state.validName) {
+      let nextKey = this.props.targetDb.get('nextModelKey').toString()
+      let newModel = fromJS({name: this.state.modelToAdd, attributes: {}, nextAttributeKey: 1})
+      let newDb = this.props.targetDb.set(nextKey, newModel).set('nextModelKey', nextKey + 1)
+      this.props.updateDB(newDb)
+      this.setState({modelToAdd: ''})
+    }
   }
 
   handleModelChange (evt) {
     this.setState({modelToAdd: evt.target.value})
+    if (evt.target.value) {
+      this.setState({validName: true})
+    }
+    else {
+      this.setState({validName: false})
+    }
   }
 
   render() {
