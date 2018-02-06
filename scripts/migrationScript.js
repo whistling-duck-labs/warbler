@@ -24,7 +24,7 @@ const createConfigFiles = (modelsPath, configPath, dbName) => {
       "host": "127.0.0.1",
       "dialect": "postgres"
     }
-  }` //consider JSON.stringify
+  }`
   // setup sequelizerc file
   shell.touch(`.sequelizerc`)
   shell.echo(`const path = require('path')\nmodule.exports = {'config': '${configPath}',\n  'models-path': '${modelsPath}'\n}`).to(`.sequelizerc`)
@@ -63,7 +63,6 @@ export const getMigrationAction = (op, changePath) => {
 }
 
 export const getListOfChanges = (db, targetDb) => {
-  console.log(diff(db, targetDb))
   return diff(db, targetDb)
   // ignore changes to nextKey value
   .filter(changeMap => !(changeMap.get('path').includes('nextAttributeKey') || changeMap.get('path').includes('nextModelKey')))
@@ -123,7 +122,6 @@ const generateMigrationContent = listOfChanges => {
     const model = change.get('model')
     const action = change.get('action')
     const downAction = getDownAction(action)
-    console.log(change)
     const type = change.get('value').get('type')
     const name = change.get('value').get('name')
     let upQuery

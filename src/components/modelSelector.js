@@ -28,9 +28,7 @@ class ModelSelector extends Component {
     let models = this.props.models
     let modelKeysArr
     if (models) {
-      console.log('MODELS', models)
       modelKeysArr = sortImmutableByKeys(models)
-      console.log('SORTED MODEL KEYS', modelKeysArr)
     }
     let count = 0;
     return (
