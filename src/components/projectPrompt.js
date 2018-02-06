@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Dialog, RaisedButton, Checkbox, Divider } from 'material-ui'
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar'
+import shell from 'shelljs'
 const remote = require('electron').remote
 
 export default class ProjectPrompt extends Component {
@@ -14,6 +15,7 @@ export default class ProjectPrompt extends Component {
     this.handleClose = this.handleClose.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
     this.openDirectory = this.openDirectory.bind(this)
+    this.createDirectory = this.createDirectory.bind(this)
   }
 
   handleClose () {
@@ -34,6 +36,14 @@ export default class ProjectPrompt extends Component {
     })
   }
 
+  createDirectory () {
+    remote.dialog.showSaveDialog((directory) => {
+      this.setState({directory})
+      shell.mkdir(this.state.directory)
+      this.handleClose()
+    })
+  }
+
   render() {
     const actions = (
       <div className='project-prompt-action'>
@@ -41,7 +51,7 @@ export default class ProjectPrompt extends Component {
           <img src='../resources/icons/folder.png' alt="Import"/>
           <h2>Import a Project</h2>
         </div>
-        <div className='folder' onClick={this.openDirectory}>
+        <div className='folder' onClick={this.createDirectory}>
             <img src='../resources/icons/folder.png' alt="Create"/>
             <h2>Create a New Project</h2>
         </div>
