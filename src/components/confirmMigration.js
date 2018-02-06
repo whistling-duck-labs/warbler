@@ -54,8 +54,8 @@ export default class ConfirmMigration extends Component {
             label="Migrate"
             secondary
             onClick={() => {
+              this.props.runMigration(this.state.checked, this.state.directory, this.props.dbName)
               this.handleClose()
-              this.props.runMigration(this.state.checked, this.state.directory)
             }}
           />
         </ToolbarGroup>

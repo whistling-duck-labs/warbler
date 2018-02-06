@@ -66,7 +66,7 @@ a {
   min-height: 50%;
   padding-right: 20px;
   border-right: thin solid grey ;
-  min-width: 235px;
+  min-width: 275px;
 }
 
 .modelSelector {
@@ -154,6 +154,11 @@ a {
   justify-content: flex-end;
 }
 
+.deleteButton {
+  height: 30px;
+  align-self: center;
+}
+
 .deleteButton button {
   background-color: white !important;
   height: 30px !important;
@@ -163,6 +168,7 @@ a {
 .deleteButton svg {
   fill: red !important;
   height: 30px !important;
+  display: inline !important;
 }
 
 .cancelButton {
@@ -188,4 +194,26 @@ td, th {
 
 .folder {
   cursor: pointer;
+}
+
+.listItemContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.listContainer {
+  padding: 8px 20px 8px 0px !important;
+}
+
+.listItemContainer:hover .deleteButton {
+  opacity: 100;
+}
+
+.deleteButton {
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+tr:hover .deleteButton {
+  opacity: 100;
 }

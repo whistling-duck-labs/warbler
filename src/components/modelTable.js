@@ -34,7 +34,6 @@ const ModelTable = (props) => {
         </TableHeader>
         <TableBody displayRowCheckbox={false} style={{width: '100%'}}>
           {properties && propertyKeysArr.map((key, idx) => {
-            console.log('iterating')
             return (
               <TableRow key={idx}>
                 <TableRowColumn>{properties.get(key).get('name')}</TableRowColumn>

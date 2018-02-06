@@ -6,6 +6,7 @@ import {setProjectDirPath} from '../store/project'
 const remote = require('electron').remote
 
 class ProjectPrompt extends Component {
+
   constructor (props) {
     super(props)
     this.state = {
@@ -24,6 +25,7 @@ class ProjectPrompt extends Component {
       this.props.history.push('/database-select')
     }
   }
+
 
   handleOpen () {
     this.setState({open: true})
