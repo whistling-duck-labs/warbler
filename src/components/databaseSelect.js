@@ -30,9 +30,8 @@ class DatabaseSelect extends Component {
   }
 
   onSelect (dbname) {
-    this.props.fetchDb(dbname)
+    this.props.fetchDb(dbname, this.props.history)
     this.props.setDbUrl('postgres://localhost:5432/' + dbname)
-    this.props.history.push('/control')
   }
 
   render () {
