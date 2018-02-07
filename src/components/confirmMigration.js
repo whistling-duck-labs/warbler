@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Dialog, RaisedButton, Checkbox, Divider } from 'material-ui'
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar'
 import {MigrationProgressBar} from './index'
+import toastr from 'toastr'
 const remote = require('electron').remote
 
 export default class ConfirmMigration extends Component {
@@ -23,7 +24,8 @@ export default class ConfirmMigration extends Component {
   }
 
   handleClose () {
-    this.setState({open: false})
+    this.setState({open: false, startingMigration: false})
+    toastr.success('Successful Migration!')
   }
 
   handleMigration () {

@@ -26,12 +26,29 @@ export default class TypeSelect extends Component {
       >
           <MenuItem
             value="STRING"
-            primaryText="STRING"
+            primaryText="string"
           />
           <MenuItem
             value="INTEGER"
-            primaryText="INTEGER"
+            primaryText="integer"
           />
+          <MenuItem
+            value="FLOAT"
+            primaryText="float"
+          />
+          <MenuItem
+            value="TEXT"
+            primaryText="text"
+          />
+          <MenuItem
+            value="DATE"
+            primaryText="date"
+          />
+          <MenuItem
+            value="BOOLEAN"
+            primaryText="boolean"
+          />
+
       </SelectField>
     )
   }
