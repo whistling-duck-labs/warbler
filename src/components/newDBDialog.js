@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
+import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 import CreateNewDB from '../../scripts/createNewDB'
 import { fetchDbNames } from '../store/dbList'
@@ -47,10 +47,9 @@ class NewDBDialog extends Component {
 
   render() {
     const actions = [
-      <FlatButton
+      <RaisedButton
         label="Cancel"
-        primary={true}
-        keyboardFocused={true}
+        primary
         onClick={this.handleClose}
       />
     ]
@@ -62,6 +61,7 @@ class NewDBDialog extends Component {
         </FloatingActionButton>
         <Dialog
           title="Create a new database"
+          contentStyle={{width: 400}}
           actions={actions}
           modal={false}
           open={this.state.open}
@@ -69,8 +69,9 @@ class NewDBDialog extends Component {
         >
           <TextField
             name="dbName"
-            floatingLabelText="Type name and hit enter"
+            floatingLabelText="Type a name and hit enter"
             value={this.state.dbName}
+            fullWidth
             onChange={this.handleChange}
             onKeyPress={event => {
               if(event.key === 'Enter')
