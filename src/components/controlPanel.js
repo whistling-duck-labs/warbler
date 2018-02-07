@@ -29,10 +29,7 @@ const mapState = state => ({
 const mapDispatch = dispatch => {
   return {
     runMigration (shouldGenerateModels, directory, dbName) {
-      // TODO: change alerts
-      alert('Migrating!')
       runMigration(shouldGenerateModels, directory)
-      alert('Finished Migrating')
       dispatch(fetchDb(dbName))
     },
     fetchDb (dbName) {
