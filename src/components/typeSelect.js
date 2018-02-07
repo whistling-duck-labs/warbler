@@ -25,14 +25,30 @@ export default class TypeSelect extends Component {
         onChange={this.handleChange}
         value={this.state.value}
       >
-        <MenuItem
-          value="STRING"
-          primaryText="STRING"
-        />
-        <MenuItem
-          value="INTEGER"
-          primaryText="INTEGER"
-        />
+          <MenuItem
+            value="STRING"
+            primaryText="string"
+          />
+          <MenuItem
+            value="INTEGER"
+            primaryText="integer"
+          />
+          <MenuItem
+            value="FLOAT"
+            primaryText="float"
+          />
+          <MenuItem
+            value="TEXT"
+            primaryText="text"
+          />
+          <MenuItem
+            value="DATE"
+            primaryText="date"
+          />
+          <MenuItem
+            value="BOOLEAN"
+            primaryText="boolean"
+          />
       </SelectField>
     )
   }

@@ -2,7 +2,7 @@ import {List} from 'immutable'
 import getDatabases from '../../scripts/getDatabases'
 import toastr from 'toastr'
 
-const initialDbList = List(['bananas'])
+const initialDbList = List([])
 
 // action
 

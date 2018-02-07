@@ -1,14 +1,13 @@
 import React, {Component} from 'react'
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card'
 import {connect} from 'react-redux'
 import {fetchDb} from '../store/db'
 import {fetchDbNames} from '../store/dbList'
 import {setDbUrl} from '../store/dbUrl'
 import {SplashScreen} from './'
-import {setTimeout} from 'timers';
+import {setTimeout} from 'timers'
 import DatabaseIcon from './databaseIcon'
-
+import NewDBDialog from './newDBDialog'
 
 class DatabaseSelect extends Component {
   constructor (props) {
@@ -31,13 +30,13 @@ class DatabaseSelect extends Component {
   }
 
   onSelect (dbname) {
-    this.props.fetchDb(dbname)
+    this.props.fetchDb(dbname, this.props.history)
     this.props.setDbUrl('postgres://localhost:5432/' + dbname)
-    this.props.history.push('/control')
   }
 
   render () {
     const className = this.state.isLoading ? 'databaseCards' : 'databaseCards visible'
+
     return (
       <div className={className}>
         {this.props.dbList.map((name, idx) => {
@@ -55,6 +54,20 @@ class DatabaseSelect extends Component {
             </Card>
           )
         })}
+        <Card
+          className="dbCard"
+        >
+          <CardText
+            className="dbCardText"
+          >
+            {
+              <div>
+                <p></p>
+                <NewDBDialog history={this.props.history} />
+              </div>
+            }
+          </CardText>
+        </Card>
       </div>
     )
   }
