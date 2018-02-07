@@ -10,7 +10,6 @@ export default class ConfirmMigration extends Component {
     this.state = {
       open: false,
       checked: true,
-      directory: '',
       startingMigration: false
     }
     this.handleOpen = this.handleOpen.bind(this)
@@ -28,7 +27,7 @@ export default class ConfirmMigration extends Component {
   }
 
   handleMigration () {
-    this.props.runMigration(this.state.checked, this.state.directory, this.props.dbName)
+    this.props.runMigration(this.state.checked, this.props.projectDir)
     this.handleClose()
   }
 
@@ -45,19 +44,12 @@ export default class ConfirmMigration extends Component {
       <Toolbar>
         <ToolbarGroup>
           <RaisedButton
-            label="Choose Directory"
-            primary
-            onClick={() => {
-              this.openDirectory()
-            }}
-          />
-        </ToolbarGroup>
-        <ToolbarGroup>
-          <RaisedButton
             label="Cancel"
             primary
             onClick={this.handleClose}
           />
+        </ToolbarGroup>
+        <ToolbarGroup>
           <RaisedButton
             label="Migrate"
             secondary
@@ -73,8 +65,7 @@ export default class ConfirmMigration extends Component {
       )
     : (
       <div>
-        <RaisedButton className='button-migrate' secondary label='Migrate' onClick={() =>
-          this.handleOpen()}
+        <RaisedButton className='button-migrate' secondary label='Migrate' onClick={ () => this.handleOpen()}
         />
         <Dialog
           title="Execute Migration"

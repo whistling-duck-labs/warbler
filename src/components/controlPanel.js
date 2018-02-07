@@ -6,7 +6,7 @@ import {fetchDb} from '../store/db'
 import Dialog from 'material-ui/Dialog'
 import ConfirmUndo from './confirmUndo'
 import ConfirmMigration from './confirmMigration'
-import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar'
 
 const ControlPanel = (props) => (
   <Toolbar>
@@ -17,13 +17,13 @@ const ControlPanel = (props) => (
     <ToolbarGroup>
       <ConfirmUndo fetchDb={props.fetchDb} dbName={props.dbName} />
       <ToolbarSeparator />
-      <ConfirmMigration runMigration={props.runMigration} dbName={props.dbName} />
+      <ConfirmMigration runMigration={props.runMigration} dbName={props.dbName} projectDir={props.projectDirPath} />
     </ToolbarGroup>
   </Toolbar>
 )
 
 const mapState = state => ({
-  dbName: state.get('dbUrl').replace('postgres://localhost:5432/', '')
+  projectDirPath: state.get('projectDirPath')
 })
 
 const mapDispatch = dispatch => {
