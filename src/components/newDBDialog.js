@@ -32,7 +32,6 @@ class NewDBDialog extends Component {
 
   handleChange(event) {
     this.setState({dbName: event.target.value})
-    console.log(this.state.dbName)
   }
 
   handleKeyPress(event) {
@@ -40,9 +39,7 @@ class NewDBDialog extends Component {
     CreateNewDB(this.state.dbName)
       .then(() => this.props.fetchDbNames())
       .then(() => this.props.setDbUrl('postgres://localhost:5432/' + this.state.dbName))
-      .then(() => {
-        this.props.history.push('/control')
-      })
+      .then(() => this.props.history.push('/control'))
   }
 
   render() {
@@ -76,7 +73,7 @@ class NewDBDialog extends Component {
             onKeyPress={event => {
               if(event.key === 'Enter')
                 this.handleKeyPress(event)
-          }}
+              }}
           />
         </Dialog>
       </div>
