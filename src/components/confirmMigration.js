@@ -29,7 +29,7 @@ export default class ConfirmMigration extends Component {
   }
 
   handleMigration () {
-    this.props.runMigration(this.state.checked, this.props.projectDir)
+    this.props.runMigration(this.state.checked, this.props.projectDir, this.props.dbName)
     this.handleClose()
   }
 
