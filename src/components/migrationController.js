@@ -13,7 +13,7 @@ class MigrationController extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      selectedModel: 1,
+      selectedModel: '0',
       modelToAdd: '',
       validName: false
     }
@@ -94,15 +94,18 @@ class MigrationController extends Component {
                />
            </div>
           <div className="tableFormContainer">
+            <ModelTable
+              model={this.props.targetDb.get(this.state.selectedModel)}
+              deleteCol={(evt, idx) => this.deleteColumn(evt, idx)}
+            />
             {
-              <ModelTable
-                model={this.props.targetDb.get(this.state.selectedModel)}
-                deleteCol={(evt, idx) => this.deleteColumn(evt, idx)}
-               />
+              this.state.selectedModel === '0' ?
+              <h2>Add or Select a Model</h2> :
+              <AddColumnForm
+                submit={(event, value) => this.addColumn(event, value)}
+                className="addColumnForm"
+              />
             }
-            <AddColumnForm
-              submit={(event, value) => this.addColumn(event, value)}
-              className="addColumnForm" />
           </div>
         </div>
         <ControlPanel

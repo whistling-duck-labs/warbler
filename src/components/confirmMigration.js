@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Dialog, RaisedButton, Checkbox, Divider } from 'material-ui'
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar'
+import {MigrationProgressBar} from './index'
 const remote = require('electron').remote
 
 export default class ConfirmMigration extends Component {
@@ -9,11 +10,13 @@ export default class ConfirmMigration extends Component {
     this.state = {
       open: false,
       checked: true,
-      directory: ''
+      directory: '',
+      startingMigration: false
     }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.updateCheck = this.updateCheck.bind(this)
+    this.handleMigration = this.handleMigration.bind(this)
   }
 
   handleOpen () {
@@ -22,6 +25,11 @@ export default class ConfirmMigration extends Component {
 
   handleClose () {
     this.setState({open: false})
+  }
+
+  handleMigration () {
+    this.props.runMigration(this.state.checked, this.state.directory, this.props.dbName)
+    this.handleClose()
   }
 
   updateCheck () {
@@ -53,16 +61,17 @@ export default class ConfirmMigration extends Component {
           <RaisedButton
             label="Migrate"
             secondary
-            onClick={() => {
-              this.props.runMigration(this.state.checked, this.state.directory, this.props.dbName)
-              this.handleClose()
-            }}
+            onClick={() => this.setState({startingMigration: true})}
           />
         </ToolbarGroup>
       </Toolbar>
     )
 
-    return (
+    return this.state.startingMigration ?
+      (
+       <MigrationProgressBar handleMigration={this.handleMigration} />
+      )
+    : (
       <div>
         <RaisedButton className='button-migrate' secondary label='Migrate' onClick={() =>
           this.handleOpen()}
