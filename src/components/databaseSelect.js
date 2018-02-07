@@ -37,11 +37,7 @@ class DatabaseSelect extends Component {
 
   render () {
     const className = this.state.isLoading ? 'databaseCards' : 'databaseCards visible'
-    const styles = {
-      card: {
-        color: "#FDFDF8"
-      }
-    }
+
     return (
       <div className={className}>
         {this.props.dbList.map((name, idx) => {
@@ -61,10 +57,8 @@ class DatabaseSelect extends Component {
         })}
         <Card
           className="dbCard"
-          style={styles.card}
         >
           <CardText
-            style={styles.card}
             className="dbCardText"
           >
             {
