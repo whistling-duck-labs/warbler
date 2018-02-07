@@ -1,9 +1,10 @@
-import {fromJS, List} from 'immutable'
+import {Map} from 'immutable'
 import getModelInfo from '../../scripts/getModelInfo'
+import toastr from 'toastr'
 // actions
 export const INIT_DB = 'INIT_DB'
 
-const initDB = (db) => ({type: INIT_DB, db: db})
+const initDB = (db) => ({type: INIT_DB, db})
 
 // thunk
 
@@ -11,12 +12,12 @@ export const fetchDb = dbName => dispatch => {
   // fetch all db info
   getModelInfo(dbName)
     .then(db => dispatch(initDB(db)))
-    .catch(console.error)
+    .catch(() => toastr.error('Error retrieving database information'))
 }
 
 // initial state
 
-const initialDB = List([])
+const initialDB = Map({})
 
 // reducer
 

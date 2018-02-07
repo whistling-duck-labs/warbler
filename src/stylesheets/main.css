@@ -1,22 +1,20 @@
+* {
+  font-family: 'Lato', sans-serif;
+}
+
 html,
 body {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-body {
   display: flex;
   justify-content: center;
-  font-family: sans-serif;
   color: #525252;
+  background-color: #FDFDF8;
 }
 
-a {
-  text-decoration: none;
-  color: #cb3837;
-}
+
 
 .container {
   text-align: center;
@@ -28,6 +26,12 @@ a {
   flex-wrap: wrap;
   margin-top: 20%;
   justify-content: center;
+  opacity: 0;
+}
+
+.databaseCards.visible {
+  transition: opacity .6s;
+  opacity: 100;
 }
 
 .dbCard {
@@ -59,7 +63,7 @@ a {
   min-height: 50%;
   padding-right: 20px;
   border-right: thin solid grey ;
-  min-width: 235px;
+  min-width: 275px;
 }
 
 .modelSelector {
@@ -113,14 +117,16 @@ a {
   height: 40px;
 }
 
-#addModelText {
-  width: 90px;
-}
-
 .splashContainer {
   height: 500px;
   width: 400px;
   margin: auto;
+  opacity: 0;
+}
+
+.splashContainer.visible {
+  transition: opacity 1s ease-in;
+  opacity: 100;
 }
 
 .splashImage {
@@ -145,6 +151,11 @@ a {
   justify-content: flex-end;
 }
 
+.deleteButton {
+  height: 30px;
+  align-self: center;
+}
+
 .deleteButton button {
   background-color: white !important;
   height: 30px !important;
@@ -154,6 +165,7 @@ a {
 .deleteButton svg {
   fill: red !important;
   height: 30px !important;
+  display: inline !important;
 }
 
 .cancelButton {
@@ -166,4 +178,39 @@ td, th {
 
 .model-export-checkbox {
   margin-top: 3vh;
+}
+
+.project-prompt-modal * {
+  text-align: center;
+}
+
+.project-prompt-action {
+  display: flex;
+  justify-content: space-around;
+}
+
+.folder {
+  cursor: pointer;
+}
+
+.listItemContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.listContainer {
+  padding: 8px 20px 8px 0px !important;
+}
+
+.listItemContainer:hover .deleteButton {
+  opacity: 100;
+}
+
+.deleteButton {
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+tr:hover .deleteButton {
+  opacity: 100;
 }

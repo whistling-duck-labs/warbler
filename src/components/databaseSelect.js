@@ -22,7 +22,7 @@ class DatabaseSelect extends Component {
 
   componentDidMount () {
     this.props.fetchDbNames()
-    setTimeout(this.splashControl, 4000)
+    setTimeout(this.splashControl, 1000)
   }
 
   splashControl () {
@@ -36,8 +36,9 @@ class DatabaseSelect extends Component {
   }
 
   render () {
+    const className = this.state.isLoading ? 'databaseCards' : 'databaseCards visible'
     return (
-      <div className="databaseCards">
+      <div className={className}>
         {this.props.dbList.map((name, idx) => {
           return (
             <Card

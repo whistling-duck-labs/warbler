@@ -1,7 +1,8 @@
 import {List} from 'immutable'
 import getDatabases from '../../scripts/getDatabases'
+import toastr from 'toastr'
 
-const initialDbList = List(['bananas'])
+const initialDbList = List([])
 
 // action
 
@@ -17,7 +18,6 @@ export const fetchDbNames = () => dispatch => {
       const dbList = List(dbs)
       return dispatch(populateDbList(dbList))
     })
-    .catch(err => console.error(err))
 }
 
 // reducer
