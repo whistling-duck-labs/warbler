@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Dialog, RaisedButton, Checkbox, Divider } from 'material-ui'
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar'
-import LinearProgress from 'material-ui/LinearProgress';
 import {MigrationProgressBar} from './index'
 const remote = require('electron').remote
 
@@ -12,8 +11,7 @@ export default class ConfirmMigration extends Component {
       open: false,
       checked: true,
       directory: '',
-      startingMigration: false,
-      migrating: false
+      startingMigration: false
     }
     this.handleOpen = this.handleOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
