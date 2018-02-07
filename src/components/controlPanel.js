@@ -23,6 +23,7 @@ const ControlPanel = (props) => (
 )
 
 const mapState = state => ({
+  dbName: state.get('dbUrl').replace('postgres://localhost:5432/', ''),
   projectDirPath: state.get('projectDirPath')
 })
 
