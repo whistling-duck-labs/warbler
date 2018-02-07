@@ -66,7 +66,10 @@ class MigrationController extends Component {
 
   handleModelAdd () {
     if (this.state.validName) {
-      let nextKey = this.props.targetDb.get('nextModelKey').toString()
+      let nextKey = '1'
+      if (this.props.targetDb.get('nextModelKey')) {
+        nextKey = this.props.targetDb.get('nextModelKey').toString()
+      }
       let newModel = fromJS({name: this.state.modelToAdd, attributes: {}, nextAttributeKey: 1})
       let newDb = this.props.targetDb.set(nextKey, newModel).set('nextModelKey', nextKey + 1)
       this.props.updateDB(newDb)
