@@ -15,7 +15,6 @@ export const fetchDb = (dbName, history) => dispatch => {
       dispatch(initDB(db))
       history.push('/control')
     })
-    .catch(() => toastr.error('Error retrieving database information'))
 }
 
 // initial state
