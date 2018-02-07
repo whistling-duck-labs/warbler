@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Dialog, RaisedButton, Checkbox, Divider } from 'material-ui'
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar'
-import {setProjectDirPath} from '../store/project'
+import {setProjectDirPath} from '../store/projectDirPath'
 const remote = require('electron').remote
 
 class ProjectPrompt extends Component {

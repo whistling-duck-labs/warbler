@@ -6,7 +6,7 @@ import db from './db'
 import dbList from './dbList'
 import targetDb from './targetDb'
 import dbUrl from './dbUrl'
-import projectDirPath from './project'
+import projectDirPath from './projectDirPath'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
