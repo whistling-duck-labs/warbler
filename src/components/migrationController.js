@@ -41,6 +41,12 @@ class MigrationController extends Component {
     this.props.updateDB(newDb)
   }
 
+  editColumn (event, idx, change) {
+    let newDb = this.props.targetDb
+      .mergeIn([this.state.selectedModel.toString(), 'attributes', idx.toString()], change)
+    this.props.updateDB(newDb)
+  }
+
   deleteModel (evt, key) {
     let newDb = this.props.targetDb.delete(key.toString())
     this.props.updateDB(newDb)
@@ -97,7 +103,9 @@ class MigrationController extends Component {
             {
               <ModelTable
                 model={this.props.targetDb.get(this.state.selectedModel)}
+                modelKey={this.state.selectedModel}
                 deleteCol={(evt, idx) => this.deleteColumn(evt, idx)}
+                editCol={(evt, idx, values) => this.editColumn(evt, idx, values)}
                />
             }
             <AddColumnForm

@@ -5,8 +5,9 @@ import MenuItem from 'material-ui/MenuItem';
 export default class TypeSelect extends Component {
   constructor (props) {
     super(props)
+    let initValue = this.props.defaultValue || 'STRING'
     this.state = {
-      value: 'STRING'
+      value: initValue
     }
     this.handleChange = this.handleChange.bind(this)
   }
@@ -24,14 +25,14 @@ export default class TypeSelect extends Component {
         onChange={this.handleChange}
         value={this.state.value}
       >
-          <MenuItem
-            value="STRING"
-            primaryText="STRING"
-          />
-          <MenuItem
-            value="INTEGER"
-            primaryText="INTEGER"
-          />
+        <MenuItem
+          value="STRING"
+          primaryText="STRING"
+        />
+        <MenuItem
+          value="INTEGER"
+          primaryText="INTEGER"
+        />
       </SelectField>
     )
   }

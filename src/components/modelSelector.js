@@ -43,7 +43,7 @@ class ModelSelector extends Component {
 
               if (key !== 'name' && key !== 'nextModelKey') {
                 return (
-                  <div className="listItemContainer">
+                  <div className="listItemContainer" key={key}>
                     <ListItem
                       primaryText={models.get(key).get('name')}
                       key={count}
