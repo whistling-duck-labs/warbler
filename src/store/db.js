@@ -8,10 +8,13 @@ const initDB = (db) => ({type: INIT_DB, db})
 
 // thunk
 
-export const fetchDb = dbName => dispatch => {
+export const fetchDb = (dbName, history) => dispatch => {
   // fetch all db info
   getModelInfo(dbName)
-    .then(db => dispatch(initDB(db)))
+    .then(db => {
+      dispatch(initDB(db))
+      history.push('/control')
+    })
     .catch(() => toastr.error('Error retrieving database information'))
 }
 
