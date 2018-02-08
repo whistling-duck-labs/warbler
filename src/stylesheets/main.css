@@ -76,6 +76,22 @@ body {
   overflow: auto;
 }
 
+.tableHeader {
+  display: flex !important
+}
+
+.tableHeader th:first-child {
+  flex: 1 !important;
+}
+
+.tableHeader th:nth-child(2) {
+  flex: 1.4 !important;
+}
+
+.tableHeader th:last-child {
+  flex: 0.55 !important;
+}
+
 .dbTitle {
   font-size: 2em;
   margin-bottom: 15px;
@@ -148,12 +164,32 @@ body {
 
 .tableButtons {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-around;
 }
 
 .deleteButton {
   height: 30px;
   align-self: center;
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.editButton {
+  opacity: 0;
+  transition: opacity .2s;
+}
+
+.editButton button {
+  margin: 0 10px;
+  background-color: white !important;
+  height: 30px !important;
+  width: 30px !important;
+}
+
+.editIcon,.saveIcon {
+  fill: rgb(100, 100, 100) !important;
+  width: 20px !important;
+  height: 20px !important;
 }
 
 .deleteButton button {
@@ -164,17 +200,13 @@ body {
 
 .deleteButton svg {
   fill: red !important;
-  height: 30px !important;
-  display: inline !important;
+  height: 20px !important;
 }
 
 .cancelButton {
   margin-right: 10px;
 }
 
-td, th {
-  text-align: center !important;
-}
 
 .model-export-checkbox {
   margin-top: 3vh;
@@ -206,11 +238,10 @@ td, th {
   opacity: 100;
 }
 
-.deleteButton {
-  opacity: 0;
-  transition: opacity .2s;
+tr:hover .deleteButton {
+  opacity: 100;
 }
 
-tr:hover .deleteButton {
+tr:hover .editButton {
   opacity: 100;
 }

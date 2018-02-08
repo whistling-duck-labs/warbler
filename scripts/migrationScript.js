@@ -129,12 +129,15 @@ const generateMigrationContent = listOfChanges => {
 }`
 
   listOfChanges.forEach((change, idx) => {
+    console.log(change)
     const model = change.get('model')
     const action = change.get('action')
     const downAction = getDownAction(action)
+    let type
+    let name
     if (action !== 'renameColumn') {
-      const type = change.get('value').get('type')
-      const name = change.get('value').get('name')
+      type = change.get('value').get('type')
+      name = change.get('value').get('name')
     }
     let upQuery
     let downQuery

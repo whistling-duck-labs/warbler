@@ -13,7 +13,7 @@ export const fetchDb = (dbName, history) => dispatch => {
   getModelInfo(dbName)
     .then(db => {
       dispatch(initDB(db))
-      history.push('/control')
+      history && history.push('/control')
     })
 }
 

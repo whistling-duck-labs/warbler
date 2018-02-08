@@ -7,12 +7,17 @@ export default class MigrationProgressBar extends Component {
     this.state = {
       open: true
     }
+    this.handleClose = this.handleClose.bind(this)
+  }
+
+  handleClose () {
+    this.setState({open: false})
   }
 
   componentDidMount () {
     window.setTimeout(() => {
       this.props.handleMigration()
-      this.setState({open: false})
+      this.handleClose()
     }, 2500)
   }
 
