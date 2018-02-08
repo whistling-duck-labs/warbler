@@ -172,6 +172,19 @@ body {
   margin-right: 10px;
 }
 
+.editColName {
+  width: 100px !important;
+  height: 20px !important;
+  font-size: 13px !important;
+  text-align: center !important;
+}
+
+.editType {
+  width: 100px !important;
+  height: 20px !important;
+  font-size: 13px !important;
+}
+
 td, th {
   text-align: center !important;
 }

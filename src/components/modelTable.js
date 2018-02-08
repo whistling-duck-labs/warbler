@@ -97,6 +97,8 @@ class ModelTable extends Component {
                         onChange={(event) => this.handleNameChange(event, key)}
                         defaultValue={properties.get(key).get('name')}
                         name="editColName"
+                        className="editColName"
+                        underlineStyle={{bottom: 0}}
                       />
                         :
                       properties.get(key).get('name')
@@ -109,6 +111,9 @@ class ModelTable extends Component {
                       <TypeSelect
                       defaultValue={properties.get(key).get('type')}
                       handleTypeChange={value => this.handleTypeChange(value, key)}
+                      cName="editType"
+                      lStyle={{height: 40, paddingRight: 0}}
+                      uStyle={{width: 0, height: 0}}
                       />
                         :
                       properties.get(key).get('type')

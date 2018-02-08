@@ -21,33 +21,35 @@ export default class TypeSelect extends Component {
     return (
       <SelectField
         name="type"
-        floatingLabelText="Type"
         onChange={this.handleChange}
         value={this.state.value}
+        className={this.props.cName}
+        labelStyle={this.props.lStyle}
+        underlineStyle={this.props.uStyle}
       >
           <MenuItem
             value="STRING"
-            primaryText="string"
+            primaryText="STRING"
           />
           <MenuItem
             value="INTEGER"
-            primaryText="integer"
+            primaryText="INTEGER"
           />
           <MenuItem
             value="FLOAT"
-            primaryText="float"
+            primaryText="FLAT"
           />
           <MenuItem
             value="TEXT"
-            primaryText="text"
+            primaryText="TEXT"
           />
           <MenuItem
             value="DATE"
-            primaryText="date"
+            primaryText="DATE"
           />
           <MenuItem
             value="BOOLEAN"
-            primaryText="boolean"
+            primaryText="BOOLEAN"
           />
       </SelectField>
     )
