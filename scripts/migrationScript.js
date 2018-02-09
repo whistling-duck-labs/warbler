@@ -79,13 +79,21 @@ export const getListOfChanges = (db, targetDb) => {
     else { // op is 'add'
       modelName = targetDb.get(modelKey).get('name')
     }
-    // if op is remove, we need to manually set the value with the attribute name or model name
     const attributeKey = changeMap.get('path').match(regex.attributeKey) ? changeMap.get('path').match(regex.attributeKey)[1] : undefined
     const attributeName = db.getIn([modelKey, 'attributes', attributeKey, 'name'])
+    const migrationAction = getMigrationAction(op, changePath)
+
+    let newName
+    let value
+    if (migrationAction === 'renameColumn') {
+      newName = changeMap.get('value')
+      value = fromJS({attributeName, newName})
+    }
+
     return changeMap
       .set('model', modelName)
-      .set('action', getMigrationAction(op, changePath))
-      .set('value', changeMap.get('value') || fromJS({ name: attributeName || modelName }))
+      .set('action', migrationAction)
+      .set('value', value || changeMap.get('value') || fromJS({ name: attributeName || modelName }))
   })
 }
 
@@ -121,11 +129,16 @@ const generateMigrationContent = listOfChanges => {
 }`
 
   listOfChanges.forEach((change, idx) => {
+    console.log(change)
     const model = change.get('model')
     const action = change.get('action')
     const downAction = getDownAction(action)
-    const type = change.get('value').get('type')
-    const name = change.get('value').get('name')
+    let type
+    let name
+    if (action !== 'renameColumn') {
+      type = change.get('value').get('type')
+      name = change.get('value').get('name')
+    }
     let upQuery
     let downQuery
     if (action === 'createTable' || action === 'dropTable') {
@@ -152,8 +165,13 @@ const generateMigrationContent = listOfChanges => {
       downQuery = `queryInterface["${downAction}"]("${name}")`
     } else {
       // working on columns
-      upQuery = `queryInterface["${action}"]("${model}", "${name}", Sequelize.${type})`
-      downQuery = `queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})`
+      if (action === 'renameColumn') {
+        upQuery = `queryInterface["${action}"]("${model}","${change.get('value').get('attributeName')}", "${change.get('value').get('newName')}")`
+        downQuery = `queryInterface["${downAction}"]("${model}", "${change.get('value').get('newName')}", "${change.get('value').get('attributeName')}")`
+      } else {
+        upQuery = `queryInterface["${action}"]("${model}", "${name}", Sequelize.${type})`
+        downQuery = `queryInterface["${downAction}"]("${model}", "${name}", Sequelize.${type})`
+      }
     }
 
     const upQueryWrapper = idx === 0 ? `${upQuery}` : `\n      .then(() => ${upQuery})`

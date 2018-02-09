@@ -41,6 +41,12 @@ class MigrationController extends Component {
     this.props.updateDB(newDb)
   }
 
+  editColumn (event, idx, change) {
+    let newDb = this.props.targetDb
+      .mergeIn([this.state.selectedModel.toString(), 'attributes', idx.toString()], change)
+    this.props.updateDB(newDb)
+  }
+
   deleteModel (evt, key) {
     let newDb = this.props.targetDb.delete(key.toString())
     this.props.updateDB(newDb)
@@ -60,7 +66,10 @@ class MigrationController extends Component {
 
   handleModelAdd () {
     if (this.state.validName) {
-      let nextKey = this.props.targetDb.get('nextModelKey').toString()
+      let nextKey = '1'
+      if (this.props.targetDb.get('nextModelKey')) {
+        nextKey = this.props.targetDb.get('nextModelKey').toString()
+      }
       let newModel = fromJS({name: this.state.modelToAdd, attributes: {}, nextAttributeKey: 1})
       let newDb = this.props.targetDb.set(nextKey, newModel).set('nextModelKey', nextKey + 1)
       this.props.updateDB(newDb)
@@ -96,7 +105,9 @@ class MigrationController extends Component {
           <div className="tableFormContainer">
             <ModelTable
               model={this.props.targetDb.get(this.state.selectedModel)}
+              modelKey={this.state.selectedModel}
               deleteCol={(evt, idx) => this.deleteColumn(evt, idx)}
+              editCol={(evt, idx, values) => this.editColumn(evt, idx, values)}
             />
             {
               this.state.selectedModel === '0' ?
