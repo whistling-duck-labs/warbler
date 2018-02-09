@@ -10,6 +10,8 @@ import {
 
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentRemove from 'material-ui/svg-icons/content/remove';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit'
+import SaveIcon from 'material-ui/svg-icons/content/save'
 import FlatButton from 'material-ui/FlatButton';
 import { sortImmutableByKeys } from './modelSelector'
 import TextField from 'material-ui/TextField';
@@ -79,10 +81,10 @@ class ModelTable extends Component {
             displaySelectAll={false}
             adjustForCheckbox={false}
           >
-            <TableRow>
+            <TableRow className="tableHeader">
               <TableHeaderColumn>Property</TableHeaderColumn>
               <TableHeaderColumn>Type</TableHeaderColumn>
-              <TableHeaderColumn />
+              <TableHeaderColumn>Edit</TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false} style={{width: '100%'}}>
@@ -122,26 +124,30 @@ class ModelTable extends Component {
                   <TableRowColumn>
                     <div className="tableButtons">
                       {
-                          !this.state.openColumns.includes(key)
-                            ?
-                          <FlatButton
+                        !this.state.openColumns.includes(key) ?
+                          <FloatingActionButton
                             className="editButton changeButton"
-                            label="EDIT"
+                            mini={true}
                             onClick={(event) => this.openCol(event, key)}
-                          /> :
-                          <FlatButton
-                            className="saveButton changeButton"
-                            label="SAVE"
+                          >
+                            <EditIcon className="editIcon" />
+                          </FloatingActionButton>
+                        :
+                          <FloatingActionButton
+                            className="editButton changeButton"
+                            mini={true}
                             onClick={(event) => this.saveChange(event, key)}
-                          />
+                          >
+                            <SaveIcon className="saveIcon" />
+                          </FloatingActionButton>
                       }
-                      <FloatingActionButton
-                        className="deleteButton"
-                        onClick={(event) => this.props.deleteCol(event, key)}
-                        mini={true}
-                      >
-                        <ContentRemove />
-                      </FloatingActionButton>
+                          <FloatingActionButton
+                            className="deleteButton"
+                            onClick={(event) => this.props.deleteCol(event, key)}
+                            mini={true}
+                          >
+                            <ContentRemove />
+                          </FloatingActionButton>
                     </div>
                   </TableRowColumn>
                 </TableRow>
