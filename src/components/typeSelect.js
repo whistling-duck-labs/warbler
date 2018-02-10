@@ -37,7 +37,7 @@ export default class TypeSelect extends Component {
           />
           <MenuItem
             value="FLOAT"
-            primaryText="FLAT"
+            primaryText="FLOAT"
           />
           <MenuItem
             value="TEXT"
