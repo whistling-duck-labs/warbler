@@ -11,21 +11,20 @@ class ProjectPrompt extends Component {
     super(props)
     this.state = {
       open: false,
+      goToDb: false
     }
 
     this.handleClose = this.handleClose.bind(this)
     this.handleOpen = this.handleOpen.bind(this)
     this.openDirectory = this.openDirectory.bind(this)
     this.createDirectory = this.createDirectory.bind(this)
+    this.loadDbList = this.loadDbList.bind(this)
   }
 
   handleClose () {
-    if(this.props.projectDirPath) {
       this.setState({open: false})
       this.props.history.push('/database-select')
-    }
   }
-
 
   handleOpen () {
     this.setState({open: true})
@@ -45,9 +44,17 @@ class ProjectPrompt extends Component {
     })
   }
 
+  loadDbList () {
+    this.handleClose()
+  }
+
   render() {
     const actions = (
       <div className='project-prompt-action'>
+        <div className='folder' onClick={this.loadDbList}>
+          <img src='../app/db-icon-2.png' alt="allDBs"/>
+          <h2>Go to all databases</h2>
+        </div>
         <div className='folder' onClick={this.openDirectory}>
           <img src='../resources/icons/folder.png' alt="Import"/>
           <h2>Import a Project</h2>
