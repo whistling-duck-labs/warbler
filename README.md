@@ -1,20 +1,19 @@
 # warbler
-A desktop app for handling database migrations
 
-# Mockups (as of 1/27/18)
+## A desktop app for handling database migrations
 
-1. Splash screen
+Built using Electron, React, and Redux, Warbler is a GUI for making easy migrations to Postgres databases. Fully automated generation of Sequelize model files and Sequelize migration files. Perform database migrations without a single line of code. Currently tested using Postgres databases on macOS.
 
-![splash screen](mockups/a-splash-screen.png "Splash screen")
+## Quick Instructions
 
-2. DB instances
+clone or fork the repository
 
-![splash screen](mockups/b-db-loading.png "DB Loading")
+npm install
 
-3. Migration control
+npm start
 
-![splash screen](mockups/c-migration-ctrl.png "Migration control")
+## Structure
 
-4. Migration loading
+Built on top of the Electron Boilerplate found here https://github.com/szwacz/electron-boilerplate.git
 
-![splash screen](mockups/d-migration-working.png "Migration loading")
+For more detailed information, see BoilerplateREADME.md
